@@ -29,29 +29,27 @@ industry:
     url: https://deepmind.google/blog/rss.xml
     verified: true
 
-  - name: Anthropic
-    url: https://www.anthropic.com/rss.xml
-    verified: false
-
-  - name: Meta AI
-    url: https://ai.meta.com/blog/rss/
-    verified: false
+  - name: Meta Engineering
+    url: https://engineering.fb.com/feed/
+    verified: true
 
   - name: Microsoft Research
     url: https://www.microsoft.com/en-us/research/feed/
-    verified: false
+    verified: true
 
   - name: Google AI Blog
     url: https://blog.google/technology/ai/rss/
-    verified: false
+    verified: true
 
   - name: NVIDIA AI
     url: https://blogs.nvidia.com/feed/
-    verified: false
+    verified: true
 
   - name: Apple Machine Learning
     url: https://machinelearning.apple.com/rss.xml
-    verified: false
+    verified: true
+
+  # Anthropic 无公开 RSS（2026-04 确认），有了再加
 
 # ── 社区 / 独立博主 ───────────────────────────
 community:
