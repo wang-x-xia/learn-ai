@@ -11,8 +11,9 @@
 daily_update.py — 拉取 AI 社区 RSS + 网页爬虫，写入 journal 原始素材。
 
 用法:
-    uv run scripts/daily_update.py            # 拉取过去 48h
-    uv run scripts/daily_update.py --hours 24 # 拉取过去 24h
+    uv run scripts/daily_update.py                    # 拉取过去 48h
+    uv run scripts/daily_update.py --hours 24         # 拉取过去 24h
+    uv run scripts/daily_update.py --only simon-willison  # 只拉取指定源
 
 输出:
     journal/YYYY/MM/DD/<source>.md  — 每个订阅源一个文件
@@ -108,9 +109,19 @@ def load_feeds() -> list[dict]:
     return feeds
 
 
-def fetch_all(since: dt.datetime) -> list[dict]:
-    """拉取所有 RSS 源 + 所有爬虫，返回汇总条目。"""
+def fetch_all(since: dt.datetime, only: str | None = None) -> list[dict]:
+    """拉取 RSS 源 + 爬虫，返回汇总条目。
+
+    Args:
+        since: 只返回该时间之后的条目。
+        only: 若指定，只拉取 slug 匹配的那一个源。
+    """
     feeds = load_feeds()
+    if only:
+        feeds = [f for f in feeds if f["slug"] == only]
+        if not feeds:
+            print(f"  [ERROR] 未找到 slug={only!r} 的订阅源")
+            return []
     all_entries: list[dict] = []
     for cfg in feeds:
         print(f"  {cfg['name']} ...", end=" ", flush=True)
@@ -198,12 +209,14 @@ def write_journal(date: dt.date, entries: list[dict]) -> list[Path]:
 def main():
     ap = argparse.ArgumentParser(description="拉取 AI RSS 写入 journal")
     ap.add_argument("--hours", type=int, default=48, help="回溯小时数 (默认 48)")
+    ap.add_argument("--only", type=str, default=None,
+                    help="只拉取指定 slug 的订阅源，如 simon-willison")
     args = ap.parse_args()
 
     since = dt.datetime.now() - dt.timedelta(hours=args.hours)
     print(f"[{TODAY}] 拉取过去 {args.hours}h ...\n")
 
-    entries = fetch_all(since)
+    entries = fetch_all(since, only=args.only)
     total = len(entries)
     print(f"\n共 {total} 条\n")
 
