@@ -18,6 +18,7 @@ CATEGORY = "industry"
 
 _URL = "https://claude.com/blog"
 _LINK_RE = re.compile(r"^/blog/[\w-]+$")
+_CTA_RE = re.compile(r"^(Read more|Learn more|See more|View more|View|Try Claude|Contact sales)$", re.IGNORECASE)
 _HEADERS = {"User-Agent": "Mozilla/5.0 learn-ai-bot"}
 
 
@@ -28,16 +29,17 @@ def scrape() -> list[dict]:
     soup = BeautifulSoup(resp.text, "html.parser")
 
     # 收集每个匹配链接对应的最佳标题
+    # 策略：过滤 CTA 文本 → 选最长的（最可能是真实标题）
     best: dict[str, str] = {}
     for a in soup.find_all("a", href=True):
         href = a["href"]
         if not _LINK_RE.match(href):
             continue
         text = a.get_text(" ", strip=True)
-        if len(text) < 4:
+        if len(text) < 4 or _CTA_RE.match(text):
             continue
         prev = best.get(href, "")
-        if not prev or len(text) < len(prev):
+        if not prev or (len(text) > len(prev) and len(text) <= 200):
             best[href] = text
 
     entries: list[dict] = []

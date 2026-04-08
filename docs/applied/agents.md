@@ -2,7 +2,7 @@
 title: AI Agent 智能体
 description: AI Agent 是 2024-2026 年最热门的 AI 方向之一。从简单的聊天机器人进化为能够自主规划、使用工具、执行复杂任务的智能体。
 created: 2026-04-07
-updated: 2026-04-07
+updated: 2026-04-08
 tags: [agents, react, mcp, a2a, code-agents, multi-agent]
 ---
 
@@ -228,7 +228,27 @@ Level 1: 代码生成 (从注释/描述生成代码)
 Level 2: 代码编辑 (理解上下文，修改现有代码)
 Level 3: 项目级理解 (理解整个代码库，跨文件修改)
 Level 4: 自主编程 (从需求到完成，包括调试和测试)
+Level 5: Dark Factory (0% 人工代码 + 0% 人工审核)
 ```
+
+### OpenAI "Dark Factory" 与 Harness Engineering（2026.4）
+
+OpenAI Frontier 团队的 Ryan Lopopolo 首次公开了一种全自动软件开发模式——**Dark Factory**（灯灭工厂），即全程零人工参与的 AI 编程流水线[^latentspace-2026-harness]：
+
+| 指标 | 数据 |
+|------|------|
+| 代码库规模 | >100 万行代码 |
+| 日 Token 消耗 | ~10 亿 token（约 $2-3k/天） |
+| 人工编写代码 | 0% |
+| 人工代码审核 | 0% |
+| 实验周期 | 5 个月 |
+
+**核心概念：**
+- **Harness Engineering（脚手架工程）**: 当 Agent 失败时，不是写更好的 prompt，而是问"缺什么能力、上下文或结构？"然后补全之
+- **Symphony**: OpenAI 内部基于 Elixir 的多 Agent 编排层，用于大规模协调 Codex Agent
+- **Ghost Library（幽灵库）**: 规格驱动的软件——Agent 从高保真规格说明复现复杂系统，而非共享源代码
+- **Agent 可读性优先**: 软件不仅为人写，更为模型写。Skills、文档、测试、Markdown tracker 和质量分数编码了"工程品味"
+- **人类成为瓶颈**: 团队从审核代码转为构建系统、可观测性和上下文，让 Agent 自主审核、修复、合并
 
 ### 评估基准
 
@@ -331,6 +351,7 @@ Agent 直接操作计算机界面：
 
 ## 参考资料
 
+[^latentspace-2026-harness]: Latent Space. "Extreme Harness Engineering for Token Billionaires — Ryan Lopopolo, OpenAI Frontier & Symphony". 2026. https://www.latent.space/p/harness-eng
 - Yao et al., "ReAct: Synergizing Reasoning and Acting in Language Models", 2022 - [arXiv:2210.03629](https://arxiv.org/abs/2210.03629)
 - Shinn et al., "Reflexion: Language Agents with Verbal Reinforcement Learning", 2023 - [arXiv:2303.11366](https://arxiv.org/abs/2303.11366)
 - Wang et al., "A Survey on Large Language Model based Autonomous Agents", 2023 - [arXiv:2308.11432](https://arxiv.org/abs/2308.11432)

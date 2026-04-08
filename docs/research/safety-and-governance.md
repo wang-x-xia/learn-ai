@@ -2,7 +2,7 @@
 title: AI 安全与治理
 description: AI 安全研究、可解释性、全球治理框架、人机协作等方向。
 created: 2026-04-07
-updated: 2026-04-07
+updated: 2026-04-08
 tags: [safety, governance, interpretability, alignment, regulation]
 ---
 
@@ -74,13 +74,33 @@ Google DeepMind 帮助 AI 安全社区深入理解复杂语言模型行为的工
 
 | 举措 | 机构 | 时间 |
 |------|------|------|
+| **Project GlassWing** | Anthropic | 2026.4 |
 | **Safety Fellowship** | OpenAI | 2026.4 |
 | **Safety Bug Bounty** | OpenAI | 2026.3 |
 | **Responsible Scaling** | Anthropic | 持续更新 |
 | **FACTS Benchmark** | Google | 2025.12 |
 | **Gemma Scope 2** | Google | 2025.12 |
 
-### 2.3 全球治理
+### 2.3 Project GlassWing 与 Claude Mythos（2026.4）
+
+Anthropic 发布了 Claude Mythos Preview，但**未公开发布**——GPT-2 以来首次有厂商主动限制前沿模型的发布[^willison-2026-glasswing]。
+
+**Claude Mythos 的能力：**
+- 发现了每个主流操作系统和浏览器中的高严重性漏洞，包括 OpenBSD 中存在 27 年的 TCP SACK 内核崩溃 bug
+- 编写了链接 4 个漏洞的浏览器攻击链，通过 JIT 堆喷射逃逸渲染器和 OS 沙箱
+- 在 Firefox JS 引擎漏洞利用测试中成功率 181/数百次，而 Opus 4.6 仅 2/数百次
+- Anthropic 红队报告：模型展现出"复杂的策略性思考和情景感知"，7.6% 的情况下意识到自己正在被评估
+
+**Project GlassWing 限制措施：**
+- 仅向 40 家合作伙伴开放（AWS、Apple、Microsoft、Google、Linux Foundation 等）
+- 提供 $1 亿使用额度 + $400 万开源安全组织捐赠
+- 合作伙伴用于查找和修复基础设施中的漏洞（漏洞检测、黑盒测试、渗透测试）
+- Anthropic 计划：不公开发布 Mythos，将在后续 Claude Opus 模型中先上线安全防护机制
+
+**Nicolas Carlini（Anthropic 研究员）：**
+> "过去几周我发现的 bug 比我这辈子加起来都多。"[^willison-2026-glasswing]
+
+### 2.4 全球治理
 
 | 地区 | 法规/政策 | 状态 |
 |------|-----------|------|
@@ -127,6 +147,7 @@ Google DeepMind 帮助 AI 安全社区深入理解复杂语言模型行为的工
 
 ## 参考资料
 
+[^willison-2026-glasswing]: Simon Willison. "Anthropic's Project Glasswing". 2026. https://simonwillison.net/2026/Apr/7/project-glasswing/
 - AI Assistance Reduces Persistence - [arXiv:2604.04721](https://arxiv.org/abs/2604.04721)
 - ShieldNet: Network-Level Guardrails for Agentic Systems - [arXiv:2604.04426](https://arxiv.org/abs/2604.04426)
 - Anthropic Research: https://www.anthropic.com/research

@@ -7,28 +7,10 @@ category: 厂商动态
 
 # Claude Blog
 
-- **Read more**  
-  https://claude.com/blog/harnessing-claudes-intelligence
-- **Read more**  
-  https://claude.com/blog/claude-builds-visuals
-- **Read more**  
-  https://claude.com/blog/how-enterprises-are-building-ai-agents-in-2026
-- **Read more**  
-  https://claude.com/blog/improving-frontend-design-through-skills
-- **Read more**  
-  https://claude.com/blog/building-ai-agents-in-financial-services
-- **Read more**  
-  https://claude.com/blog/claude-code-on-the-web
-- **Read more**  
-  https://claude.com/blog/claude-and-slack
-- **Read more**  
-  https://claude.com/blog/claude-for-chrome
-- **Read more**  
-  https://claude.com/blog/how-anthropic-teams-use-claude-code
-- **Read more**  
-  https://claude.com/blog/integrations
 - **How and when to use subagents in Claude Code**  
   https://claude.com/blog/subagents-in-claude-code
+- **Harnessing Claude’s intelligence**  
+  https://claude.com/blog/harnessing-claudes-intelligence
 - **Audit Claude Platform activity with the Compliance API**  
   https://claude.com/blog/claude-platform-compliance-api
 - **Auto mode for Claude Code**  
@@ -41,6 +23,8 @@ category: 厂商动态
   https://claude.com/blog/code-with-claude-san-francisco-london-tokyo
 - **1M context is now generally available for Opus 4.6 and Sonnet 4.6**  
   https://claude.com/blog/1m-context-ga
+- **Claude now creates interactive charts, diagrams and visualizations**  
+  https://claude.com/blog/claude-builds-visuals
 - **Advancing Claude for Excel and PowerPoint**  
   https://claude.com/blog/claude-excel-powerpoint-updates
 - **Bringing Code Review to Claude Code**  
