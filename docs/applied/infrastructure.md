@@ -156,7 +156,7 @@ GPU 间通信层级：
 
 **Multi-Drafter Speculative Decoding**[^multi-drafter-2026]（2026.4 arXiv）：传统推测解码用单个小模型做草稿，该工作提出用多个草稿模型并行预测，再通过对齐反馈（alignment feedback）筛选和聚合候选 token。多草稿模型提高了 token 接受率，对齐反馈确保草稿质量。
 
-> KV Cache 的原理和压缩技术详见 [Transformer 架构 § KV Cache](../foundations/transformer.md#4-kv-cache自回归推理的核心机制)。以下聚焦工程部署视角。
+> KV Cache 的原理和压缩技术详见 [KV Cache 与推理优化](../foundations/kv-cache.md)。以下聚焦工程部署视角。
 
 **KV Cache 的工程决策**：生产环境中 KV Cache 管理直接决定系统吞吐和延迟。关键调优点：
 

@@ -51,7 +51,11 @@ markdown_extensions:
   - tables
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -69,6 +73,7 @@ nav:
   - 基础理论:
     - foundations/index.md
     - Transformer 架构: foundations/transformer.md
+    - KV Cache 与推理优化: foundations/kv-cache.md
     - 大语言模型: foundations/large-language-models.md
     - Mamba 与 SSM: foundations/mamba-and-ssm.md
     - 多模态 AI: foundations/multimodal-ai.md
@@ -106,6 +111,9 @@ nav:
     - landscape/index.md
     - 模型动态跟踪: landscape/model-tracker.md
   - 精选资源: resources.md
+
+extra_css:
+  - stylesheets/extra.css
 
 extra:
   social: []

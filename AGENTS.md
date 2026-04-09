@@ -63,7 +63,7 @@ learn-ai/
 
 每个 `.md` 文件必须有 YAML frontmatter。知识文档要求六个字段（`title`、`description`、`created`、`updated`、`tags`、`review`），索引页只需 `title` + `description`。各目录的具体要求见对应的 `AGENTS.md`。
 
-`review` 字段记录维护者最后一次阅读/审校该文档的日期（`YYYY-MM-DD`），留空表示从未 review。每次 review 后手动更新此字段。用 `uv run scripts/review_status.py` 查看待 review 清单。
+`review` 字段记录维护者最后一次阅读/审校该文档的日期（`YYYY-MM-DD`），留空表示从未 review。Review 过程中不要更新 `review` 日期，等维护者确认 review 完成后再更新。用 `uv run scripts/review_status.py` 查看待 review 清单。
 
 ### 来源标识（脚注）
 
