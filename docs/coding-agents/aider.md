@@ -4,6 +4,7 @@ description: 开源终端 AI 结对编程工具，以 Edit Format 自适应和 t
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, coding, cli, open-source]
+review:
 ---
 
 # Aider

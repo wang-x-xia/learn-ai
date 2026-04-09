@@ -4,6 +4,7 @@ description: 企业级 AI 编码助手，核心差异在于隐私优先的架构
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, tabnine, databricks, coding, ide]
+review:
 ---
 
 # Tabnine

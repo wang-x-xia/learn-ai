@@ -4,6 +4,7 @@ description: 推理模型、test-time compute scaling、过程奖励模型等前
 created: 2026-04-07
 updated: 2026-04-09
 tags: [reasoning, test-time-compute, prm, o1, deepseek-r1]
+review:
 ---
 
 # 推理与规划 (Reasoning & Planning)

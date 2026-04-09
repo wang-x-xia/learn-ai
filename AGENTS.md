@@ -61,7 +61,9 @@ learn-ai/
 
 ### Frontmatter
 
-每个 `.md` 文件必须有 YAML frontmatter。知识文档要求五个字段（`title`、`description`、`created`、`updated`、`tags`），索引页只需 `title` + `description`。各目录的具体要求见对应的 `AGENTS.md`。
+每个 `.md` 文件必须有 YAML frontmatter。知识文档要求六个字段（`title`、`description`、`created`、`updated`、`tags`、`review`），索引页只需 `title` + `description`。各目录的具体要求见对应的 `AGENTS.md`。
+
+`review` 字段记录维护者最后一次阅读/审校该文档的日期（`YYYY-MM-DD`），留空表示从未 review。每次 review 后手动更新此字段。用 `uv run scripts/review_status.py` 查看待 review 清单。
 
 ### 来源标识（脚注）
 
@@ -122,6 +124,7 @@ uv run scripts/daily_update.py --hours 1    # 验证新源
 uv run mkdocs serve              # 本地预览
 uv run mkdocs build --strict     # 严格构建（CI 使用，警告视为错误）
 uv run scripts/validate_docs.py  # 检查 frontmatter 和脚注规范
+uv run scripts/review_status.py  # 查看待 review 清单
 uv run scripts/daily_update.py --hours 1   # 日更脚本验证
 ```
 

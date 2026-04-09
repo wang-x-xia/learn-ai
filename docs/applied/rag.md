@@ -4,6 +4,7 @@ description: RAG 通过将外部知识检索与大语言模型结合，解决了
 created: 2026-04-07
 updated: 2026-04-09
 tags: [rag, vector-database, embedding, retrieval, graphrag]
+review:
 ---
 
 # 检索增强生成 (RAG - Retrieval-Augmented Generation)

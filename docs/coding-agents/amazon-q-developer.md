@@ -4,6 +4,7 @@ description: AWS 的 AI 编码助手（原 CodeWhisperer），核心差异在于
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, aws, amazon, coding, ide, agent]
+review:
 ---
 
 # Amazon Q Developer

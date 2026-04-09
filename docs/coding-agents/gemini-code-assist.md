@@ -4,6 +4,7 @@ description: Google 的 AI 编码助手，核心差异在于 Gemini 原生长上
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, google, coding, ide]
+review:
 ---
 
 # Gemini Code Assist

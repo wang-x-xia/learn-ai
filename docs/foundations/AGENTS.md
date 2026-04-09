@@ -29,7 +29,8 @@ description: 一句话描述
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [tag1, tag2]
+review: YYYY-MM-DD
 ---
 ```
 
-五个字段必填。每次修改内容时更新 `updated`。
+六个字段必填（`review` 留空表示从未 review）。每次修改内容时更新 `updated`，每次阅读审校后更新 `review`。

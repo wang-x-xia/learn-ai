@@ -4,6 +4,7 @@ description: "Transformer 架构深度解析——自注意力机制、KV cache 
 created: 2026-04-08
 updated: 2026-04-08
 tags: [transformer, attention, kv-cache, rope, flash-attention, moe, gqa, mla]
+review:
 ---
 
 # Transformer 架构

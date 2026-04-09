@@ -4,6 +4,7 @@ description: 以 Config-as-Code 和可扩展上下文系统为核心设计理念
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, coding, vscode, jetbrains, open-source]
+review:
 ---
 
 # Continue

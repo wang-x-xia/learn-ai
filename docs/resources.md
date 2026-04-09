@@ -4,6 +4,7 @@ description: AI 领域的精选论文、工具、社区和学习资源汇总。
 created: 2026-04-07
 updated: 2026-04-07
 tags: [resources, papers, tools, community]
+review:
 ---
 
 # 精选资源

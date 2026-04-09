@@ -64,7 +64,7 @@ INDEX_ONLY_DIRS = {
     "docs/landscape",
 }
 
-KNOWLEDGE_REQUIRED = {"title", "description", "created", "updated", "tags"}
+KNOWLEDGE_REQUIRED = {"title", "description", "created", "updated", "tags", "review"}
 INDEX_REQUIRED = {"title", "description"}
 JOURNAL_REQUIRED = {"date", "type", "source", "category"}
 

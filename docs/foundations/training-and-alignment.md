@@ -4,6 +4,7 @@ description: "微调让通用模型适配特定任务，对齐确保模型行为
 created: 2026-04-07
 updated: 2026-04-09
 tags: [fine-tuning, alignment, lora, rlhf, dpo, constitutional-ai]
+review:
 ---
 
 # 微调与对齐 (Fine-tuning & Alignment)

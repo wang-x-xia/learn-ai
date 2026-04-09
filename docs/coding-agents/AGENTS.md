@@ -18,10 +18,11 @@ description: 一句话定位
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [product, vendor-name, coding, form-factor, agent]
+review: YYYY-MM-DD
 ---
 ```
 
-`title` 用引号包裹（产品名通常是英文专有名词）。五个字段必填。
+`title` 用引号包裹（产品名通常是英文专有名词）。六个字段必填（`review` 留空表示从未 review）。
 
 ## 模板
 
@@ -32,6 +33,7 @@ description: 一句话定位
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [product, vendor-name, coding, form-factor, agent]
+review:
 ---
 
 # 产品名

@@ -4,6 +4,7 @@ description: Subagent 是解决单一 Agent 串行瓶颈与上下文膨胀的核
 created: 2026-04-09
 updated: 2026-04-09
 tags: [agents, subagents, multi-agent, context-management, parallel-execution]
+review:
 ---
 
 # Subagent 实践：从架构到工程模式
