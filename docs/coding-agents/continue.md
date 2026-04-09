@@ -1,5 +1,6 @@
 ---
 title: "Continue"
+description: 以 Config-as-Code 和可扩展上下文系统为核心设计理念的开源 AI 编码助手，原生支持 VS Code 与 JetBrains 双平台。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, coding, vscode, jetbrains, open-source]

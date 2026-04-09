@@ -1,5 +1,6 @@
 ---
 title: "Aider"
+description: 开源终端 AI 结对编程工具，以 Edit Format 自适应和 tree-sitter Repo Map 为核心技术，Claude Code 的主要开源竞品。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, coding, cli, open-source]

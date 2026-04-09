@@ -1,5 +1,6 @@
 ---
 title: "Gemini Code Assist"
+description: Google 的 AI 编码助手，核心差异在于 Gemini 原生长上下文窗口和 Google Cloud 生态绑定。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, google, coding, ide]

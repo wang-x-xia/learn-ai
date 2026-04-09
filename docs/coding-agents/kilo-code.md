@@ -1,5 +1,6 @@
 ---
 title: "Kilo Code"
+description: Cline/Roo Code 的下游分支，在继承全部基础能力之上增加了多模式工作流和快照回滚。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, coding, vscode, agent, open-source]

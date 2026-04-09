@@ -71,4 +71,4 @@ PRM:        评估每个推理步骤的正确性
 
 - Lightman et al., "Let's Verify Step by Step" (Process Reward Models), 2023 - [arXiv:2305.20050](https://arxiv.org/abs/2305.20050)
 - QED-Nano: Teaching a Tiny Model to Prove Hard Theorems - [arXiv:2604.04898](https://arxiv.org/abs/2604.04898)
-- "ETR: Entropy Trend Reward for Efficient Chain-of-Thought Reasoning", 2026 - [arXiv:2604.05355](https://arxiv.org/abs/2604.05355)
+[^etr-2026]: "ETR: Entropy Trend Reward for Efficient Chain-of-Thought Reasoning". 2026. https://arxiv.org/abs/2604.05355

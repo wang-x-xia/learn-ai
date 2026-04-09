@@ -1,5 +1,6 @@
 ---
 title: "Cursor"
+description: Anysphere 出品的 AI 代码编辑器，VS Code fork，以自研补全模型和代理架构见长。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, anysphere, coding, ide, agent]

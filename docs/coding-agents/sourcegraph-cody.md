@@ -1,5 +1,6 @@
 ---
 title: "Sourcegraph Cody"
+description: Sourcegraph 的 AI 编码助手，核心差异在于用代码图谱（而非 embedding 检索）驱动上下文，是架构层面的根本不同。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, sourcegraph, coding, ide, open-source]

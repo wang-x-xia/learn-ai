@@ -1,5 +1,6 @@
 ---
 title: "Windsurf"
+description: Codeium 出品的 AI IDE，2025 年被 OpenAI 以 ~$3B 收购。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, codeium, openai, coding, ide, agent]

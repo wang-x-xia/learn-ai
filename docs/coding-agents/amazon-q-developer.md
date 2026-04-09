@@ -1,5 +1,6 @@
 ---
 title: "Amazon Q Developer"
+description: AWS 的 AI 编码助手（原 CodeWhisperer），核心差异在于 Agent 驱动的大规模代码迁移和 AWS 生态深度绑定。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, aws, amazon, coding, ide, agent]

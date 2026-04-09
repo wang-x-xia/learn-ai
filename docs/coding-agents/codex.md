@@ -1,5 +1,6 @@
 ---
 title: "OpenAI Codex"
+description: OpenAI 的编码 Agent，云端（ChatGPT 内）与本地 CLI 双形态，以 microVM 沙箱隔离和 codex-1 专用模型为核心差异。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, openai, coding, cli, agent]

@@ -1,5 +1,6 @@
 ---
 title: "Tabnine"
+description: 企业级 AI 编码助手，核心差异在于隐私优先的架构设计——代码不出域、完全本地推理、合规训练数据。2025 年被 Databricks 收购。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, tabnine, databricks, coding, ide]

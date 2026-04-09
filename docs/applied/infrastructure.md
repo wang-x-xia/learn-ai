@@ -486,8 +486,8 @@ ONNX (Open Neural Network Exchange) 提供模型格式标准化：
 - Frantar et al., "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers", 2022 - [arXiv:2210.17323](https://arxiv.org/abs/2210.17323)
 - vLLM: https://github.com/vllm-project/vllm
 - Ollama: https://ollama.com/
-- Yuan et al., "MegaTrain: Full Precision Training of 100B+ Parameter Large Language Models on a Single GPU", 2026 - [arXiv:2604.05091](https://arxiv.org/abs/2604.05091)
-- "Multi-Drafter Speculative Decoding with Alignment Feedback", 2026 - [arXiv:2604.05417](https://arxiv.org/abs/2604.05417)
+[^megatrain-2026]: Yuan et al. "MegaTrain: Full Precision Training of 100B+ Parameter Large Language Models on a Single GPU". 2026. https://arxiv.org/abs/2604.05091
+[^multi-drafter-2026]: "Multi-Drafter Speculative Decoding with Alignment Feedback". 2026. https://arxiv.org/abs/2604.05417
 [^trtllm-github]: NVIDIA. TensorRT-LLM. https://github.com/NVIDIA/TensorRT-LLM
 [^dynamo-github]: NVIDIA. Dynamo — The open-source, datacenter-scale inference stack. https://github.com/ai-dynamo/dynamo
 [^nvidia-nim-docs]: NVIDIA. NIM Documentation. https://docs.nvidia.com/nim/

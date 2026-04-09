@@ -1,5 +1,6 @@
 ---
 title: "Trae"
+description: 字节跳动推出的免费 AI IDE，技术上是标准的 VS Code fork + 前沿模型接入，核心差异在于商业策略。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, bytedance, coding, ide]

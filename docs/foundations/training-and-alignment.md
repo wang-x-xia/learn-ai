@@ -473,4 +473,4 @@ R_q  (事实正确)    = p_entail(b(C), y)          # 仅事实领域，锚定�
 - Bai et al., "Constitutional AI", 2022 - [arXiv:2212.08073](https://arxiv.org/abs/2212.08073)
 - Zhou et al., "LIMA: Less Is More for Alignment", 2023 - [arXiv:2305.11206](https://arxiv.org/abs/2305.11206)
 - Anthropic Alignment Research: https://www.anthropic.com/research
-- "Pressure, What Pressure? Sycophancy Disentanglement in Language Models via Reward Decomposition", 2026 - [arXiv:2604.05279](https://arxiv.org/abs/2604.05279)
+[^sycophancy-2026]: "Pressure, What Pressure? Sycophancy Disentanglement in Language Models via Reward Decomposition". 2026. https://arxiv.org/abs/2604.05279

@@ -451,5 +451,5 @@ RAG 与 Agent 的融合是大趋势：
 - Yan et al., "Corrective Retrieval Augmented Generation", 2024 - [arXiv:2401.15884](https://arxiv.org/abs/2401.15884)
 - RAGAS Documentation: https://docs.ragas.io/
 - LangChain RAG Guide: https://python.langchain.com/docs/tutorials/rag/
-- "Document Optimization for Black-Box Retrieval via Reinforcement Learning", 2026 - [arXiv:2604.05087](https://arxiv.org/abs/2604.05087)
-- "LatentAudit: Real-Time White-Box Faithfulness Monitoring for RAG", 2026 - [arXiv:2604.05358](https://arxiv.org/abs/2604.05358)
+[^doc-opt-rl-2026]: "Document Optimization for Black-Box Retrieval via Reinforcement Learning". 2026. https://arxiv.org/abs/2604.05087
+[^latentaudit-2026]: "LatentAudit: Real-Time White-Box Faithfulness Monitoring for RAG". 2026. https://arxiv.org/abs/2604.05358

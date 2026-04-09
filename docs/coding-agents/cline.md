@@ -1,5 +1,6 @@
 ---
 title: "Cline"
+description: Cline fork 家族的架构原型——定义了"VS Code 扩展 + LLM 原生工具调用 = 自主编码 Agent"这一模式。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, coding, vscode, agent, open-source]

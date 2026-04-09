@@ -1,5 +1,6 @@
 ---
 title: "GitHub Copilot"
+description: GitHub/Microsoft 的 AI 编码助手，核心差异在于 FIM 补全技术、多模型路由架构、以及不可复制的 GitHub 平台深度集成。
 created: 2026-04-08
 updated: 2026-04-08
 tags: [product, github, microsoft, coding, ide, agent]
