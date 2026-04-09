@@ -150,7 +150,7 @@ Transformer 的核心是自注意力机制，通过 Q/K/V 矩阵计算 token 间
 | 训练/对齐新方法 | `docs/foundations/training-and-alignment.md` |
 | 提示技巧/框架 | `docs/applied/prompt-engineering.md` |
 | RAG 新方法 | `docs/applied/rag.md` |
-| Agent 框架/协议 | `docs/applied/agents.md` |
+| Agent 框架/协议 | `docs/applied/ai-agents.md` |
 | 硬件/推理/部署 | `docs/applied/infrastructure.md` |
 | 推理模型进展 | `docs/research/reasoning-and-planning.md` |
 | 安全/治理/可解释性 | `docs/research/safety-and-governance.md` |

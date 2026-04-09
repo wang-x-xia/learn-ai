@@ -20,7 +20,7 @@
 |------|------|
 | [提示工程](docs/applied/prompt-engineering.md) | CoT、Few-shot、提示框架 (CRISPE/CO-STAR/DSPy)、安全防御 |
 | [检索增强生成 (RAG)](docs/applied/rag.md) | 分块/嵌入/向量库/检索策略、GraphRAG、Agentic RAG |
-| [AI Agent 智能体](docs/applied/agents.md) | ReAct、框架生态、MCP/A2A 协议、代码 Agent |
+| [AI Agent 智能体](docs/applied/ai-agents.md) | ReAct、框架生态、MCP/A2A 协议、代码 Agent |
 | [AI 基础设施](docs/applied/infrastructure.md) | GPU/TPU、推理优化、量化压缩、MLOps、成本优化 |
 
 ### 前沿研究 — *what's next*
@@ -53,7 +53,7 @@ learn-ai/
 │   ├── applied/              # 应用技术 (工程方法)
 │   │   ├── prompt-engineering.md
 │   │   ├── rag.md
-│   │   ├── agents.md
+│   │   ├── ai-agents.md
 │   │   └── infrastructure.md
 │   ├── research/             # 前沿研究 (快速演进)
 │   │   ├── reasoning-and-planning.md

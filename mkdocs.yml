@@ -75,7 +75,7 @@ nav:
     - 微调与对齐: foundations/training-and-alignment.md
   - 应用技术:
     - applied/index.md
-    - AI Agent 智能体: applied/agents.md
+    - AI Agent 智能体: applied/ai-agents.md
     - Agent Hooks: applied/agent-hooks.md
     - Subagent 实践: applied/subagents.md
     - 提示工程: applied/prompt-engineering.md
