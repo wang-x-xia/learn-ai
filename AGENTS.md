@@ -113,7 +113,7 @@ Transformer 的核心是自注意力机制，通过 Q/K/V 矩阵计算 token 间
 
 - 入口：`scripts/daily_update.py`
 - 只做一件事：拉 RSS + 爬虫 → 按订阅源写入 `journal/YYYY/MM/DD/<source>.md`
-- 依赖管理：PEP 723 inline metadata，`uv run` 自动安装
+- 依赖管理：统一在 `pyproject.toml`，通过 `uv` 管理
 - 所有源统一在 `scripts/feeds.yaml` 登记，按分类（papers / industry / community）组织
   - 只有 `verified: true` 的源会被拉取
   - `type: rss`（默认）— 标准 RSS/Atom 源，配置 url 即可

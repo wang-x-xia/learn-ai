@@ -1,12 +1,3 @@
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "feedparser>=6.0",
-#     "pyyaml>=6.0",
-#     "httpx>=0.27",
-#     "beautifulsoup4>=4.12",
-# ]
-# ///
 """
 daily_update.py — 拉取 AI 社区 RSS + 网页爬虫，写入 journal 原始素材。
 
