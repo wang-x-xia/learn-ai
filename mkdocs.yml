@@ -11,15 +11,11 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: pink
-      accent: amber
       toggle:
         icon: material/brightness-7
         name: 切换到暗色模式
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: pink
-      accent: amber
       toggle:
         icon: material/brightness-4
         name: 切换到亮色模式
