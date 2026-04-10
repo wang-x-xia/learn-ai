@@ -11,11 +11,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: coral
+      accent: gold
       toggle:
         icon: material/brightness-7
         name: 切换到暗色模式
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: coral
+      accent: gold
       toggle:
         icon: material/brightness-4
         name: 切换到亮色模式

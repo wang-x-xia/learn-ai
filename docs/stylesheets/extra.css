@@ -1,25 +1,40 @@
-/* ---------- Custom palette: #FF5C77 primary + #FFB300 accent ---------- */
-[data-md-color-scheme="default"] {
+/* ---------- Custom palette "coral" + "gold" ---------- */
+/* Register as new palette names so Material has zero built-in rules to clash. */
+
+/* ---- Light mode ---- */
+[data-md-color-primary="coral"] {
   --md-primary-fg-color:               #FF5C77;
   --md-primary-fg-color--light:        #FF8A9E;
   --md-primary-fg-color--dark:         #E84862;
+  --md-primary-bg-color:               #fff;
+  --md-primary-bg-color--light:        #fff;
+}
+[data-md-color-accent="gold"] {
   --md-accent-fg-color:                #FFB300;
   --md-accent-fg-color--transparent:   rgba(255, 179, 0, 0.1);
+  --md-accent-bg-color:                #FFB300;
+  --md-accent-bg-color--transparent:   rgba(255, 179, 0, 0.1);
 }
 
-[data-md-color-scheme="slate"] {
+/* ---- Dark mode ---- */
+[data-md-color-scheme="slate"][data-md-color-primary="coral"] {
   --md-primary-fg-color:               #D4748A;
   --md-primary-fg-color--light:        #E08A9E;
   --md-primary-fg-color--dark:         #B8606F;
+  --md-typeset-a-color:                #D4748A;
+}
+[data-md-color-scheme="slate"][data-md-color-accent="gold"] {
   --md-accent-fg-color:                #E5A830;
   --md-accent-fg-color--transparent:   rgba(229, 168, 48, 0.1);
+  --md-accent-bg-color:                #E5A830;
+  --md-accent-bg-color--transparent:   rgba(229, 168, 48, 0.1);
 }
 
-/* Dark mode: muted header & tabs so the solid bar doesn't glare */
-[data-md-color-scheme="slate"] .md-header {
+/* Dark mode header & tabs */
+[data-md-color-scheme="slate"][data-md-color-primary="coral"] .md-header {
   background-color: #663548;
 }
-[data-md-color-scheme="slate"] .md-tabs {
+[data-md-color-scheme="slate"][data-md-color-primary="coral"] .md-tabs {
   background-color: #582D3D;
 }
 
