@@ -99,6 +99,9 @@ nav:
     - 推理与规划: research/reasoning-and-planning.md
     - AI 安全与治理: research/safety-and-governance.md
     - 新兴前沿方向: research/emerging-frontiers.md
+  - 模型档案:
+    - model/index.md
+    - Claude Mythos Preview: model/claude-mythos.md
   - Agent 框架:
     - agent-frameworks/index.md
     - LangGraph: agent-frameworks/langgraph.md

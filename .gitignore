@@ -16,3 +16,6 @@ build/
 
 # Secrets
 .env
+
+# Generated reference docs (can be regenerated from source PDFs)
+reference/mythos-system-card/

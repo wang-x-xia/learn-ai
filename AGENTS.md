@@ -48,10 +48,12 @@ learn-ai/
 │   ├── foundations/             # 基础理论（低频更新）
 │   ├── applied/                # 应用技术（中频更新）
 │   ├── research/               # 前沿研究（高频更新）
+│   ├── model/                  # 模型档案（重要模型深度分析）
 │   ├── coding-agents/          # 编码 Agent 产品档案
 │   ├── personal-agents/        # 个人 AI Agent 产品档案
 │   ├── agent-frameworks/       # Agent 框架产品档案
 │   └── landscape/              # 行业全景（模型跟踪）
+├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 MkDocs）
 ├── journal/                     # 每日 RSS 原始素材（脚本自动生成）
 ├── scripts/                     # 自动化脚本
 ├── mkdocs.yml                   # 站点配置 & 导航
