@@ -105,41 +105,43 @@ nav:
   - 模型档案:
     - model/index.md
     - Claude Mythos Preview: model/claude-mythos.md
-  - Agent 框架:
-    - agent-frameworks/index.md
-    - LangGraph: agent-frameworks/langgraph.md
-    - AutoGen: agent-frameworks/autogen.md
-    - CrewAI: agent-frameworks/crewai.md
-    - Semantic Kernel: agent-frameworks/semantic-kernel.md
-    - Dify: agent-frameworks/dify.md
-    - Coze: agent-frameworks/coze.md
-    - NeMo Agent Toolkit: agent-frameworks/nemo-agent-toolkit.md
   - 产品档案:
-    - coding-agents/index.md
-    - libraries/index.md
-    - libraries/honcho.md
-    - Cursor: coding-agents/cursor.md
-    - GitHub Copilot: coding-agents/github-copilot.md
-    - Claude Code: coding-agents/claude-code.md
-    - Windsurf: coding-agents/windsurf.md
-    - OpenAI Codex: coding-agents/codex.md
-    - Gemini Code Assist: coding-agents/gemini-code-assist.md
-    - Amazon Q Developer: coding-agents/amazon-q-developer.md
-    - Cline: coding-agents/cline.md
-    - Aider: coding-agents/aider.md
-    - Continue: coding-agents/continue.md
-    - Kilo Code: coding-agents/kilo-code.md
-    - Sourcegraph Cody: coding-agents/sourcegraph-cody.md
-    - Tabnine: coding-agents/tabnine.md
-    - Trae: coding-agents/trae.md
-  - 个人 Agent:
-    - personal-agents/index.md
-    - Hermes Agent: personal-agents/hermes-agent.md
-    - OpenClaw: personal-agents/openclaw.md
+    - 编码工具:
+      - coding-agents/index.md
+      - Cursor: coding-agents/cursor.md
+      - GitHub Copilot: coding-agents/github-copilot.md
+      - Claude Code: coding-agents/claude-code.md
+      - Windsurf: coding-agents/windsurf.md
+      - OpenAI Codex: coding-agents/codex.md
+      - Gemini Code Assist: coding-agents/gemini-code-assist.md
+      - Amazon Q Developer: coding-agents/amazon-q-developer.md
+      - Cline: coding-agents/cline.md
+      - Aider: coding-agents/aider.md
+      - Continue: coding-agents/continue.md
+      - Kilo Code: coding-agents/kilo-code.md
+      - Sourcegraph Cody: coding-agents/sourcegraph-cody.md
+      - Tabnine: coding-agents/tabnine.md
+      - Trae: coding-agents/trae.md
+    - 开源库:
+      - libraries/index.md
+      - libraries/honcho.md
+    - Agent 框架:
+      - agent-frameworks/index.md
+      - LangGraph: agent-frameworks/langgraph.md
+      - AutoGen: agent-frameworks/autogen.md
+      - CrewAI: agent-frameworks/crewai.md
+      - Semantic Kernel: agent-frameworks/semantic-kernel.md
+      - Dify: agent-frameworks/dify.md
+      - Coze: agent-frameworks/coze.md
+      - NeMo Agent Toolkit: agent-frameworks/nemo-agent-toolkit.md
+    - 个人 Agent:
+      - personal-agents/index.md
+      - Hermes Agent: personal-agents/hermes-agent.md
+      - OpenClaw: personal-agents/openclaw.md
   - 行业全景:
     - landscape/index.md
     - 模型动态跟踪: landscape/model-tracker.md
-  - 精选资源: resources.md
+
 
 extra_css:
   - stylesheets/extra.css
