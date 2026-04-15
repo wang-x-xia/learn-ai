@@ -2,9 +2,9 @@
 title: Hermes Agent
 description: Nous Research 的自进化个人 AI Agent，核心区分点是闭环学习循环——自动创建 Skill、使用中自我改进、跨会话知识持久化。
 created: 2026-04-10
-updated: 2026-04-10
+updated: 2026-04-15
 tags: [product, nous-research, personal-agent, agent, skills, memory]
-review:
+review: 2026-04-15
 ---
 
 # Hermes Agent
@@ -33,38 +33,61 @@ review:
        ← Skill 在使用中自我改进，不断精化 ←
 ```
 
-- **自主 Skill 创建**：完成复杂任务后，Agent 自动将多步操作凝练为可复用的 [Skill](../applied/agent-skills.md)
-- **使用中自我改进**：Skill 不是创建后就固定——每次执行后根据效果迭代改进
+**Skill 管理机制**（系统 prompt 指导 Agent 自主判断）：
+
+创建触发场景：
+- 完成复杂任务（5+ tool calls）
+- 修复棘手错误后找到正确路径
+- 发现非平凡工作流
+- 困难/迭代任务完成后
+
+改进机制：
+- 使用 Skill 时发现问题（过时、缺失步骤、命令错误）→ **立即**用 `skill_manage(action='patch')` 更新
+- 不等用户提醒，发现就改
+
+本质上没有自动评估/反馈循环，完全靠 Agent 自主判断在使用中发现问题并修复。
+
 - **主动知识持久化**：Agent 会 nudge 自己将有价值的信息写入[长期记忆](../applied/memory-systems.md)，而非等用户指示
 - 兼容 [agentskills.io](https://agentskills.io) 开放标准
 
 ### 2. RL 训练集成
 
-Hermes Agent 不只是一个终端产品——它同时是一个**训练数据生成平台**：
+Hermes 同时是一个**训练数据生成平台**：
 
-- **Atropos RL 环境**：内置 RL 训练环境，可从 Agent 实际交互中生成训练轨迹
+- **Atropos RL 环境**：[Atropos](https://github.com/NousResearch/atropos)（1K stars）是 Nous Research 的 LLM RL 框架，通过环境微服务收集和评估 LLM 轨迹。Hermes 内置 [tinker-atropos](https://github.com/NousResearch/tinker-atropos) submodule 作为集成层
 - **轨迹压缩**：将冗长的多轮交互压缩为高质量训练样本
 - **批量轨迹生成**：配合 `batch_runner.py` 和 `datagen-config-examples/` 批量生产 tool-calling 训练数据
 
-这形成了一个自我强化循环：用户使用 Agent → 产生轨迹数据 → 训练更好的 tool-calling 模型 → 反哺 Agent 能力。
+> **注意**：Atropos RL 训练需要自托管模型（vLLM/SGLang 加载 LoRA），商业 API 用户无法使用此功能。
+
+**工作流程**：
+
+```
+用户使用 Hermes Agent → 生成交互轨迹 → 送入 Atropos RL 环境 → 训练 tool-calling 专精模型 → 反哺 Hermes Agent
+```
+
+**实测效果**（Tool Calling）：
+
+| 任务类型 | Base Model | With Atropos RL |
+|---------|------------|-----------------|
+| Parallel Tasks | 10% | 46%（4.6x） |
+| Simple Tasks | 21% | 51.75%（2.5x） |
+
+模型输出：[DeepHermes-ToolCalling-Specialist-Atropos](https://huggingface.co/NousResearch/DeepHermes-ToolCalling-Specialist-Atropos)
+
+**与 Honcho 的关系**：Honcho 负责用户记忆（输入侧），Atropos 负责 RL 训练（训练侧），两者独立。
 
 ### 3. Honcho 辩证用户建模
 
-不同于简单记录用户偏好的方法，Hermes 使用 Honcho 框架做**辩证用户建模**——通过多轮交互逐步构建和修正对用户的理解模型，跨会话累积。本质上是让 Agent 构建一个"用户心智模型"而非"用户偏好列表"。
-
-### 4. 单 Gateway 多平台
-
-一个 gateway 进程同时服务 Telegram、Discord、Slack、WhatsApp、Signal，对话跨平台连续。包含语音消息转录。
-
-### 5. Serverless 休眠
-
-六种终端后端（Local、Docker、SSH、Daytona、Singularity、Modal）。Daytona 和 Modal 后端支持 serverless 休眠——Agent 环境空闲时 hibernate，唤醒时恢复状态，闲时接近零成本。
+[Honcho](../libraries/honcho.md) 是 plastic-labs 开源的记忆库。Hermes 用它做**辩证用户建模**——通过多轮交互逐步构建和修正对用户的理解模型，跨会话累积。本质是让 Agent 构建一个"用户心智模型"而非"用户偏好列表"。Honcho 不绑定特定模型或框架，可以独立使用。
 
 ---
 
 ## 演进历史
 
-Hermes Agent 早期曾用 ClawdBot、MoltBot 等名称[^hermes-github]。项目提供 `hermes claw migrate` 一键迁移工具，方便从 [OpenClaw](https://github.com/openclaw/openclaw)（独立的开源个人 AI 助手，354K stars）迁移过来。
+Hermes Agent 早期曾用 ClawdBot、MoltBot 等名称[^hermes-github]。项目提供 `hermes claw migrate` 一键迁移工具，方便从 [OpenClaw](https://github.com/openclaw/openclaw)（354K stars）迁移。
+
+OpenClaw 同样支持 Skills 系统、多渠道接入、IDE 集成等能力。两者核心差异在于 Hermes 多了**学习循环**（Skill 使用中改进）和** Honcho 用户建模**，但对普通用户来说实际体验差异不大。
 
 ---
 

@@ -116,6 +116,8 @@ nav:
     - NeMo Agent Toolkit: agent-frameworks/nemo-agent-toolkit.md
   - 产品档案:
     - coding-agents/index.md
+    - libraries/index.md
+    - libraries/honcho.md
     - Cursor: coding-agents/cursor.md
     - GitHub Copilot: coding-agents/github-copilot.md
     - Claude Code: coding-agents/claude-code.md
@@ -133,6 +135,7 @@ nav:
   - 个人 Agent:
     - personal-agents/index.md
     - Hermes Agent: personal-agents/hermes-agent.md
+    - OpenClaw: personal-agents/openclaw.md
   - 行业全景:
     - landscape/index.md
     - 模型动态跟踪: landscape/model-tracker.md
