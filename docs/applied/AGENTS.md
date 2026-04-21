@@ -13,6 +13,7 @@
 | `agent-protocols.md` | Agent 间通信协议（A2A、ANX） |
 | `agent-hooks.md` | Agent 生命周期钩子 |
 | `subagents.md` | Subagent / 多 Agent 架构 |
+| `thinking-mode.md` | Thinking Mode（推理时计算扩展的核心优势与权衡） |
 | `prompt-engineering.md` | 提示工程 |
 | `rag.md` | 检索增强生成 |
 | `browser-automation.md` | AI 浏览器自动化（Accessibility Snapshot、Playwright CLI/MCP） |
@@ -29,6 +30,7 @@
 - Agent 生命周期钩子 → `agent-hooks.md`
 - Subagent / 多 Agent 架构 → `subagents.md`
 - Agent 框架产品档案 → `docs/agent-frameworks/`
+- Thinking Mode（推理时计算扩展）→ `thinking-mode.md`
 - 提示技巧 / 框架 → `prompt-engineering.md`
 - RAG 新方法 → `rag.md`
 - AI 浏览器自动化（Accessibility Snapshot / Playwright）→ `browser-automation.md`

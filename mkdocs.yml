@@ -91,6 +91,7 @@ nav:
     - Agent 间协议: applied/agent-protocols.md
     - Agent Hooks: applied/agent-hooks.md
     - Subagent 实践: applied/subagents.md
+    - Thinking Mode: applied/thinking-mode.md
     - 提示工程: applied/prompt-engineering.md
     - 检索增强生成 (RAG): applied/rag.md
     - AI 浏览器自动化: applied/browser-automation.md

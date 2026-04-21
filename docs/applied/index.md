@@ -51,6 +51,12 @@ description: AI 工程化实践——Agent、RAG、提示工程、基础设施�
 
     从架构到工程模式
 
+- :material-lightbulb: **[Thinking Mode](thinking-mode.md)**
+
+    ---
+
+    推理时计算扩展的核心优势、与 plan/execute 的权衡
+
 - :material-chat-processing: **[提示工程](prompt-engineering.md)**
 
     ---
