@@ -7,8 +7,7 @@ Checks:
   4. No bullet-list references masquerading as footnote definitions
 
 Usage:
-    uv run scripts/validate_docs.py          # check docs/ only
-    uv run scripts/validate_docs.py --all    # check docs/ + journal/
+    uv run scripts/validate_docs.py
 """
 
 from __future__ import annotations
@@ -62,14 +61,11 @@ INDEX_ONLY_DIRS = {
 
 KNOWLEDGE_REQUIRED = {"title", "description", "created", "updated", "tags", "review"}
 INDEX_REQUIRED = {"title", "description"}
-JOURNAL_REQUIRED = {"date", "type", "source", "category"}
 
 
 def classify(path: Path) -> str:
-    """Return 'index', 'knowledge', 'journal', or 'skip'."""
+    """Return 'index', 'knowledge', or 'skip'."""
     rel = path.relative_to(REPO_ROOT).as_posix()
-    if rel.startswith("journal/"):
-        return "journal"
     if not rel.startswith("docs/"):
         return "skip"
     if path.name == "index.md":
@@ -133,9 +129,7 @@ def validate_file(path: Path) -> list[str]:
         errors.append("missing or malformed YAML frontmatter")
         return errors  # can't check further
 
-    if kind == "journal":
-        required = JOURNAL_REQUIRED
-    elif kind == "index":
+    if kind == "index":
         required = INDEX_REQUIRED
     else:
         required = KNOWLEDGE_REQUIRED
@@ -153,16 +147,9 @@ def validate_file(path: Path) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate Markdown files.")
-    parser.add_argument(
-        "--all",
-        action="store_true",
-        help="Also validate journal/ files (default: docs/ only).",
-    )
     args = parser.parse_args()
 
     dirs = [REPO_ROOT / "docs"]
-    if args.all:
-        dirs.append(REPO_ROOT / "journal")
 
     files: list[Path] = []
     for d in dirs:

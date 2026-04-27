@@ -54,7 +54,6 @@ learn-ai/
 │   ├── agent-frameworks/       # Agent 框架产品档案
 │   └── landscape/              # 行业全景（模型跟踪）
 ├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 MkDocs）
-├── journal/                     # 每日 RSS 原始素材（脚本自动生成）
 ├── scripts/                     # 自动化脚本
 ├── mkdocs.yml                   # 站点配置 & 导航
 └── pyproject.toml               # Python 依赖
@@ -66,7 +65,6 @@ learn-ai/
 
 - **知识文档**：`kebab-case.md`（如 `ai-agents.md`、`prompt-engineering.md`）
 - **Python 脚本**：`snake_case.py`（如 `daily_update.py`）
-- **journal 文件**：`<source-slug>.md`，由脚本自动生成
 
 ---
 
@@ -110,29 +108,6 @@ learn-ai/
 
 ---
 
-## 日更脚本
-
-入口：`scripts/daily_update.py`。详细用法和订阅源配置见 `scripts/AGENTS.md`。
-
-```bash
-uv run scripts/daily_update.py              # 默认拉取 48h
-uv run scripts/daily_update.py --hours 1    # 验证新源
-```
-
----
-
-## LLM 整理流程（手动触发）
-
-脚本只负责拉取原始素材到 `journal/`。后续整理由人 + LLM 协作完成：
-
-1. 阅读 `journal/YYYY/MM/DD/` 当日素材
-2. 按筛选标准挑选值得收录的内容
-3. 更新对应知识文档（各目录的 `AGENTS.md` 有文件-主题映射表）
-4. 如有新模型，更新 `docs/landscape/model-tracker.md`
-5. 如有精选资源，添加到 `docs/resources.md`
-
----
-
 ## 构建 & 验证
 
 ```bash
@@ -140,7 +115,6 @@ uv run mkdocs serve              # 本地预览
 uv run mkdocs build --strict     # 严格构建（CI 使用，警告视为错误）
 uv run scripts/validate_docs.py  # 检查 frontmatter 和脚注规范
 uv run scripts/review_status.py  # 查看待 review 清单
-uv run scripts/daily_update.py --hours 1   # 日更脚本验证
 ```
 
 推送 `main` 后 GitHub Actions 自动构建部署（`.github/workflows/deploy-pages.yml`）。
