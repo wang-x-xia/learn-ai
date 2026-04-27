@@ -106,6 +106,7 @@ nav:
   - 模型档案:
     - model/index.md
     - Claude Mythos Preview: model/claude-mythos.md
+    - DeepSeek-V4: model/deepseek-v4.md
   - 产品档案:
     - 编码工具:
       - coding-agents/index.md

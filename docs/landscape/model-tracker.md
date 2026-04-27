@@ -2,7 +2,7 @@
 title: 模型动态跟踪
 description: 追踪主流 AI 模型的最新发布、更新和关键变化。本文件由日更脚本自动维护。
 created: 2026-04-07
-updated: 2026-04-09
+updated: 2026-04-27
 tags: [models, landscape, tracker]
 review:
 ---
@@ -37,6 +37,8 @@ review:
 | 模型 | 厂商 | 参数量 | 发布时间 | 亮点 |
 |------|------|--------|----------|------|
 | **GLM-5.1** | Z.ai (智谱) | 754B | 2026.4 | MIT 协议，1.51TB，主打长周期任务 |
+| **DeepSeek-V4-Pro** | DeepSeek | 1.6T(49B active) | 2026.4 | 混合压缩注意力，原生 1M 上下文，FP4+FP8 混合精度 |
+| **DeepSeek-V4-Flash** | DeepSeek | 284B(13B active) | 2026.4 | V4 轻量版，1M 推理 FLOPs 仅 V3.2 的 10% |
 | **Gemma 4** | Google | 多规格 | 2026.4 | 开源高效率 |
 | **DeepSeek-R1** | DeepSeek | 671B | 2025.1 | 开源推理模型标杆 |
 | **DeepSeek-V3** | DeepSeek | 671B(37B active) | 2024 | MoE 架构，卓越性价比 |
@@ -47,6 +49,10 @@ review:
 | **Qwen2.5** | 阿里 | 0.5B-72B | 2024 | 中文最强开源之一 |
 
 ## 最近更新
+
+### 2026-04-27
+
+- **DeepSeek-V4** 系列发布：V4-Pro（1.6T/49B active）和 V4-Flash（284B/13B active），原生 1M 上下文。混合压缩注意力（CSA+HCA）将 1M 推理 FLOPs 降至 V3.2 的 27%，KV Cache 降至 10%。Codeforces Rating 3206，开源首次匹配闭源。详见[模型档案](../model/deepseek-v4.md)
 
 ### 2026-04-09
 

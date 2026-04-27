@@ -7,6 +7,7 @@
 | 文件 | 主题 |
 |------|------|
 | `claude-mythos.md` | Claude Mythos Preview System Card 中文摘要 |
+| `deepseek-v4.md` | DeepSeek-V4 技术报告——混合压缩注意力、mHC、Muon 优化器 |
 
 ## 收录哪些内容
 

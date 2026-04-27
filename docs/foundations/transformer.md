@@ -210,6 +210,7 @@ MoE FFN:    x → Router(x) → 选择 Top-K Expert → Σ(gate_i · Expert_i(x)
 |------|--------|----------|-----------|-------------|
 | Mixtral 8x7B | 46.7B | 12.9B | 8, Top-2 | Token-choice |
 | DeepSeek-V3 | 671B | 37B | 256, Top-8 | 辅助 loss-free 均衡 |
+| [DeepSeek-V4-Pro](../model/deepseek-v4.md) | 1.6T | 49B | 384, Top-6 | loss-free + Hash routing(前 3 层) |
 | Qwen2.5-MoE | 14.3B | 2.7B | 60, Top-4+4 shared | Fine-grained |
 
 **MoE 的关键工程挑战**：
