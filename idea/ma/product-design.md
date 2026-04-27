@@ -2,7 +2,7 @@
 
 ## 产品定位
 
-**核心价值主张**: 一个泛用的多Agent协作框架，让非技术人员也能通过自然语言编排多个AI Agent完成复杂任务。
+**核心价值主张**: 一个泛用的多任务协作框架，让非技术人员也能通过自然语言编排多个AI能力完成复杂任务。
 
 **目标用户**:
 - 知识工作者（产品经理、PO、分析师）
@@ -18,17 +18,17 @@
 
 **US1: 业务报告生成**
 - 作为PO，我想"帮我准备下个Sprint的Review文档"
-- 系统自动协调多个Agent：拉取JIRA数据、分析完成情况、生成Review文档
+- 系统自动协调多个Impl：拉取JIRA数据、分析完成情况、生成Review文档
 - 我只需要审阅和微调
 
 **US2: 市场研究**
 - 作为产品经理，我想"调研竞品X的定价策略"
-- 系统协调Agent：搜索公开信息、分析定价模式、生成对比报告
+- 系统协调Impl：搜索公开信息、分析定价模式、生成对比报告
 - 我获得结构化的研究结果
 
 **US3: 跨系统信息整合**
 - 作为决策者，我想"汇总所有系统的健康状态"
-- 系统协调Agent：查询监控、检查日志、分析趋势、生成健康报告
+- 系统协调Impl：查询监控、检查日志、分析趋势、生成健康报告
 - 我获得全局视图
 
 **US4: 流程自动化**
@@ -48,7 +48,6 @@
 
 | 原语 | 功能 | 示例 | 理论/实践参考 |
 |------|------|------|---------------|
-| `decompose` | 任务分解（确定task类型） | "写报告" → [collect_data, analyze, generate_doc] | HTN (Hierarchical Task Networks) |
 | `sequence` | 顺序执行 | 先A，再B，再C | 工作流引擎 (Airflow, Temporal) |
 | `parallel` | 并行执行 | 同时执行A、B、C | 并行计算、CSP (Communicating Sequential Processes) |
 | `condition` | 条件分支 | 如果X则A，否则B | 控制流图、BPMN (Gateway) |
@@ -56,39 +55,39 @@
 | `map` | 映射 | 把一个操作应用到每个元素 | 函数式编程 (MapReduce) |
 | `context` | 上下文作用域 | 在指定Context中执行Task | 作用域、环境变量、依赖注入
 
-**Task类型与Agent绑定**：
+**Task Type 与 Impl**：
 
-task类型在decompose时确定，直接映射到对应的agent类型：
+Task Type由Planner在规划时确定，每个Task Type下可以有多个Impl（不同模型/配置/脚本）：
 
-| Task类型 | 对应Agent | 职责 |
+| Task Type | Impl示例 | 职责 |
 |----------|-----------|------|
-| `collect_data` | DataCollector | 信息收集、查询、爬取 |
-| `analyze` | Analyzer | 数据分析、模式识别 |
-| `generate_doc` | DocumentGenerator | 文档生成、内容创作 |
-| `send_email` | EmailSender | 邮件发送 |
-| `query_jira` | JiraQuery | JIRA查询 |
-| `query_monitor` | MonitorQuery | 监控数据查询 |
+| `collect_data` | collect_data/gpt-4o-mini, collect_data/jira-script | 信息收集、查询、爬取 |
+| `analyze` | analyze/gpt-4o, analyze/deepseek-v4 | 数据分析、模式识别 |
+| `generate_doc` | generate_doc/gpt-4o | 文档生成、内容创作 |
+| `send_email` | send_email/smtp-script | 邮件发送 |
+| `query_jira` | query_jira/jira-script | JIRA查询 |
+| `query_monitor` | query_monitor/prometheus-script | 监控数据查询 |
 
 **示例**：
 ```
 用户: "帮我准备Sprint Review"
 
-decompose("准备Sprint Review")
-  → sequence([
-      parallel([
-          collect_data(source="jira"),      // → DataCollector
-          collect_data(source="monitor")    // → DataCollector
-      ]),
-      analyze(),                            // → Analyzer
-      generate_doc(),                       // → DocumentGenerator
-    ])
+Planner生成的Plan:
+  sequence([
+    parallel([
+        collect_data(source="jira"),
+        collect_data(source="monitor"),
+    ]),
+    analyze(),
+    generate_doc(),
+  ])
 ```
 
 **简化后的架构**：
-- decompose时确定每个subtask的类型
-- task类型直接映射到agent类型（1:1绑定）
+- Planner规划时确定每个subtask的Task Type
+- 同一Task Type下可以有多个Impl（不同模型/配置/脚本），由选择策略决定
 - 不需要运行时匹配、竞标等复杂机制
-- 类似"强类型"编程：task的type决定了它的handler
+- 类似"强类型"编程：Task的Type决定了它的handler
 
 **理论参考文献**：
 
@@ -126,38 +125,40 @@ decompose("准备Sprint Review")
 **关键洞察**：
 - 这些原语不是凭空想象的，而是几十年工作流和分布式系统研究的结晶
 - LLM时代的新挑战是"自然语言 → 原语组合"的语义理解
-- 规划器的核心创新在于用LLM做"语义到语法"的转换
+- 核心创新在于用LLM做"语义到语法"的转换
 
-**规划器的工作**：
-1. 理解用户需求（自然语言 → 意图）
-2. 用原语组合出执行计划（类似写代码）
-3. 执行计划并跟踪状态
-4. 处理异常和人工干预
+**规划能力**：
+
+规划不是独立角色，而是 Impl 的能力。当 Impl 的 `can_expand_to_plan: true` 时，它承担规划职责：
+1. 理解 Task 的意图
+2. 用编排原语组合出子 Plan
+3. Plan Executor 校验 Plan 合法性（partners 范围、参数、DSL 结构）
+4. 校验通过后由 Plan Executor 执行
 
 **类比**：
 - 编排原语 = 编程语言的语法（if/else/for/while）
-- 规划器 = 编译器/解释器
+- Impl（规划时）= 编译器/解释器
 - 执行计划 = 编译后的程序
 
 **好处**：
-- 规划器本身不需要"懂"所有业务，只需要"懂"原语组合
-- 新增业务逻辑 = 新的原语组合，不需要改规划器
+- 规划能力分布在各个 Impl 中，每个 Impl 只需要"懂"自己 partners 范围内的原语组合
 - 可调试：执行计划是可视化的
-- 可扩展：新增原语即可增强能力
+- 可校验：Plan 生成后可做结构校验（partners、参数、DSL），语义正确性通过评价体系感知
 
 **示例**：
 ```
 用户: "帮我准备Sprint Review"
 
-规划器生成的执行计划:
-decompose("准备Sprint Review")
-  → sequence([
-      parallel(["拉取JIRA数据", "拉取测试结果"]),
-      analyze_completion(),
-      generate_review_doc(),
-      wait_for_human_review()
-    ])
-assign_to_agents(plan)
+Planner生成的Plan:
+  sequence([
+    parallel([
+        collect_data(source="jira"),
+        collect_data(source="test_results"),
+    ]),
+    analyze_completion(),
+    generate_review_doc(),
+    wait_for_human_review(),
+  ])
 ```
 
 **状态流转设计**:
@@ -178,7 +179,7 @@ assign_to_agents(plan)
 **上下文传递**:
 - Plan Executor在Plan和Task间传递必要的上下文
 - 子Plan继承父Plan的Context
-- Agent可以请求额外上下文
+- Impl可以请求额外上下文
 - 支持上下文的增量更新
 
 **上下文修改**:
@@ -191,19 +192,23 @@ assign_to_agents(plan)
 - 支持断点续传
 - 上下文版本管理
 
-### 3. Agent能力定义
+### 3. Task Type 与 Impl
 
-**Agent类型**:
-- **信息收集Agent**: 搜索、查询、爬取
-- **分析Agent**: 数据分析、模式识别
-- **生成Agent**: 文档生成、内容创作
-- **执行Agent**: 调用API、发送邮件、更新系统
-- **规划Agent**: 任务分解、调度（中央规划器）
+**Task Type**：定义"这类工作是什么"——能力契约（输入/输出格式、redo_strategy）。
 
-**Agent能力描述**:
-- 每个Agent声明自己的能力（输入/输出格式）
-- 规划器根据能力匹配任务
-- 支持Agent的动态注册和发现
+**Impl**：定义"这类工作怎么做"——同一Task Type下的具体执行方式（不同模型、策略、配置、脚本）。
+
+| Task Type | Impl示例 |
+|-----------|----------|
+| `collect_data` | collect_data/gpt-4o-mini (kind: llm), collect_data/jira-script (kind: script) |
+| `analyze` | analyze/gpt-4o (kind: llm), analyze/deepseek-v4 (kind: llm) |
+| `generate_doc` | generate_doc/gpt-4o (kind: llm) |
+| `send_email` | send_email/smtp-script (kind: script) |
+
+**Impl选择**：
+- Plan Executor将Task分配给Task Type时，由选择策略决定使用哪个Impl
+- 评价体系在Impl级别运作，为选择策略提供数据（合格率、成本、速度等）
+- 支持Impl的动态注册和发现
 
 ### 4. 用户交互
 
@@ -237,13 +242,13 @@ assign_to_agents(plan)
 
 **Phase 1 - 核心编排（3个月）**
 - 中央任务规划器
-- 3-5个基础Agent（信息收集、分析、生成）
+- 3-5个基础Task Type + Impl（信息收集、分析、生成）
 - 简单的上下文管理
 - 命令行/简单的Web界面
 - 1-2个核心用户故事（如报告生成）
 
 **Phase 2 - 扩展能力（3个月）**
-- 更多Agent类型
+- 更多Task Type和Impl
 - 任务模板系统
 - 可视化进度展示
 - 基础的错误处理和重试
@@ -259,7 +264,7 @@ assign_to_agents(plan)
 ## 技术可行性考虑（不深入细节）
 
 **规划器**: 可以基于现有的workflow引擎或自研
-**Agent通信**: 消息队列或事件总线
+**Impl通信**: 消息队列或事件总线
 **上下文存储**: 数据库或文件系统
 **LLM集成**: 调用现有的LLM API
 **部署**: 可以是SaaS或本地部署
@@ -267,10 +272,10 @@ assign_to_agents(plan)
 ## 风险和挑战
 
 1. **任务分解的准确性**: LLM可能无法准确理解复杂需求
-2. **Agent之间的协作**: 需要良好的接口定义和错误处理
+2. **Impl之间的协作**: 需要良好的接口定义和错误处理
 3. **上下文管理**: 复杂任务的上下文可能很庞大
 4. **用户期望管理**: 用户可能期望系统能做所有事情
-5. **成本**: 多Agent调用LLM的成本可能很高
+5. **成本**: 多Impl调用LLM的成本可能很高
 
 ## 成功指标
 

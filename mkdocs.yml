@@ -45,6 +45,7 @@ plugins:
       lang:
         - zh
         - en
+  - tags
   - social:
       enabled: !ENV [CI, false]
 

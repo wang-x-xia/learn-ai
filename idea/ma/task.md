@@ -40,7 +40,7 @@ Task 实例包含完整的执行信息：
 ```yaml
 Task_A:
   id: "task:/collect_data?source=jira&sprint=23"
-  type: "analyze"
+  type: "collect_data"
   state: "new"
   input:
     source: "jira"
@@ -63,7 +63,7 @@ Task_A:
 | 字段 | 类型 | 必填 | 描述 |
 |------|------|------|------|
 | `id` | URI | 是 | Task ID，格式 `task:/<type>?<query>#<fragment>` |
-| `type` | string | 是 | Task 类型，对应 Agent 类型 |
+| `type` | string | 是 | Task 类型 |
 | `state` | string | 是 | Task 状态（new/working/delegated/done） |
 | `input` | object | 是 | Task 输入参数 |
 | `plan` | object | 否 | 可选，子 Plan 定义 |
@@ -85,9 +85,9 @@ new → working → delegated → done
 | 状态 | 描述 | 触发条件 |
 |------|------|----------|
 | `new` | Task已创建，等待执行 | Plan生成后Task被创建 |
-| `working` | Task正在执行中 | Agent开始处理Task |
+| `working` | Task正在执行中 | Impl开始处理Task |
 | `delegated` | Task已展开为子Plan，等待子Plan完成 | Task有plan字段，Plan Executor展开为子Plan |
-| `done` | Task执行完成（成功或失败） | Agent返回结果或错误，或子Plan完成 |
+| `done` | Task执行完成（成功或失败） | Impl返回结果或错误，或子Plan完成 |
 
 **Subtype（可选的细粒度状态）**：
 - `working.waiting` - 等待依赖Task完成
@@ -100,17 +100,17 @@ new → working → delegated → done
 **设计原则**：
 - 宏观状态保持简单（4个），便于理解和调试
 - Subtype用于内部跟踪和监控，不影响编排逻辑
-- 状态转换由Plan Executor控制，Agent不直接修改Task状态
+- 状态转换由Plan Executor控制，Impl不直接修改Task状态
 
 ## Task 展开为 Plan
 
-Task 实例可以包含可选的 plan 字段，如果存在则展开为子 Plan：
+当选中的 Impl 的 `can_expand_to_plan: true` 时，该 Impl 会为 Task 生成一个子 Plan：
 
 ```yaml
 Task_A:
   id: "task:/analyze?target=test_results"
-  type: "analyze"  # 支持 can_expand_to_plan
-  plan:
+  type: "analyze"
+  plan:  # 由 Impl 生成
     sequence([
       collect_data(source="jira"),
       collect_data(source="monitor"),
@@ -119,26 +119,29 @@ Task_A:
 ```
 
 **展开规则**：
-- 只有 `can_expand_to_plan: true` 的 Task 类型才能包含 plan 字段
-- Plan Executor 检测到 plan 字段时，展开为子 Plan
-- 子 Plan 创建时继承父 Plan 的 Context
+- 是否展开由选中的 Impl 决定（`can_expand_to_plan`），不是 Task 类型决定
+- Impl 生成 Plan 后，Plan Executor 进行结构校验（partners 范围、参数合法性、DSL 结构）
+- 校验通过后，创建子 Plan Context（继承父 Plan Context），递归执行子 Plan
 - 子 Plan 完成后，结果合并到父 Plan Context
 - Task 状态变为 `delegated`，等待子 Plan 完成
 
-## Task 与 Agent 的关系
+## Task 与 Impl 的关系
 
-Agent 是 Task 的执行者，每个 Agent 对应一种 Task 类型：
+Impl 是 Task 的执行者：
 
 - **输入**：Task + Context
 - **输出**：Result + 新Context
-- **能力边界**：只处理特定类型的Task
-- **无状态**：Agent本身不维护状态，状态在Context中
+- **无状态**：Impl本身不维护状态，状态在Context中
 
 **映射关系**：
 
 ```
-Task Type ← 1:1 → Agent Type
-  collect_data ← → DataCollector
-  analyze       ← → Analyzer
-  generate_doc  ← → DocumentGenerator
+Task Type ← 1:N → Impl
+  collect_data ←┬─ collect_data/jira-script   (kind: script)
+                └─ collect_data/gpt-4o-mini   (kind: llm)
+  analyze      ←┬─ analyze/gpt-4o             (kind: llm)
+                └─ analyze/gpt-4o-mini        (kind: llm)
+  generate_doc ←── generate_doc/gpt-4o        (kind: llm)
 ```
+
+每个 Task Type 可以有多个 Impl，由 Plan Executor 的选择策略决定使用哪个。评价体系在 Impl 级别运作。

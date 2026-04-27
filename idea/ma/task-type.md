@@ -1,21 +1,19 @@
 # Task 类型
 
-Task 类型在 decompose 时确定，直接映射到 Agent 类型。
+Task 类型定义能力契约，每个 Task Type 可以有多个 Impl。
 
 ## Task 类型定义
 
 每个 Task 类型在注册时声明：
-1. 是否支持扩展为 Plan（can_expand_to_plan）
-2. 重做策略（redo_strategy）
-3. URI 参数解析规则（如何解析 query 和 fragment）
-4. DSL 辅助方法（dsl_helpers，可选）
+1. 重做策略（redo_strategy）
+2. URI 参数解析规则（如何解析 query 和 fragment）
+3. DSL 辅助方法（dsl_helpers，可选）
 
 **定义结构**：
 
 ```
 task_types:
   <task_type_name>:
-    can_expand_to_plan: boolean
     redo_strategy:
       type: "always_redo" | "context_aware" | "input_driven"
       logic: string  # 策略逻辑描述或引用
@@ -38,24 +36,70 @@ task_types:
 
 | 字段 | 类型 | 必填 | 描述 |
 |------|------|------|------|
-| `can_expand_to_plan` | boolean | 是 | 是否支持展开为子 Plan |
-| `redo_strategy.type` | enum | 是 | 重做策略类型 |
+| `redo_strategy.type` | enum | 是 | 重做策略类型（描述任务本身的性质） |
 | `redo_strategy.logic` | string | 是 | 策略逻辑描述或引用 |
 | `uri_params.query` | array | 是 | URI query 参数定义 |
 | `uri_params.fragment` | object | 否 | URI fragment 用法定义 |
 | `dsl_helpers` | array | 否 | 可在 Plan DSL 中使用的辅助方法 |
 | `description` | string | 是 | Task 类型描述 |
 
-**URI 参数定义**：
+## Impl 定义
 
-每个 query 参数需要定义：
-- `name`：参数名称
-- `required`：是否必填
-- `description`：参数描述
+每个 Impl 在注册时声明：
 
-fragment 需要定义：
-- `usage`：用途（如 "version"、"instance_id"）
-- `description`：描述
+```
+impls:
+  <task_type>/<impl_name>:
+    kind: "llm" | "script" | "predefined"
+    can_expand_to_plan: boolean
+    partners: [task_type_name]  # 可协作的 Task Type 列表
+    config:
+      model: string
+      # ... 其他实现特定配置
+```
+
+**字段说明**：
+
+| 字段 | 类型 | 必填 | 描述 |
+|------|------|------|------|
+| `kind` | enum | 是 | 执行者类型（llm、script、predefined等） |
+| `can_expand_to_plan` | boolean | 是 | 是否将Task展开为Plan。强模型可能直接完成，脚本直接执行，弱模型需要拆分 |
+| `partners` | array | 是 | 可协作的Task Type列表。生成的Plan只能引用此范围内的Task Type |
+| `config` | object | 是 | 实现特定配置（模型、脚本路径等） |
+
+**示例**：
+
+```
+impls:
+  collect_data/jira-script:
+    kind: "script"
+    can_expand_to_plan: false
+    partners: []
+    config:
+      script: "scripts/collect_jira.py"
+
+  analyze/gpt-4o:
+    kind: "llm"
+    can_expand_to_plan: false
+    partners: []
+    config:
+      model: "gpt-4o"
+
+  analyze/gpt-4o-mini:
+    kind: "llm"
+    can_expand_to_plan: true
+    partners: [collect_data, summarize]
+    config:
+      model: "gpt-4o-mini"
+```
+
+## Task Type 与 Impl 的映射
+
+```
+Task Type ← 1:N → Impl
+```
+
+每个 Task Type 可以有多个 Impl（不同 kind、不同模型/配置），由 Plan Executor 的选择策略决定使用哪个。评价体系在 Impl 级别运作，为选择策略提供数据支持。
 
 ## DSL 辅助方法
 
@@ -136,13 +180,3 @@ Plan Executor 根据决策执行
   - redo：重新执行
   - partial_redo：部分重做
 ```
-
-## Task 类型与 Agent 的映射
-
-Task 类型与 Agent 类型是 1:1 映射关系：
-
-```
-Task Type ← 1:1 → Agent Type
-```
-
-每个 Task 类型对应一个专门的 Agent，Agent 只处理特定类型的 Task。

@@ -4,11 +4,11 @@
     2. 尽量避免引入边界case的讨论，优先以主要的用户故事为主。
  -->
 
-# 多Agent工程任务框架
+# 多任务协作框架
 
 ---
 
-这是一个多Agent协作框架的产品设计文档，包含技术架构、产品设计和质量评价三个部分。
+这是一个多任务协作框架的产品设计文档，包含技术架构、产品设计和质量评价三个部分。
 
 ## 文档结构
 
@@ -16,8 +16,7 @@
 技术架构设计，包含：
 - 词汇表
 - Context设计（层次结构、访问规则、扩展机制）
-- Agent能力
-- Planner职责
+- Task Type 与 Impl（kind、partners、Plan生成与校验）
 - Plan Executor（版本管理、执行流程、异常处理）
 
 ### [Plan DSL 语法](plan-dsl.md)
@@ -46,20 +45,20 @@ Task 的完整定义，包含：
 - Task 实例（字段结构）
 - Task 生命周期
 - Task 展开为 Plan
-- Task 与 Agent 的关系
+- Task 与 Impl 的关系
 
 ### [Task 类型](task-type.md)
 Task 类型定义，包含：
-- Task 类型定义（can_expand_to_plan、redo_strategy、URI 参数解析）
+- Task 类型定义（redo_strategy、URI 参数解析）
+- Impl 定义（kind、can_expand_to_plan、partners）
 - 重做策略类型
 - 版本切换时的判断逻辑
-- Task 类型与 Agent 的映射
 
 ### [产品设计笔记](product-design.md)
 产品设计思路，包含：
 - 产品定位和目标用户
 - 主要用户故事
-- 核心功能模块（任务编排、上下文管理、Agent能力、用户交互、知识记忆）
+- 核心功能模块（任务编排、上下文管理、Task Type与Impl、用户交互、知识记忆）
 - MVP范围建议
 - 技术可行性考虑
 - 风险和挑战

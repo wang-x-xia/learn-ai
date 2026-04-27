@@ -119,16 +119,17 @@ Plan Executor 接收 Plan
   ↓
 遇到 Task
   ↓
-Task 有 plan 字段？
+分配 Task 给 Task Type，选择 Impl
+  ↓
+Impl 的 can_expand_to_plan?
   ↓ Yes
-  展开 Task 为子 Plan
-  - 创建子 Plan Context（继承父 Plan Context）
-  - 递归执行子 Plan
-  - 等待子 Plan 完成
+  Impl 生成子 Plan
+  - Plan Executor 校验子 Plan（partners、参数、DSL）
+  - 校验通过：创建子 Plan Context（继承父 Plan Context），递归执行子 Plan
+  - 校验不通过：打回重新生成或标记失败
   ↓ No
-  分配 Task 给 Agent
-  - Agent 执行 Task
-  - Agent 返回结果 + Context 更新
+  Impl 直接执行 Task
+  - Impl 返回结果 + Context 更新
   - 更新 Plan Context
   ↓
 所有 Task 完成？
@@ -141,13 +142,13 @@ Plan 完成
 ## Task 执行流程
 
 ```
-Task 分配给 Agent
+Task 分配给 Task Type，选择 Impl
   ↓
-Agent 接收 Task + Context
+Impl 接收 Task + Context
   ↓
-Agent 执行 Task
+Impl 执行 Task（直接执行或展开为 Plan）
   ↓
-Agent 返回 Result + Context Updates
+Impl 返回 Result + Context Updates
   ↓
 Plan Executor 更新 Plan Context
   ↓
@@ -158,7 +159,7 @@ Task 状态变为 done
 
 ## Context 更新规则
 
-1. **Task输出更新Context**：Agent返回的Context Updates合并到Plan Context
+1. **Task输出更新Context**：Impl返回的Context Updates合并到Plan Context
 2. **子Plan继承父Context**：子Plan创建时继承父Plan的Context
 3. **子Plan结果合并**：子Plan完成后，其Context更新合并到父Plan Context
 4. **并发冲突解决**：parallel/map原语执行时，多个Task并发更新Context，采用合并策略

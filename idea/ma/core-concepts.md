@@ -5,9 +5,9 @@
 | 词汇 | 定义 |
 |------|------|
 | **Task** | 最小执行单元，代表一个原子化的工作项。Task可以按需展开为Plan。详见 [Task 定义](task.md) |
-| **Agent** | 执行特定类型Task的实体，与Task类型1:1绑定 |
-| **Planner** | 任务规划器，负责理解需求、分解任务、组合原语、生成Plan |
-| **Plan Executor** | Plan执行器，负责执行Planner生成的Plan，管理Task调度和Context传递 |
+| **Task Type** | Task的类型，定义能力契约（输入/输出、redo_strategy、uri_params）。每个Task Type可以有多个Impl |
+| **Impl** | Task Type的具体执行者，可以是LLM、脚本、预定义流程等（通过kind区分）。Impl决定是否将Task展开为Plan（can_expand_to_plan）以及可协作的partners。评价体系针对Impl级别运作 |
+| **Plan Executor** | Plan执行器，负责执行Plan，管理Task调度、Impl选择和Context传递 |
 | **Plan** | 由编排原语组合而成的执行计划，类似程序代码。Plan可以嵌套 |
 | **Context** | Task和Plan执行时的输入数据和依赖信息，由Plan Executor管理。Context可以分层：Global Context、Plan Context（嵌套） |
 | **Plan Context** | Plan调度Task时共享的数据，支持嵌套。Plan Context可以被Task修改 |
@@ -103,7 +103,7 @@ shared_data:
 
 | Context类型 | 访问权限 | 读写规则 |
 |-------------|----------|----------|
-| Global Context | 所有Agent可读 | 只读，基于main branch的特定commit执行，修改需提交新commit到main branch |
+| Global Context | 所有Impl可读 | 只读，基于main branch的特定commit执行，修改需提交新commit到main branch |
 | Plan Context | Plan内的所有Task可读写，支持嵌套继承 | Plan级别隔离，子Plan可访问父Plan Context |
 
 **预留扩展空间的设计**：
@@ -148,46 +148,73 @@ shared_data:
 
 1. **增量更新**：Context支持增量更新，避免全量替换
 2. **版本控制**：重要Context有版本历史，支持回滚
-3. **事件通知**：Context变更触发事件，相关Agent收到通知
-4. **冲突解决**：多Agent并发更新时的冲突解决策略
+3. **事件通知**：Context变更触发事件，相关Impl收到通知
+4. **冲突解决**：多Impl并发更新时的冲突解决策略
 5. **Task修改Context**：Task可以修改Plan Context，Global Context为只读（基于main branch的特定commit执行）
 
 **设计原则**：
 - **分层隔离**：不同层次Context相互隔离，避免污染
-- **最小权限**：Agent只能访问必要的Context层次
+- **最小权限**：Impl只能访问必要的Context层次
 - **全局偏好**：偏好配置固化在Global Context，不针对个人
 - **可扩展**：通过命名空间、继承机制预留扩展空间
 - **可追溯**：所有Context变更可追溯（who/when/what）
 - **可恢复**：Global Context通过main branch的commit历史支持版本回滚，可追溯每个Task基于哪个commit执行
 
-## Agent能力
+## Task Type 与 Impl
 
-Agent是Task的执行者，每个Agent对应一种Task类型：
+Task Type 定义能力契约，Impl 是具体执行者。
+
+**Task Type**：定义"这类工作是什么"
 - **输入**：Task + Context
 - **输出**：Result + 新Context
-- **能力边界**：只处理特定类型的Task
-- **无状态**：Agent本身不维护状态，状态在Context中
+- **redo_strategy**：定义该类型的重做策略（描述任务本身的性质，与Impl无关）
 
-## Planner职责
+**Impl**：定义"这类工作怎么做"
 
-Planner不执行具体Task，只负责规划：
-1. **理解需求**：自然语言 → 意图
-2. **分解任务**：需求 → Task列表（确定Task类型）
-3. **组合原语**：用编排原语组合出Plan
-4. **处理异常**：重试、fallback、人工干预
+同一个Task Type可以有多个Impl，通过 `kind` 区分执行者类型：
+
+```
+Task Type ← 1:N → Impl
+  collect_data ←──┬── collect_data/jira-script  (kind: script)
+                   │     can_expand_to_plan: false
+                   │     partners: []
+                   │
+                   ├── collect_data/gpt-4o-mini  (kind: llm)
+                   │     can_expand_to_plan: true
+                   │     partners: [query_jira, query_monitor]
+                   │
+                   └── collect_data/predefined   (kind: predefined)
+                         can_expand_to_plan: true
+                         partners: [query_jira]
+```
+
+每个Impl声明：
+- **kind**：执行者类型（llm、script、predefined等）
+- **can_expand_to_plan**：是否将Task展开为Plan。强模型可能直接完成，脚本直接执行，弱模型需要拆分为子任务
+- **partners**：可协作的Task Type列表。当Impl生成Plan时，Plan中只能引用partners范围内的Task Type
+
+**Plan生成与校验**：当Impl将Task展开为Plan时，该Impl承担了规划职责。Plan生成后、执行前进行结构校验：
+1. Plan中引用的每个Task Type是否都在该Impl的partners范围内？
+2. 每个Task的参数是否符合对应Task Type的定义？
+3. DSL结构本身是否合法？
+
+结构校验只能捕捉结构性错误。语义错误（Plan逻辑是否正确）通过执行后的评价体系（见 [任务评价体系](task-evaluation.md)）来感知。
+
+**Impl选择**：Plan Executor将Task分配给Task Type时，由选择策略决定使用哪个Impl。评价体系在Impl级别运作，为选择策略提供数据支持（如：不合格的Impl降权、优秀的Impl优先选用、成本敏感场景选用更便宜的Impl）。
 
 ## Plan Executor
 
-Plan Executor负责执行Planner生成的Plan，管理Task的调度和执行流程。
+Plan Executor负责执行Plan，管理Task的调度和执行流程。
 
 **职责**：
 1. **Plan调度**：按Plan的原语顺序调度Task执行
-2. **Task分配**：将Task分配给对应的Agent
+2. **Impl选择**：将Task分配给Task Type，由选择策略决定使用哪个Impl
 3. **状态跟踪**：跟踪Task和Plan的执行状态
 4. **Context管理**：管理Plan Context的传递和更新
-5. **Task展开**：处理Task的plan字段，展开为子Plan
-6. **异常处理**：处理Task执行失败、重试、fallback
-7. **版本管理**：管理Plan的版本，处理版本切换
+5. **Plan校验**：校验Impl生成的Plan是否合法（partners范围、参数合法性、DSL结构）
+6. **Task展开**：当选中的Impl将Task展开为Plan时，递归执行子Plan
+7. **异常处理**：处理Task执行失败、重试、fallback
+8. **版本管理**：管理Plan的版本，处理版本切换
 
 **Plan版本化**：
 
@@ -197,13 +224,13 @@ Plan Executor负责执行Planner生成的Plan，管理Task的调度和执行流�
 
 **版本切换场景**：
 
-典型场景：Plan执行错误时，Planner重新订正Plan
+典型场景：Plan执行错误时，负责规划的Impl重新订正Plan
 ```
 Plan v1 执行中
   ↓
 某个Task失败
   ↓
-Planner重新订正Plan（生成v2）
+Impl重新订正Plan（生成v2）
   ↓
 Plan Executor处理版本切换：
   - 遍历v2中的每个Task
@@ -219,21 +246,18 @@ Plan Executor处理版本切换：
 ```yaml
 task_types:
   collect_data:
-    can_expand_to_plan: false
     description: "数据收集"
     redo_strategy:
       type: "context_aware"
       logic: "TODO"  # 待设计：根据上下文判断是否重做
 
   analyze:
-    can_expand_to_plan: true
     description: "数据分析"
     redo_strategy:
       type: "input_driven"
       logic: "TODO"  # 待设计：根据输入变化判断是否重做
 
   generate_doc:
-    can_expand_to_plan: true
     description: "文档生成"
     redo_strategy:
       type: "always_redo"
@@ -271,16 +295,17 @@ Plan Executor 接收 Plan
   ↓
 遇到 Task
   ↓
-Task 有 plan 字段？
+分配 Task 给 Task Type，选择 Impl
+  ↓
+Impl 的 can_expand_to_plan?
   ↓ Yes
-  展开 Task 为子 Plan
-  - 创建子 Plan Context（继承父 Plan Context）
-  - 递归执行子 Plan
-  - 等待子 Plan 完成
+  Impl 生成子 Plan
+  - Plan Executor 校验子 Plan（partners、参数、DSL）
+  - 校验通过：创建子 Plan Context（继承父 Plan Context），递归执行子 Plan
+  - 校验不通过：打回重新生成或标记失败
   ↓ No
-  分配 Task 给 Agent
-  - Agent 执行 Task
-  - Agent 返回结果 + Context 更新
+  Impl 直接执行 Task
+  - Impl 返回结果 + Context 更新
   - 更新 Plan Context
   ↓
 所有 Task 完成？
@@ -304,13 +329,13 @@ Plan 完成
 **Task执行流程**：
 
 ```
-Task 分配给 Agent
+Task 分配给 Task Type，选择 Impl
   ↓
-Agent 接收 Task + Context
+Impl 接收 Task + Context
   ↓
-Agent 执行 Task
+Impl 执行 Task（直接执行或展开为 Plan）
   ↓
-Agent 返回 Result + Context Updates
+Impl 返回 Result + Context Updates
   ↓
 Plan Executor 更新 Plan Context
   ↓
@@ -323,11 +348,11 @@ Task 状态变为 done
 
 | 状态 | 描述 | 触发条件 |
 |------|------|----------|
-| `new` | Plan已创建，等待执行 | Planner生成Plan后 |
+| `new` | Plan已创建，等待执行 | Impl生成Plan后 |
 | `running` | Plan正在执行中 | Plan Executor开始执行Plan |
 | `waiting` | Plan等待子Plan完成 | 展开的Task正在执行子Plan |
 | `done` | Plan执行完成（成功或失败） | 所有Task完成或失败 |
-| `switched` | Plan已切换到新版本 | Planner生成新版本，Plan Executor切换 |
+| `switched` | Plan已切换到新版本 | Impl生成新版本，Plan Executor切换 |
 
 **Plan版本信息**：
 
@@ -351,7 +376,7 @@ version_diff:
 
 **Context更新规则**：
 
-1. **Task输出更新Context**：Agent返回的Context Updates合并到Plan Context
+1. **Task输出更新Context**：Impl返回的Context Updates合并到Plan Context
 2. **子Plan继承父Context**：子Plan创建时继承父Plan的Context
 3. **子Plan结果合并**：子Plan完成后，其Context更新合并到父Plan Context
 4. **并发冲突解决**：parallel/map原语执行时，多个Task并发更新Context，采用合并策略
@@ -372,7 +397,7 @@ version_diff:
    - 或配置自定义合并策略
 
 **设计原则**：
-- **职责分离**：Planner负责规划，Plan Executor负责执行
+- **职责分离**：Impl负责执行（或规划+执行），Plan Executor负责调度和校验
 - **状态透明**：Plan和Task的状态变化可追踪
 - **Context隔离**：不同Plan的Context相互隔离
 - **可恢复**：Plan执行失败后可以从断点恢复

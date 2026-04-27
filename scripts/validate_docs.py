@@ -50,15 +50,6 @@ def parse_frontmatter(text: str) -> dict | None:
 # Classification
 # ---------------------------------------------------------------------------
 
-# Directories whose index.md only needs title + description.
-INDEX_ONLY_DIRS = {
-    "docs/foundations",
-    "docs/applied",
-    "docs/research",
-    "docs/coding-agents",
-    "docs/landscape",
-}
-
 KNOWLEDGE_REQUIRED = {"title", "description", "created", "updated", "tags", "review"}
 INDEX_REQUIRED = {"title", "description"}
 

@@ -2,11 +2,11 @@
 
 ## 评价目标
 
-对Task执行结果进行量化评价，用于：
+对Task执行结果进行量化评价，**针对 Impl 级别运作**，用于：
 - 判断Task是否达到基本要求（合格/不合格）
 - 识别Task执行中的优秀表现（哪些指标达到优秀标准）
-- 为模型选择和Agent优化提供数据支持
-- 决策：不合格的Task需要换模型或换Agent
+- 为 Impl 选择策略提供数据支持（同一Task Type下选用哪个Impl）
+- 决策：不合格的Impl降权或淘汰，优秀的Impl优先选用，成本敏感场景选用更便宜的Impl
 
 ## 评价指标设计
 
@@ -70,7 +70,7 @@ else:
 
 ## 指标定义配置
 
-每个Task类型在Agent注册时声明自己的指标配置：
+每个Task类型在注册时声明自己的指标配置：
 
 ```yaml
 task_type_metrics:
@@ -106,6 +106,7 @@ task_type_metrics:
 task_evaluation:
   task_id: "task-123"
   task_type: "generate_doc"
+  impl: "analyze/gpt-4o"  # 执行该Task的Impl
   
   rating: "qualified"  # qualified | unqualified
   
@@ -154,9 +155,10 @@ task_evaluation:
 
 ## 评价结果的应用
 
-- **实时决策**：不合格的Task触发模型/Agent切换
-- **Agent优化**：识别Agent的弱点指标，针对性改进
-- **成本优化**：如果"Token效率"达到优秀，可以考虑用更便宜的模型
+- **Impl选择**：基于历史评价数据，为同一Task Type下的多个Impl排序和选择
+- **实时决策**：不合格的Impl降权，连续不合格则淘汰
+- **成本优化**：如果便宜的Impl也能达到合格，优先选用以降低成本
+- **Impl优化**：识别Impl的弱点指标，针对性改进（如调整prompt、更换模型）
 - **用户信任**：展示评价结果，帮助用户判断是否信任AI执行结果
 - **系统演进**：长期趋势分析，指导产品迭代
 
@@ -165,7 +167,7 @@ task_evaluation:
 **分阶段落地**：
 - **Phase 1**：先实现合格性评价，收集基础数据
 - **Phase 2**：加入优秀性指标，建立历史基准
-- **Phase 3**：实现自动模型/Agent切换逻辑
+- **Phase 3**：实现自动Impl选择和切换逻辑
 
 **关键问题**：
 - 初期没有历史基准，Token效率等指标如何设定？建议先使用经验值或相对比较

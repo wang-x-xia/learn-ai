@@ -26,8 +26,5 @@ reference/mythos-system-card/
 .playwright/
 .playwright-cli/
 
-# Task tracking
-todo.md
-
 # Devin local config
 .devin/
