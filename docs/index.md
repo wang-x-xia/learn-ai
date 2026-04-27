@@ -147,6 +147,16 @@ description: 个人 AI 前沿知识库。系统梳理 AI 核心技术，每日�
 
     闭源/开源模型发布追踪、评估排行
 
+</div>
 
+### 精选资源
+
+<div class="grid cards" markdown>
+
+- :material-rss: **[精选资源](resources.md)**
+
+    ---
+
+    论文预印本、厂商官方博客、社区独立博主
 
 </div>

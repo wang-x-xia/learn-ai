@@ -143,6 +143,7 @@ nav:
   - 行业全景:
     - landscape/index.md
     - 模型动态跟踪: landscape/model-tracker.md
+  - 精选资源: resources.md
 
 
 extra_css:
