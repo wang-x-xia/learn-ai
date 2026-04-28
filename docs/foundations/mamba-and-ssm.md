@@ -2,10 +2,9 @@
 title: "Mamba 与状态空间模型 (SSM)"
 description: "状态空间模型核心原理、Mamba 选择性机制、替代架构（RWKV/xLSTM/RetNet）以及 Transformer-SSM 混合架构的深度解析。"
 created: 2026-04-08
-updated: 2026-04-10
+updated: 2026-04-28
 tags: [mamba, ssm, state-space-model, rwkv, xlstm, retnet, pam, jamba, hybrid-architecture]
-review: 2026-04-09
-review_note: "review 到了第 3 章"
+review: 2026-04-28
 ---
 
 # Mamba 与状态空间模型 (SSM)
@@ -95,30 +94,7 @@ Mamba:    B = f_B(x_t), C = f_C(x_t), Δ = f_Δ(x_t)    # 输入依赖
 2. **等效于门控 RNN**：选择性 SSM 在概念上等价于一个数据依赖的门控 RNN，但计算方式完全不同
 3. **内容感知推理**：Transformer 的注意力天然是内容感知的（token 间的相似度决定权重）；选择性机制让 SSM 也获得了这种能力
 
-### 硬件感知的并行扫描算法
-
-**选择性破坏了高效计算**：早期 SSM 之所以高效，是因为固定的 A, B, C 可以预计算卷积核，用 FFT 做 O(n log n) 的序列并行。参数变成输入依赖后，卷积不再适用。
-
-Mamba 的工程创新在于将选择性 SSM 实现为**并行前缀和（parallel scan）**，利用结合律在 GPU 上高效并行：
-
-```
-朴素循环: h_t = Ā_t h_{t-1} + B̄_t x_t    # O(n) 顺序计算
-并行扫描: 将 (Ā_t, B̄_t x_t) 视为半群元素 → 前缀和 → O(log n) 并行深度
-```
-
-配合 Flash Attention 式的 kernel fusion（在 SRAM 中完成所有中间计算，避免 HBM 读写），Mamba 在 A100 上的实际速度是同参数量 Transformer 的 **3-5x**（长序列时）。
-
-### 架构细节
-
-```
-输入 x
- ├── 线性投影 → 扩展到 2E 维度（E = expand factor, 通常 2）
- ├── 分支 1: Conv1d → SiLU → 选择性 SSM → ...
- ├── 分支 2: SiLU (门控路径) → ...
- └── 两分支逐元素相乘 → 线性投影回 D 维度 → 输出
-```
-
-注意 Mamba **没有注意力层、没有 MLP 层**——整个 block 就是上面这个结构重复 N 次。比 Transformer 的 Attention+FFN 更简洁。
+Mamba 的工程创新解决了选择性带来的计算效率问题，在长序列时速度可达同参数量 Transformer 的 3-5x。
 
 ---
 
