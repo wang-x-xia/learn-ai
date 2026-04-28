@@ -2,9 +2,9 @@
 title: "KV Cache 与推理优化"
 description: "KV Cache 的存储特征、注意力变体（GQA）、推理阶段差异与压缩手段的设计权衡。"
 created: 2026-04-09
-updated: 2026-04-09
+updated: 2026-04-28
 tags: [kv-cache, gqa, inference]
-review: 2026-04-09
+review: 2026-04-28
 ---
 
 # KV Cache 与推理优化
@@ -145,12 +145,23 @@ MQA:        1 组 KV → 需缓存   ~4 GB  ← 但质量损失大
 | 手段 | 思路 | 权衡 |
 |------|------|------|
 | **量化** | KV Cache 从 FP16 降到 INT8/FP8/INT4 | 显存减半至 1/4，质量损失可控[^kivi-2024] |
+| **TurboQuant** | PolarQuant（极坐标变换）+ QJL（随机投影）双重压缩 | 3bit量化，6倍内存压缩，无需重新训练[^turboquant-2025] |
 | **Token 驱逐** | 淘汰注意力分数低的历史 token | 固定 cache 上限，可能丢失长距离信息[^h2o-2023] |
 | **滑动窗口** | 只缓存最近 W 个 token | cache 上限 = W，需和全注意力交替使用[^mistral-2023] |
 | **Prefix Caching** | 多个请求共享相同前缀的 KV Cache | 省掉重复 prefill，需额外缓存管理[^sglang-2024] |
 | **Offloading** | 把部分 KV Cache 卸载到 CPU 内存 / SSD | 显存压力降低，但增加读取延迟 |
 
 **H₂O 的洞察**[^h2o-2023]：注意力分数的分布高度不均匀——少数 token（如标点、语法词）始终获得高注意力。保留这些"Heavy Hitter"+ 最近的局部窗口，就能在很小的 cache 预算下维持大部分生成质量。
+
+**TurboQuant 的双重压缩策略**[^turboquant-2025][^polarquant-2025][^qjl-2024]：传统量化方案将数据从 32bit 压到 4bit，理论上省 8 倍空间，但压缩过程本身需要存储量化常量、缩放因子等辅助参数（每个数据块额外占 1-2bit），实际压缩率被这些"附加成本"吃掉一大块。TurboQuant 用两套算法解决这个问题：
+
+1. **PolarQuant（极坐标量化）**：将向量从直角坐标系转到极坐标系——"往东走 3 个路口再往北走 4 个路口"变成"朝 37 度方向走 5 个路口"。转换后角度的统计分布变得高度集中、可预测，不再需要为每个数据块单独存储归一化参数，附加成本归零。
+
+2. **QJL（Johnson-Lindenstrauss 随机投影）**：处理 PolarQuant 的压缩残差。用随机投影只花 1 个 bit（记一个正负号），把残差误差的系统性偏差给抹平——类似秤上的"去皮"按钮，保证误差不会朝一个方向累积。
+
+两步组合可在无需重新训练或微调的情况下实现 3bit 量化，在 H100 上注意力计算比未量化快 8 倍。经济价值显著：假设一张 H100 有 80GB 显存，模型权重占 40GB，剩余 40GB 给 KV Cache。没有 TurboQuant 时每个用户 KV Cache 占 4GB 只能同时服务 10 个用户，压缩后每个用户只占 670MB 左右，同一张卡可服务近 60 个并发，推理费用降到原来的 1/6。
+
+**工程改动：需要重写 attention kernel**。TurboQuant 不是简单的存储格式变化，而是需要在压缩域直接计算注意力（compressed-domain attention）。如果采用"先解量化再计算"的路径（3bit → FP16 → 标准注意力），解量化开销会抵消压缩带来的带宽优势。因此必须重写 attention kernel 的核心计算逻辑，包括点积计算、位操作读取 packed 3bit 数据、内存访问模式等。论文用 JAX 框架测试，生产环境常用 vLLM/TensorRT-LLM/SGLang，需要为每个框架分别适配——这是 TurboQuant 落地的主要工程难点之一[^turboquant-2025]。
 
 ---
 
@@ -181,3 +192,6 @@ MQA:        1 组 KV → 需缓存   ~4 GB  ← 但质量损失大
 [^h2o-2023]: Zhang et al. *H₂O: Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models*. 2023. https://arxiv.org/abs/2306.14048
 [^mistral-2023]: Jiang et al. *Mistral 7B*. 2023. https://arxiv.org/abs/2310.06825
 [^sglang-2024]: Zheng et al. *SGLang: Efficient Execution of Structured Language Model Programs*. 2024. https://arxiv.org/abs/2312.07104
+[^turboquant-2025]: Zandieh et al. *TurboQuant: Online Vector Quantization with Near-optimal Distortion Rate*. 2025. https://arxiv.org/abs/2504.19874
+[^polarquant-2025]: Han et al. *PolarQuant: Quantizing KV Caches with Polar Transformation*. 2025. https://arxiv.org/abs/2502.02617
+[^qjl-2024]: Zandieh et al. *QJL: 1-Bit Quantized JL Transform for KV Cache Quantization with Zero Overhead*. 2024. https://arxiv.org/abs/2406.03482

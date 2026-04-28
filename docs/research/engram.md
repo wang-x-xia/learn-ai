@@ -4,7 +4,7 @@ description: 条件记忆模块——通过现代化 N-gram embeddings 实现 O(
 created: 2026-04-27
 updated: 2026-04-28
 tags: [deepseek, conditional-memory, n-gram, moe, sparsity, long-context, rag]
-review:
+review: 2026-04-28
 ---
 
 > 原文：Cheng et al. *Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models*. 2026[^engram-2026]。本文提炼论文中的核心技术方案与设计权衡。
