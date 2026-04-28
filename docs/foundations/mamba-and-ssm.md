@@ -1,9 +1,9 @@
 ---
 title: "Mamba 与状态空间模型 (SSM)"
-description: "状态空间模型核心原理、Mamba 选择性机制、替代架构（RWKV/xLSTM/RetNet）以及 Transformer-SSM 混合架构的深度解析。"
+description: "状态空间模型核心原理、Mamba 选择性机制、Mamba-2 的 SSD 框架以及 Transformer-SSM 混合架构的深度解析。"
 created: 2026-04-08
 updated: 2026-04-28
-tags: [mamba, ssm, state-space-model, rwkv, xlstm, retnet, pam, jamba, hybrid-architecture]
+tags: [mamba, ssm, state-space-model, jamba, hybrid-architecture]
 review: 2026-04-28
 ---
 
@@ -121,9 +121,7 @@ SSM 视角:  h_t = A_t h_{t-1} + B_t x_t, y_t = C_t h_t
 - **SSM 模式**（循环）：O(n) 时间，O(1) 推理步骤内存 → 适合推理
 - **注意力模式**（矩阵乘法）：O(n²) 时间，高并行度 → 适合训练
 
-Mamba-2 的实际做法是**分块处理**：将序列分成长度 T 的块，块内用矩阵乘法（利用 GPU tensor core），块间用循环传递状态。这是两种模式的最优混合。
-
-**性能提升**：Mamba-2 比 Mamba-1 训练速度快 2-8x，同时在 scaling 行为上更接近 Transformer++（带 GQA、SwiGLU 等优化的 Transformer）。
+**训练加速的实现**：SSD 理论本身不直接加速训练，但它揭示了两种计算模式的等价性，从而启发了更高效的实现策略。Mamba-2 采用**分块处理**：将序列分成长度 T 的块，块内用矩阵乘法（充分利用 GPU tensor core），块间用循环传递状态。这种实现比 Mamba-1 的训练速度快 2-8x，同时在 scaling 行为上更接近 Transformer++（带 GQA、SwiGLU 等优化的 Transformer）。
 
 ---
 
@@ -143,71 +141,7 @@ SSM 并非万能。关键实验发现：
 
 ---
 
-## 6. 替代架构
-
-### RWKV（Receptance Weighted Key Value）
-
-RWKV[^rwkv-2023] 试图将 Transformer 的 attention "线性化"并转换为 RNN 形式：
-
-- **训练时**：按 Transformer 风格并行（矩阵运算）
-- **推理时**：按 RNN 风格循环（O(1) 步骤复杂度）
-
-RWKV 的关键设计是 **WKV（Weighted Key-Value）** 操作，类似于 attention 但用指数衰减替代 softmax：
-
-```
-wkv_t = Σ_{i=1}^{t-1} e^{-(t-1-i)w + k_i} · v_i + e^{u+k_t} · v_t
-```
-
-其中 `w` 是可学习的时间衰减参数。这个公式可以递推计算，因此推理时是 O(1)。
-
-**RWKV 的局限**：时间衰减是单调递减的，无法像注意力那样"跳跃式"地关注远处的特定 token。RWKV-6/7 通过数据依赖的衰减和门控机制持续改进，但在精确回忆任务上仍不及 Transformer。
-
-当前 RWKV 发展到 v7 (Goose)，社区活跃，最大模型到 14B 规格，是纯开源社区驱动的唯一竞争性 LLM 架构。
-
-### xLSTM（Extended LSTM）
-
-xLSTM[^xlstm-2024] 由 LSTM 的发明者 Sepp Hochreiter 提出，本质是"如果用现代技术重新设计 LSTM 会怎样"：
-
-- **sLSTM（scalar LSTM）**：引入指数门控，缓解梯度消失
-- **mLSTM（matrix LSTM）**：将标量记忆扩展为矩阵记忆，容量大幅提升。mLSTM 的更新规则与线性注意力 + 衰减非常相似，可以并行训练
-
-xLSTM 在中等规模实验中表现不错（400M-1.3B），但缺乏大规模 scaling 的验证。
-
-### RetNet（Retentive Network）
-
-微软提出的 RetNet[^retnet-2023] 引入 **retention 机制**——一种带指数衰减的注意力变体：
-
-```
-Retention(Q, K, V) = (QK^T ⊙ D) V    其中 D_{ij} = γ^{i-j} (因果衰减掩码)
-```
-
-支持三种等价的计算模式：
-1. **并行模式**：类注意力的矩阵乘法 → 适合训练
-2. **循环模式**：类 RNN → 适合推理
-3. **分块模式**：块内并行 + 块间循环 → 平衡训练和推理
-
-这个三模式等价性后来被 Mamba-2 的 SSD 框架所吸收和泛化。
-
-### Phase-Associative Memory (PAM, 2026)
-
-PAM[^pam-2026] 是一种完全基于复数域的循环序列模型，核心思想是将联想记忆推广到**复 Hilbert 空间**。
-
-**架构核心**：所有表征为复数值，联想通过外积累积在矩阵状态 S_t ∈ ℂ^{d×d} 中，检索通过共轭内积 K_t* · Q_t / √d 完成：
-
-```
-状态更新: S_t = S_{t-1} + V_t ⊗ K_t*    # 外积累积（矩阵联想记忆）
-检索输出: y_t = S_t · Q_t                 # 共轭内积检索
-```
-
-**为什么从向量记忆升级到矩阵记忆**：向量状态模型（如全息绑定 holographic binding）的联想记忆容量以 O(1/√n) 速率退化——叠加的联想越多，每条的保真度越低。矩阵状态将容量瓶颈从 O(√d) 提升到 O(d)，根本性地解决了这个问题。
-
-**初步结果**：~100M 参数在 WikiText-103 上达到 perplexity 30.0，与相同条件训练的 Transformer（27.1）差距约 10%，但 PAM 承受了 4× 的复数运算开销且未使用定制 CUDA kernel。
-
-**与 SSM 的关系**：PAM 可视为 SSM 的"复数化"变体——状态转移和检索都在复数域上操作，保留了 RNN 式的线性推理复杂度。其数学形式也与线性注意力有类比关系，但用相位（phase）编码替代了显式的衰减或门控。
-
----
-
-## 7. 混合架构：融合两个范式
+## 6. 混合架构：融合两个范式
 
 纯 SSM 在精确回忆和 in-context learning 上弱于 Transformer，纯 Transformer 在长序列推理效率上有瓶颈。混合架构尝试两全其美。
 
@@ -251,7 +185,7 @@ Mamba → 共享 Attention → Mamba → 共享 Attention → Mamba → ...
 
 ---
 
-## 8. 工程选型
+## 7. 工程选型
 
 | 场景 | 推荐架构 | 理由 |
 |------|----------|------|
@@ -261,20 +195,10 @@ Mamba → 共享 Attention → Mamba → 共享 Attention → Mamba → ...
 | 高吞吐服务 | 依场景而定 | 短 prompt 选 Transformer（prefill 并行度高）；长 prompt 选混合 |
 | 实时流式处理 | SSM/RWKV | 天然的流式推理，无需 KV cache 管理 |
 
-### 2026 年现状
-
-截至 2026 年 4 月，**Transformer 仍是绝对主流**。所有前沿闭源模型（GPT-5.3, Claude Opus 4.6, Gemini 3）都基于 Transformer（可能有内部改良，但核心是注意力机制）。SSM/Mamba 在开源社区和特定场景（长序列、端侧）中持续推进，但尚未在 >70B 规模上证明可以替代 Transformer。
-
-混合架构是最有前景的方向——不是"Transformer 或 SSM"的二选一，而是在**同一模型内按层分配**注意力和循环计算的比例。
-
 ---
 
 ## 参考资料
 
 [^mamba-2023]: Gu & Dao. *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*. 2023. https://arxiv.org/abs/2312.00752
 [^mamba2-2024]: Dao & Gu. *Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality*. 2024. https://arxiv.org/abs/2405.21060
-[^rwkv-2023]: Peng et al. *RWKV: Reinventing RNNs for the Transformer Era*. 2023. https://arxiv.org/abs/2305.13048
-[^xlstm-2024]: Beck et al. *xLSTM: Extended Long Short-Term Memory*. 2024. https://arxiv.org/abs/2405.04517
-[^retnet-2023]: Sun et al. *Retentive Network: A Successor to Transformer for Large Language Models*. 2023. https://arxiv.org/abs/2307.08621
 [^jamba-2024]: Lieber et al. *Jamba: A Hybrid Transformer-Mamba Language Model*. 2024. https://arxiv.org/abs/2403.19887
-[^pam-2026]: Vishwakarma & Agostino. *Phase-Associative Memory: Sequence Modeling in Complex Hilbert Space*. 2026. https://arxiv.org/abs/2604.05030
