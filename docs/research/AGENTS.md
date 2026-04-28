@@ -10,6 +10,7 @@
 | `interpretability.md` | 可解释性（理论框架 + 逆向工程方法）|
 | `safety-and-governance.md` | 安全 / 治理 |
 | `emerging-frontiers.md` | 其他新兴前沿方向 |
+| `engram.md` | Engram 条件记忆模块 |
 
 ## 收录哪些内容
 

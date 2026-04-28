@@ -104,6 +104,7 @@ nav:
     - 可解释性: research/interpretability.md
     - AI 安全与治理: research/safety-and-governance.md
     - 新兴前沿方向: research/emerging-frontiers.md
+    - Engram: research/engram.md
   - 模型档案:
     - model/index.md
     - Claude Mythos Preview: model/claude-mythos.md

@@ -33,4 +33,10 @@ description: 快速演进的前沿方向——推理与规划、AI 安全、新�
 
     AI for Science、世界模型、小模型效率、长上下文
 
+- :material-database: **[Engram](engram.md)**
+
+    ---
+
+    条件记忆模块——通过现代化 N-gram embeddings 实现 O(1) 知识查找，与 MoE 条件计算形成互补稀疏性轴
+
 </div>
