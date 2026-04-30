@@ -30,7 +30,7 @@ else:
 |------|---------|
 | 不合格 | 不合格 |
 | 合格，无优秀指标 | 合格 |
-| 合格，有优秀指标 | 合格（优秀：Token效率、洞察深度） |
+| 合格，有优秀指标 | 合格（优秀：Token效率、数据准确性） |
 
 ## 指标示例（按Task类型）
 
@@ -44,8 +44,6 @@ else:
 | no_critical_errors | true | - | 无致命错误：无明显错误或矛盾 |
 | token_efficiency | 节省>10% | 节省>30% | Token效率：相比历史平均节省比例 |
 | execution_speed | <10分钟 | <5分钟 | 执行速度：任务完成时间 |
-| insight_depth | basic | deep | 洞察深度：是否提供超出基础的分析 |
-| readability | >3分 | >4分 | 可读性：用户评分（1-5分） |
 
 ### Task类型：collect_data（数据收集）
 
@@ -62,11 +60,9 @@ else:
 | 指标 | 合格阈值 | 优秀阈值 | 说明 |
 |------|---------|---------|------|
 | error_identification_rate | >90% | >95% | 错误识别率：识别出实际错误的比例 |
-| root_cause_relevance | relevant | highly_relevant | 根因相关性：与实际问题相关程度 |
 | no_misleading_conclusions | true | - | 无误导性结论：不给出错误诊断方向 |
 | token_efficiency | <基准值 | <基准值×0.7 | Token效率：每单位数据的token消耗 |
 | diagnostic_speed | <5分钟 | <2分钟 | 诊断速度：从输入到结论输出时间 |
-| actionability | actionable | highly_actionable | 可操作性：建议是否可直接执行 |
 
 ## 指标定义配置
 
@@ -92,12 +88,6 @@ task_type_metrics:
       excellent_threshold: "节省>30%"
       type: percentage
       description: "相比历史平均节省比例"
-      
-    - name: insight_depth
-      qualified_threshold: "basic"
-      excellent_threshold: "deep"
-      type: enum
-      description: "是否提供超出基础的分析"
 ```
 
 ## 评价数据结构
@@ -142,12 +132,9 @@ task_evaluation:
 **自动化指标**（系统自动收集）：
 - API成功率、响应时间、Token消耗
 - 执行时长、错误日志
-
-**用户反馈指标**（需用户主动提供）：
-- 可读性评分（1-5分）
-- 洞察深度评价（basic/deep）
-- 可操作性评价（actionable/highly_actionable）
-- 根因相关性评价（relevant/highly_relevant）
+- 内容完整性（检查必需章节是否存在）
+- 格式正确性（模板匹配校验）
+- 数据准确性（与源数据交叉比对）
 
 **历史对比指标**：
 - Token效率、API调用次数：与历史同类任务平均值对比
@@ -162,13 +149,3 @@ task_evaluation:
 - **用户信任**：展示评价结果，帮助用户判断是否信任AI执行结果
 - **系统演进**：长期趋势分析，指导产品迭代
 
-## 实施建议
-
-**分阶段落地**：
-- **Phase 1**：先实现合格性评价，收集基础数据
-- **Phase 2**：加入优秀性指标，建立历史基准
-- **Phase 3**：实现自动Impl选择和切换逻辑
-
-**关键问题**：
-- 初期没有历史基准，Token效率等指标如何设定？建议先使用经验值或相对比较
-- 用户反馈指标如何收集？建议在Task完成后弹出简短评价表单

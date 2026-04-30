@@ -36,82 +36,25 @@
 - 系统编排：数据收集、报告生成、邮件发送
 - 一次配置，持续运行
 
-## 核心功能模块
+## 核心设计决策
 
-### 1. 任务编排与状态流转
+### 编排原语
 
-**谁来负责任务编排？**
+系统使用 6 个编排原语（sequence、parallel、condition、loop、map、context）组合执行计划。详见 [Plan DSL 语法](plan-dsl.md)。
 
-**编排原语抽象**：
+**设计灵感**：这些原语不是凭空想象的，而是几十年工作流和分布式系统研究的结晶。LLM 时代的核心创新在于用 LLM 做"自然语言 → 原语组合"的语义转换。
 
-把编排拆解成几个简单的原子动作，规划器就是组合这些原语：
+**理论参考**：
 
-| 原语 | 功能 | 示例 | 理论/实践参考 |
-|------|------|------|---------------|
-| `sequence` | 顺序执行 | 先A，再B，再C | 工作流引擎 (Airflow, Temporal) |
-| `parallel` | 并行执行 | 同时执行A、B、C | 并行计算、CSP (Communicating Sequential Processes) |
-| `condition` | 条件分支 | 如果X则A，否则B | 控制流图、BPMN (Gateway) |
-| `loop` | 循环 | 对列表中的每个item执行 | 迭代器、循环结构 |
-| `map` | 映射 | 把一个操作应用到每个元素 | 函数式编程 (MapReduce) |
-| `context` | 上下文作用域 | 在指定Context中执行Task | 作用域、环境变量、依赖注入
+| 来源 | 核心贡献 |
+|------|---------|
+| HTN (Hierarchical Task Networks) | 任务分解的经典方法 |
+| Workflow Patterns (van der Aalst et al.) | 定义了工作流的基本控制模式 |
+| BPMN | 业务流程的标准化表示 |
+| MapReduce (Dean & Ghemawat, 2004) | 数据处理的核心原语 |
+| Actor 模型 (Hewitt, 1973) | 消息传递和并发处理 |
 
-**Task Type 与 Impl**：
-
-Task Type由Planner在规划时确定，每个Task Type下可以有多个Impl（不同模型/配置/脚本）：
-
-| Task Type | Impl示例 | 职责 |
-|----------|-----------|------|
-| `collect_data` | collect_data/gpt-4o-mini, collect_data/jira-script | 信息收集、查询、爬取 |
-| `analyze` | analyze/gpt-4o, analyze/deepseek-v4 | 数据分析、模式识别 |
-| `generate_doc` | generate_doc/gpt-4o | 文档生成、内容创作 |
-| `send_email` | send_email/smtp-script | 邮件发送 |
-| `query_jira` | query_jira/jira-script | JIRA查询 |
-| `query_monitor` | query_monitor/prometheus-script | 监控数据查询 |
-
-**示例**：
-```
-用户: "帮我准备Sprint Review"
-
-Planner生成的Plan:
-  sequence([
-    parallel([
-        collect_data(source="jira"),
-        collect_data(source="monitor"),
-    ]),
-    analyze(),
-    generate_doc(),
-  ])
-```
-
-**简化后的架构**：
-- Planner规划时确定每个subtask的Task Type
-- 同一Task Type下可以有多个Impl（不同模型/配置/脚本），由选择策略决定
-- 不需要运行时匹配、竞标等复杂机制
-- 类似"强类型"编程：Task的Type决定了它的handler
-
-**理论参考文献**：
-
-1. **HTN (Hierarchical Task Networks)** - AI规划理论
-   - "Planning and Acting" (Russell & Norvig, AI textbook)
-   - 任务分解的经典方法，用于SHOP、SHOP2等规划器
-
-2. **工作流理论**
-   - "Workflow Patterns" (van der Aalst et al.)
-   - 定义了工作流的基本控制模式：sequence、parallel split、synchronization、choice等
-
-3. **BPMN (Business Process Model and Notation)**
-   - OMG标准，定义了业务流程的图形化表示
-   - Gateway (exclusive/inclusive/parallel) 对应 condition/parallel
-
-4. **函数式编程**
-   - MapReduce (Dean & Ghemawat, 2004)
-   - map/reduce/fold 是数据处理的核心原语
-
-5. **Actor模型**
-   - "A Universal Modular ACTOR Formalism" (Hewitt, 1973)
-   - 消息传递、角色分配、并发处理
-
-**实践参考系统**：
+**实践参考**：
 
 | 系统 | 类型 | 核心原语 |
 |------|------|----------|
@@ -122,95 +65,23 @@ Planner生成的Plan:
 | **AutoGPT** | 自主Agent | Thought、Plan、Action、Observation |
 | **CrewAI** | 多Agent | Crew、Agent、Task、Process |
 
-**关键洞察**：
-- 这些原语不是凭空想象的，而是几十年工作流和分布式系统研究的结晶
-- LLM时代的新挑战是"自然语言 → 原语组合"的语义理解
-- 核心创新在于用LLM做"语义到语法"的转换
+### Task Type 与 Impl
 
-**规划能力**：
+Task Type 定义"这类工作是什么"，Impl 定义"这类工作怎么做"。同一 Task Type 下可有多个 Impl（不同模型/配置/脚本），由选择策略决定。详见 [Task 类型](task-type.md)。
 
-规划不是独立角色，而是 Impl 的能力。当 Impl 的 `can_expand_to_plan: true` 时，它承担规划职责：
-1. 理解 Task 的意图
-2. 用编排原语组合出子 Plan
-3. Plan Executor 校验 Plan 合法性（partners 范围、参数、DSL 结构）
-4. 校验通过后由 Plan Executor 执行
+### 规划能力
 
-**类比**：
-- 编排原语 = 编程语言的语法（if/else/for/while）
-- Impl（规划时）= 编译器/解释器
-- 执行计划 = 编译后的程序
+规划不是独立角色，而是 Impl 的能力（`can_expand_to_plan`）。每个 Impl 只需"懂"自己 partners 范围内的原语组合。
 
-**好处**：
-- 规划能力分布在各个 Impl 中，每个 Impl 只需要"懂"自己 partners 范围内的原语组合
-- 可调试：执行计划是可视化的
-- 可校验：Plan 生成后可做结构校验（partners、参数、DSL），语义正确性通过评价体系感知
+**类比**：编排原语 = 编程语言语法，Impl（规划时）= 编译器，执行计划 = 编译后的程序。
 
-**示例**：
-```
-用户: "帮我准备Sprint Review"
+**好处**：规划能力分布式、执行计划可视化可调试、结构校验 + 评价体系双重保障。
 
-Planner生成的Plan:
-  sequence([
-    parallel([
-        collect_data(source="jira"),
-        collect_data(source="test_results"),
-    ]),
-    analyze_completion(),
-    generate_review_doc(),
-    wait_for_human_review(),
-  ])
-```
+### 上下文管理
 
-**状态流转设计**:
-```
-待处理 → 分解中 → 执行中 → 等待依赖 → 完成/失败
-```
-- 每个任务有明确的状态
-- 支持任务依赖（DAG）
-- 支持重试和错误处理
+Context 分为两层：Global Context（全局只读，基于 main branch 特定 commit）和 Plan Context（Plan 级别读写，支持嵌套继承）。详见 [核心概念 - Context 设计](core-concepts.md#context设计)。
 
-### 2. 上下文管理
-
-**上下文类型**:
-- **Global Context**: 全局共享的上下文，指向main branch的特定commit，为Task执行提供确定的背景，系统配置、用户偏好、知识库
-- **Plan Context**: Plan调度Task时共享的数据，支持嵌套，子Plan可访问父Plan Context
-- **Task Context**: Task的输入、目标、约束（临时数据）
-
-**上下文传递**:
-- Plan Executor在Plan和Task间传递必要的上下文
-- 子Plan继承父Plan的Context
-- Impl可以请求额外上下文
-- 支持上下文的增量更新
-
-**上下文修改**:
-- Task可以修改Plan Context
-- Global Context为只读（基于main branch的特定commit执行，记录commit以确定Task的执行背景）
-- 支持Context冲突解决策略
-
-**上下文持久化**:
-- 长期任务需要持久化上下文
-- 支持断点续传
-- 上下文版本管理
-
-### 3. Task Type 与 Impl
-
-**Task Type**：定义"这类工作是什么"——能力契约（输入/输出格式、redo_strategy）。
-
-**Impl**：定义"这类工作怎么做"——同一Task Type下的具体执行方式（不同模型、策略、配置、脚本）。
-
-| Task Type | Impl示例 |
-|-----------|----------|
-| `collect_data` | collect_data/gpt-4o-mini (kind: llm), collect_data/jira-script (kind: script) |
-| `analyze` | analyze/gpt-4o (kind: llm), analyze/deepseek-v4 (kind: llm) |
-| `generate_doc` | generate_doc/gpt-4o (kind: llm) |
-| `send_email` | send_email/smtp-script (kind: script) |
-
-**Impl选择**：
-- Plan Executor将Task分配给Task Type时，由选择策略决定使用哪个Impl
-- 评价体系在Impl级别运作，为选择策略提供数据（合格率、成本、速度等）
-- 支持Impl的动态注册和发现
-
-### 4. 用户交互
+### 用户交互
 
 **交互方式**:
 - **自然语言输入**: "帮我做X"
@@ -222,7 +93,7 @@ Planner生成的Plan:
 - 中间结果预览
 - 异常处理和人工干预
 
-### 5. 知识和记忆
+### 知识和记忆
 
 **短期记忆**:
 - 当前会话的上下文
@@ -237,37 +108,6 @@ Planner生成的Plan:
 - 领域知识
 - 最佳实践
 - 错误处理指南
-
-## MVP范围建议
-
-**Phase 1 - 核心编排（3个月）**
-- 中央任务规划器
-- 3-5个基础Task Type + Impl（信息收集、分析、生成）
-- 简单的上下文管理
-- 命令行/简单的Web界面
-- 1-2个核心用户故事（如报告生成）
-
-**Phase 2 - 扩展能力（3个月）**
-- 更多Task Type和Impl
-- 任务模板系统
-- 可视化进度展示
-- 基础的错误处理和重试
-- 更多用户故事
-
-**Phase 3 - 企业级（6个月）**
-- 多用户支持
-- 权限管理
-- 任务调度和定时执行
-- 集成更多外部系统
-- 完整的监控和日志
-
-## 技术可行性考虑（不深入细节）
-
-**规划器**: 可以基于现有的workflow引擎或自研
-**Impl通信**: 消息队列或事件总线
-**上下文存储**: 数据库或文件系统
-**LLM集成**: 调用现有的LLM API
-**部署**: 可以是SaaS或本地部署
 
 ## 风险和挑战
 

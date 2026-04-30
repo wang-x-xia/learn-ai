@@ -1,6 +1,6 @@
 ---
 title: 基础理论
-description: AI 基础理论知识——Transformer、大语言模型、状态空间模型、多模态与训练对齐。
+description: AI 基础理论知识——Transformer、大语言模型、状态空间模型、多模态与扩散模型。
 ---
 
 # 基础理论
@@ -32,6 +32,12 @@ description: AI 基础理论知识——Transformer、大语言模型、状态�
     ---
 
     文本/图像/音频/视频的数据特征差异与技术路线对比
+
+- :material-blur: **[扩散模型](diffusion-models.md)**
+
+    ---
+
+    DDPM、Latent Diffusion、DiT 与 Flow Matching
 
 - :material-history: **[从规则到表示学习](representation-learning.md)**
 

@@ -82,6 +82,7 @@ nav:
     - KV Cache 与推理优化: foundations/kv-cache.md
     - Mamba 与 SSM: foundations/mamba-and-ssm.md
     - 多模态 AI: foundations/multimodal-ai.md
+    - 扩散模型: foundations/diffusion-models.md
     - 从规则到表示学习: foundations/representation-learning.md
   - 应用技术:
     - applied/index.md

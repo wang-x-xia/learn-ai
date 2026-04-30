@@ -16,7 +16,7 @@ task_types:
   <task_type_name>:
     redo_strategy:
       type: "always_redo" | "context_aware" | "input_driven"
-      logic: string  # 策略逻辑描述或引用
+      depends_on: [string]  # context_aware 专用：依赖的 Context 字段列表
     uri_params:
       query:
         - name: string
@@ -37,7 +37,7 @@ task_types:
 | 字段 | 类型 | 必填 | 描述 |
 |------|------|------|------|
 | `redo_strategy.type` | enum | 是 | 重做策略类型（描述任务本身的性质） |
-| `redo_strategy.logic` | string | 是 | 策略逻辑描述或引用 |
+| `redo_strategy.depends_on` | array | 否 | context_aware 专用：依赖的 Context 字段列表 |
 | `uri_params.query` | array | 是 | URI query 参数定义 |
 | `uri_params.fragment` | object | 否 | URI fragment 用法定义 |
 | `dsl_helpers` | array | 否 | 可在 Plan DSL 中使用的辅助方法 |
@@ -130,16 +130,16 @@ task_types:
 
 在 Plan DSL 中可以简化为：
 
-```
-collect_jira_data(sprint=23),
-collect_monitor_data(time_range=7d)
+```yaml
+"collect_jira_data(sprint=23)":
+"collect_monitor_data(time_range=7d)":
 ```
 
 而不是：
 
-```
-collect_data(source=jira, sprint=23),
-collect_data(source=monitor, time_range=7d)
+```yaml
+"collect_data(source=jira, sprint=23)":
+"collect_data(source=monitor, time_range=7d)":
 ```
 
 **设计原则**：
@@ -151,32 +151,83 @@ collect_data(source=monitor, time_range=7d)
   - 例如：`check_jira_count_gt_100`、`is_data_ready`
   - 如果 Task 既做事情又输出条件，可以使用更语义化的名称，如 `validate_and_check`
 
-## 重做策略类型
+## 重做策略
 
-每个 Task 类型定义自己的 redo_strategy，用于 Plan 版本切换时判断是否重做：
+Plan 版本切换时，Plan Executor 需要判断 v2 中的每个 Task 是否需要重新执行。判断依据由 Task Type 的 `redo_strategy` 定义。
 
-| 类型 | 描述 | 适用场景 |
-|------|------|----------|
-| `always_redo` | 总是重新执行 | 副作用操作（如发送邮件） |
-| `context_aware` | 根据上下文变化判断 | 数据收集、查询 |
-| `input_driven` | 根据输入变化判断 | 数据分析、文档生成 |
+### 判断结果
 
-## 版本切换时的判断逻辑
+| 决策 | 含义 | Plan Executor 行为 |
+|------|------|-------------------|
+| `reuse` | 复用 v1 的结果 | 跳过执行，将 v1 结果写入当前 Context |
+| `redo` | 完全重新执行 | 正常执行 Task |
+| `partial_redo` | 带参考的重新执行 | 将 v1 结果作为 `prior_result` 注入 Task 输入，然后执行 |
+
+**partial_redo**：重新执行 Task，但 Impl 可以访问 `prior_result`（v1 的执行结果）来加速执行。例如，文档生成 Impl 可以在 v1 文档基础上增量修改，而非从零生成。如果 Impl 不支持利用 `prior_result`，行为等同于 `redo`。
+
+### 策略类型
+
+#### always_redo
+
+总是返回 `redo`。不考虑输入或 Context 是否变化。
+
+适用于有外部副作用的操作（发送通知、写入外部系统），无法确定之前的副作用是否仍然有效。
+
+#### context_aware
+
+根据 Context 中依赖字段的变化判断。Task Type 需额外声明 `depends_on`（依赖的 Context 字段列表）。
+
+**判断逻辑**：
+
+1. 获取 v1 执行时 Context 中 `depends_on` 字段的快照
+2. 与当前 Context 中对应字段的值比较
+3. 所有依赖字段均未变化 → `reuse`
+4. 有字段变化 → `partial_redo`
+
+默认返回 `partial_redo` 而非 `redo`，因为 Context 变化通常是增量的（如新增了几条数据），v1 结果有参考价值。
+
+**示例**：
+
+```yaml
+task_types:
+  collect_data:
+    redo_strategy:
+      type: context_aware
+      depends_on: [sprint_data, monitor_data]
+```
+
+#### input_driven
+
+根据 Task 的显式输入参数变化判断。
+
+**判断逻辑**：
+
+1. 比较 v1 和 v2 中该 Task 的显式输入参数（key 中的参数 + value 中的具名参数）
+2. 参数完全相同 → `reuse`
+3. 参数不同 → `redo`
+
+不关心 Context 变化——适用于输出完全由输入决定的 Task（给定相同输入，无论 Context 如何变化，输出一样）。
+
+**示例**：
+
+```yaml
+task_types:
+  generate_doc:
+    redo_strategy:
+      type: input_driven
+```
+
+### 版本切换流程
 
 ```
 Plan v1 → Plan v2
   ↓
 Plan Executor 遍历 v2 中的每个 Task
   ↓
-获取 Task 的类型
+v1 中是否存在对应 Task？（通过 Task ID 匹配）
+  ↓ No → 按新 Task 执行（redo）
+  ↓ Yes
+调用该 Task Type 的 redo_strategy
   ↓
-调用该 Task 类型的 redo_strategy
-  - 传入：v1中对应Task的信息、v2中Task的参数、Context变化
-  - 执行：该类型定义的策略逻辑
-  - 返回：reuse / redo / partial_redo
-  ↓
-Plan Executor 根据决策执行
-  - reuse：复用v1的结果
-  - redo：重新执行
-  - partial_redo：部分重做
+按决策执行：reuse / redo / partial_redo
 ```

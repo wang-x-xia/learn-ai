@@ -15,21 +15,38 @@ task:/<type>?<query>#<fragment>
 
 **结构解析**：
 - `task:`：自定义 scheme
-- `/<type>`：path，表示 task type
-- `?<query>`：query，意图相关的参数（由 task type 定义解析规则）
-- `#<fragment>`：fragment，可选扩展信息（由 task type 定义用途）
+- `/<type>`：path，表示 task type（固定，不可自定义）
+- `?<query>`：query，编码 task 的 input 参数
+- `#<fragment>`：fragment，可选扩展信息
 
-**示例**：
+**默认 ID 生成规则**：
+
+默认使用括号表示法（bracket notation）将所有 input 编码到 query 中，没有 fragment：
+
 ```
+# 简单参数
 task:/collect_data?source=jira&sprint=23
-task:/analyze?target=test_results&method=regression
+
+# 数组参数
+task:/collect_data?filters[]=open&filters[]=in_progress&filters[]=done
+
+# 嵌套参数
+task:/collect_data?source=jira&config[timeout]=3600&config[retry]=3
+```
+
+**自定义 ID 生成器**：
+
+Task type 可以自定义 ID 生成逻辑，但**只允许自定义 query 和 fragment 部分**，scheme 和 path 固定不变。用途包括：
+- 省略不影响唯一性的参数，缩短 ID
+- 利用 fragment 携带版本、实例标识等扩展信息
+
+```
+# 默认生成（全量 input）
+task:/generate_doc?type=review_summary&format=markdown&lang=zh
+
+# 自定义生成（只保留关键参数 + fragment 标识版本）
 task:/generate_doc?type=review_summary#v2
 ```
-
-**设计原则**：
-- query 和 fragment 由对应的 task type 定义解析规则
-- query 参数只包含"意图相关"的参数，不是全部参数
-- fragment 可用于版本、实例标识等扩展信息
 
 Task 类型的详细定义见 [Task 类型](task-type.md)。
 
@@ -46,11 +63,9 @@ Task_A:
     source: "jira"
     sprint: "23"
   plan:  # 可选字段，如果有就展开为子 Plan
-    sequence([
-      collect_data(source="jira"),
-      collect_data(source="monitor"),
-      analyze_results()
-    ])
+    - "collect_data(source=jira)":
+    - "collect_data(source=monitor)":
+    - analyze_results():
   output: null
   error: null
   created_at: "2026-04-17T10:00:00Z"
@@ -75,9 +90,13 @@ Task_A:
 
 ## Task 生命周期
 
-**宏观状态**（4个核心状态）：
+完整的状态机定义（含状态转换图、进度管理、重试策略、超时机制）见 [Plan 与 Task 生命周期](plan-lifecycle.md)。以下是核心设计的摘要。
+
+**宏观状态**（4个核心状态，编排逻辑只关心这一层）：
 ```
-new → working → delegated → done
+new → working → done
+         ↓
+      delegated → done
 ```
 
 **状态说明**：
@@ -86,20 +105,22 @@ new → working → delegated → done
 |------|------|----------|
 | `new` | Task已创建，等待执行 | Plan生成后Task被创建 |
 | `working` | Task正在执行中 | Impl开始处理Task |
-| `delegated` | Task已展开为子Plan，等待子Plan完成 | Task有plan字段，Plan Executor展开为子Plan |
-| `done` | Task执行完成（成功或失败） | Impl返回结果或错误，或子Plan完成 |
+| `delegated` | Task已展开为子Plan，等待子Plan完成 | Impl 生成子 Plan，交由 Plan Executor 执行 |
+| `done` | Task执行结束 | Impl返回结果或错误，或子Plan完成 |
 
-**Subtype（可选的细粒度状态）**：
-- `working.waiting` - 等待依赖Task完成
-- `working.retrying` - 重试中
-- `delegated.waiting_plan` - 等待子Plan完成
-- `done.success` - 成功完成
-- `done.failed` - 执行失败
-- `done.cancelled` - 被取消
+**执行结果**：Task 进入 `done` 时，由独立的 `result` 字段记录结果（success / failed / cancelled），不使用 sub-status 编码成败。
+
+**Sub-status**（用于内部跟踪和监控，不影响编排逻辑）：
+- `working.running` — 正在执行
+- `working.waiting` — 等待依赖 Task 完成
+- `working.retrying` — 执行失败，正在重试
+- `delegated.planning` — Impl 正在生成子 Plan
+- `delegated.validating` — Plan Executor 正在校验子 Plan
+- `delegated.executing` — 子 Plan 正在执行
 
 **设计原则**：
 - 宏观状态保持简单（4个），便于理解和调试
-- Subtype用于内部跟踪和监控，不影响编排逻辑
+- Sub-status 用于内部跟踪和监控，不影响编排逻辑
 - 状态转换由Plan Executor控制，Impl不直接修改Task状态
 
 ## Task 展开为 Plan
@@ -111,11 +132,9 @@ Task_A:
   id: "task:/analyze?target=test_results"
   type: "analyze"
   plan:  # 由 Impl 生成
-    sequence([
-      collect_data(source="jira"),
-      collect_data(source="monitor"),
-      analyze_results()
-    ])
+    - "collect_data(source=jira)":
+    - "collect_data(source=monitor)":
+    - analyze_results():
 ```
 
 **展开规则**：

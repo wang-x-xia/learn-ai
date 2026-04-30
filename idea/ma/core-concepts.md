@@ -162,243 +162,35 @@ shared_data:
 
 ## Task Type 与 Impl
 
-Task Type 定义能力契约，Impl 是具体执行者。
+Task Type 定义能力契约，Impl 是具体执行者。详见 [Task 类型](task-type.md)。
 
-**Task Type**：定义"这类工作是什么"
-- **输入**：Task + Context
-- **输出**：Result + 新Context
-- **redo_strategy**：定义该类型的重做策略（描述任务本身的性质，与Impl无关）
-
-**Impl**：定义"这类工作怎么做"
-
-同一个Task Type可以有多个Impl，通过 `kind` 区分执行者类型：
-
-```
-Task Type ← 1:N → Impl
-  collect_data ←──┬── collect_data/jira-script  (kind: script)
-                   │     can_expand_to_plan: false
-                   │     partners: []
-                   │
-                   ├── collect_data/gpt-4o-mini  (kind: llm)
-                   │     can_expand_to_plan: true
-                   │     partners: [query_jira, query_monitor]
-                   │
-                   └── collect_data/predefined   (kind: predefined)
-                         can_expand_to_plan: true
-                         partners: [query_jira]
-```
-
-每个Impl声明：
-- **kind**：执行者类型（llm、script、predefined等）
-- **can_expand_to_plan**：是否将Task展开为Plan。强模型可能直接完成，脚本直接执行，弱模型需要拆分为子任务
-- **partners**：可协作的Task Type列表。当Impl生成Plan时，Plan中只能引用partners范围内的Task Type
-
-**Plan生成与校验**：当Impl将Task展开为Plan时，该Impl承担了规划职责。Plan生成后、执行前进行结构校验：
-1. Plan中引用的每个Task Type是否都在该Impl的partners范围内？
-2. 每个Task的参数是否符合对应Task Type的定义？
-3. DSL结构本身是否合法？
-
-结构校验只能捕捉结构性错误。语义错误（Plan逻辑是否正确）通过执行后的评价体系（见 [任务评价体系](task-evaluation.md)）来感知。
-
-**Impl选择**：Plan Executor将Task分配给Task Type时，由选择策略决定使用哪个Impl。评价体系在Impl级别运作，为选择策略提供数据支持（如：不合格的Impl降权、优秀的Impl优先选用、成本敏感场景选用更便宜的Impl）。
+- **Task Type**：定义"这类工作是什么"（输入/输出、redo_strategy）
+- **Impl**：定义"这类工作怎么做"（kind: llm/script/predefined）
+- 每个 Task Type 可有多个 Impl，由 Plan Executor 选择策略决定使用哪个
+- Impl 可以将 Task 展开为 Plan（`can_expand_to_plan`），此时承担规划职责
+- Plan 生成后由 Plan Executor 做结构校验（partners 范围、参数合法性、DSL 结构），语义正确性通过[评价体系](task-evaluation.md)感知
 
 ## Plan Executor
 
-Plan Executor负责执行Plan，管理Task的调度和执行流程。
+Plan Executor 负责执行 Plan，管理 Task 的调度和执行流程。
 
 **职责**：
-1. **Plan调度**：按Plan的原语顺序调度Task执行
-2. **Impl选择**：将Task分配给Task Type，由选择策略决定使用哪个Impl
-3. **状态跟踪**：跟踪Task和Plan的执行状态
-4. **Context管理**：管理Plan Context的传递和更新
-5. **Plan校验**：校验Impl生成的Plan是否合法（partners范围、参数合法性、DSL结构）
-6. **Task展开**：当选中的Impl将Task展开为Plan时，递归执行子Plan
-7. **异常处理**：处理Task执行失败、重试、fallback
-8. **版本管理**：管理Plan的版本，处理版本切换
 
-**Plan版本化**：
+1. **Plan 调度**：按 Plan 的编排原语调度 Task 执行（原语定义见 [Plan DSL 语法](plan-dsl.md)）
+2. **Impl 选择**：将 Task 分配给 Task Type，由选择策略决定使用哪个 Impl
+3. **状态跟踪**：跟踪 Task 和 Plan 的执行状态（详见 [Plan 与 Task 生命周期](plan-lifecycle.md)）
+4. **Context 管理**：管理 Plan Context 的传递和更新
+5. **Plan 校验**：校验 Impl 生成的 Plan 是否合法（partners 范围、参数合法性、DSL 结构）
+6. **Task 展开**：当选中的 Impl 将 Task 展开为 Plan 时，递归执行子 Plan
+7. **异常处理**：处理 Task 执行失败、重试、fallback
+8. **版本管理**：管理 Plan 的版本，处理版本切换（重做策略详见 [Task 类型 - 重做策略](task-type.md#重做策略)）
 
-- 每个Plan版本是不可变的（immutable）
-- 修改Plan时，基于当前版本创建新版本
-- 版本号：v1, v2, v3（简单递增）
-
-**版本切换场景**：
-
-典型场景：Plan执行错误时，负责规划的Impl重新订正Plan
-```
-Plan v1 执行中
-  ↓
-某个Task失败
-  ↓
-Impl重新订正Plan（生成v2）
-  ↓
-Plan Executor处理版本切换：
-  - 遍历v2中的每个Task
-  - 调用Task类型的redo_strategy判断是否重做
-  - 复用v1中已成功Task的结果
-  - 重新执行需要重做的Task
-```
-
-**Task类型的重做策略定义**：
-
-每个Task类型在注册时定义自己的redo_strategy：
-
-```yaml
-task_types:
-  collect_data:
-    description: "数据收集"
-    redo_strategy:
-      type: "context_aware"
-      logic: "TODO"  # 待设计：根据上下文判断是否重做
-
-  analyze:
-    description: "数据分析"
-    redo_strategy:
-      type: "input_driven"
-      logic: "TODO"  # 待设计：根据输入变化判断是否重做
-
-  generate_doc:
-    description: "文档生成"
-    redo_strategy:
-      type: "always_redo"
-      logic: "TODO"  # 待设计：总是重新执行
-```
-
-**版本切换流程**：
-
-```
-Plan v1 → Plan v2
-  ↓
-Plan Executor 遍历 v2 中的每个 Task
-  ↓
-获取 Task 的类型
-  ↓
-调用该 Task 类型的 redo_strategy
-  - 传入：v1中对应Task的信息、v2中Task的参数、Context变化
-  - 执行：该类型定义的策略逻辑
-  - 返回：reuse / redo / partial_redo
-  ↓
-Plan Executor 根据决策执行
-  - reuse：复用v1的结果
-  - redo：重新执行
-  - partial_redo：部分重做
-```
-
-**Plan执行流程**：
-
-```
-Plan Executor 接收 Plan
-  ↓
-创建 Plan Context
-  ↓
-遍历 Plan 的原语
-  ↓
-遇到 Task
-  ↓
-分配 Task 给 Task Type，选择 Impl
-  ↓
-Impl 的 can_expand_to_plan?
-  ↓ Yes
-  Impl 生成子 Plan
-  - Plan Executor 校验子 Plan（partners、参数、DSL）
-  - 校验通过：创建子 Plan Context（继承父 Plan Context），递归执行子 Plan
-  - 校验不通过：打回重新生成或标记失败
-  ↓ No
-  Impl 直接执行 Task
-  - Impl 返回结果 + Context 更新
-  - 更新 Plan Context
-  ↓
-所有 Task 完成？
-  ↓ Yes
-Plan 完成
-  ↓ No
-继续下一个 Task
-```
-
-**原语执行逻辑**：
-
-| 原语 | 执行逻辑 | Context传递 |
-|------|---------|------------|
-| `sequence` | 顺序执行Task，前一个Task完成后执行下一个 | 后续Task继承前面Task的Context更新 |
-| `parallel` | 并行执行多个Task，等待所有Task完成 | 合并所有Task的Context更新 |
-| `condition` | 根据条件选择执行哪个分支 | 选中的分支继承当前Context |
-| `loop` | 对列表中的每个item执行Task | 先执行items Task获取列表，每次迭代创建新的context包含当前item，如何绑定由items Task决定，迭代完成后合并到父context |
-| `map` | 对列表中的每个item并行执行Task | 先执行items Task获取列表，每个元素创建新的context包含当前item，如何绑定由items Task决定，完成后合并到父context |
-| `context` | 创建新的Context作用域，在指定Context中执行Task | body执行完成后Context修改合并到父Context |
-
-**Task执行流程**：
-
-```
-Task 分配给 Task Type，选择 Impl
-  ↓
-Impl 接收 Task + Context
-  ↓
-Impl 执行 Task（直接执行或展开为 Plan）
-  ↓
-Impl 返回 Result + Context Updates
-  ↓
-Plan Executor 更新 Plan Context
-  ↓
-Task 状态变为 done
-  ↓
-继续 Plan 的下一个原语
-```
-
-**Plan状态管理**：
-
-| 状态 | 描述 | 触发条件 |
-|------|------|----------|
-| `new` | Plan已创建，等待执行 | Impl生成Plan后 |
-| `running` | Plan正在执行中 | Plan Executor开始执行Plan |
-| `waiting` | Plan等待子Plan完成 | 展开的Task正在执行子Plan |
-| `done` | Plan执行完成（成功或失败） | 所有Task完成或失败 |
-| `switched` | Plan已切换到新版本 | Impl生成新版本，Plan Executor切换 |
-
-**Plan版本信息**：
-
-每个Plan包含版本信息：
-```yaml
-plan:
-  id: "plan-123"
-  version: "v2"
-  parent_version: "v1"  # 父版本，如果是初始版本则为null
-  state: "running"
-
-version_diff:
-  - type: "task_added"
-    task_id: "task-456"
-  - type: "task_modified"
-    task_id: "task-123"
-    changes: {...}
-  - type: "task_removed"
-    task_id: "task-789"
-```
-
-**Context更新规则**：
-
-1. **Task输出更新Context**：Impl返回的Context Updates合并到Plan Context
-2. **子Plan继承父Context**：子Plan创建时继承父Plan的Context
-3. **子Plan结果合并**：子Plan完成后，其Context更新合并到父Plan Context
-4. **并发冲突解决**：parallel/map原语执行时，多个Task并发更新Context，采用合并策略
-
-**异常处理**：
-
-1. **Task失败**：
-   - 如果Task配置了retry，按策略重试
-   - 如果retry耗尽，标记Plan为failed
-   - 如果Plan配置了fallback，执行fallback逻辑
-
-2. **子Plan失败**：
-   - 子Plan失败传递到父Task
-   - 父Task失败，父Plan按异常处理逻辑处理
-
-3. **Context更新冲突**：
-   - 采用"最后写入优先"策略
-   - 或配置自定义合并策略
+Plan 数据结构、执行流程和异常处理的详细定义见 [Plan 执行机制](plan.md)。
 
 **设计原则**：
-- **职责分离**：Impl负责执行（或规划+执行），Plan Executor负责调度和校验
-- **状态透明**：Plan和Task的状态变化可追踪
-- **Context隔离**：不同Plan的Context相互隔离
-- **可恢复**：Plan执行失败后可以从断点恢复
-- **可观测**：Plan执行过程可监控和调试
+
+- **职责分离**：Impl 负责执行（或规划+执行），Plan Executor 负责调度和校验
+- **状态透明**：Plan 和 Task 的状态变化可追踪
+- **Context 隔离**：不同 Plan 的 Context 相互隔离
+- **可恢复**：Plan 执行失败后可以从断点恢复
+- **可观测**：Plan 执行过程可监控和调试

@@ -2,14 +2,16 @@
 title: "多模态 AI (Multimodal AI)"
 description: "文本、图像、音频、视频四种模态的数据特征差异，以及各自的离散化、生成与跨模态对齐技术路线。"
 created: 2026-04-07
-updated: 2026-04-09
+updated: 2026-04-28
 tags: [multimodal, vision-language, diffusion, audio, cross-modal-alignment]
-review:
+review: 2026-04-28
 ---
 
 # 多模态 AI (Multimodal AI)
 
-> 比较文本、图像、音频、视频四种核心模态的数据特征，以及 AI 处理它们的技术路线差异。
+> 本文档聚焦于 **Transformer/自回归路线**的多模态技术——如何将不同模态转换为 token 序列并用 Transformer 处理，以及跨模态对齐方法。
+>
+> 图像/视频生成主流是扩散模型（非自回归），详见[扩散模型](./diffusion-models.md)。
 
 ---
 
@@ -23,11 +25,11 @@ review:
 | 典型序列长度 | ~10³–10⁴ tokens | ~10²–10³ patches | ~10³–10⁴ codec tokens | ~10⁴–10⁶ |
 | 时间维度 | 无（或弱顺序） | 无 | 有，高分辨率 | 有，需帧间一致性 |
 
-核心差异：文本天然离散、语义密度高；图像/音频/视频是连续信号，需要先**离散化**才能送入 Transformer，而离散化策略直接决定模型的效果上限。
+核心差异：文本天然离散、语义密度高；图像/音频/视频是连续信号，需要先**tokenization**才能送入 Transformer，而 tokenization 策略直接决定模型的效果上限。
 
 ---
 
-## 2. 离散化：把连续信号变成 token
+## 2. Tokenization：把连续信号变成 token
 
 这是多模态 AI 最核心的技术问题——如何把不同模态统一到 Transformer 能处理的 token 序列。
 
@@ -41,17 +43,28 @@ BPE / SentencePiece 等子词切分已是成熟方案，词表大小通常 32k�
 
 | 路线 | 代表 | 原理 | 权衡 |
 |------|------|------|------|
-| Patch 嵌入 | ViT[^dosovitskiy-2020-vit] | 将图像切成 16×16 patch，线性投影为向量 | 简单高效，但 patch 粒度限制细节 |
-| 离散码本 | VQ-VAE / VQ-GAN | 将图像编码为离散 token（码本索引） | 可用自回归生成，但码本大小限制保真度 |
+| Patch 嵌入 | ViT[^dosovitskiy-2020-vit] | 将图像切成 16×16 patch，线性投影为向量 | 不对称，无法重建图像；简单高效 |
+| 离散码本 | VQ-VAE / VQ-GAN | 将图像编码为离散 token（码本索引） | 对称（有损）；可用自回归生成，但码本大小限制保真度 |
 
-实践中，**理解**任务多用 patch 嵌入（CLIP、Gemini），**生成**任务多用 VAE 潜空间 + 扩散模型。
+**ViT（Vision Transformer）原理**：把图像切成小块，像处理文本序列一样用 Transformer 处理。
+
+以 224×224 的彩色图像为例：
+1. **切块**：切成 14×14 = 196 个 16×16 的小块（patch）
+2. **展平**：每个 patch 有 16×16×3 = 768 个像素值，展平成 768 维向量
+3. **投影**：通过可学习的线性层投影到固定维度（如 768 维）
+4. **加位置编码**：给每个 patch 加位置信息（Transformer 本身不知道空间关系）
+5. **送入 Transformer**：196 个向量序列，就像 196 个"词"
+
+直觉类比：文本把句子拆成 token 序列（"我/喜欢/吃/苹果"），ViT 把图像拆成 patch 序列。区别在于 CNN 靠卷积核滑窗提取局部特征，ViT 用全局注意力，每个 patch 能直接看到所有 patch。
+
+实践中，**理解**任务多用 patch 嵌入（CLIP、Gemini）。注意：图像生成主流是扩散模型（非自回归），详见[扩散模型](./diffusion-models.md)。
 
 ### 音频
 
-| 路线 | 代表 | 原理 |
-|------|------|------|
-| 频谱 → patch | Whisper, AST | 波形 → mel 频谱图（2D）→ 按 ViT 方式切 patch |
-| 神经音频编码 | EnCodec, SoundStream | 将波形压缩为多层离散 token（残差向量量化, RVQ） |
+| 路线 | 代表 | 原理 | 权衡 |
+|------|------|------|------|
+| 频谱 → patch | Whisper, AST | 波形 → mel 频谱图（2D）→ 按 ViT 方式切 patch | 不对称，无法重建波形 |
+| 神经音频编码 | EnCodec, SoundStream | 将波形压缩为多层离散 token（残差向量量化, RVQ） | 对称（有损）；压缩率高，~50–75 token/秒 |
 
 音频的采样率问题：16kHz 语音 1 秒 = 16,000 个采样点，直接处理不现实。频谱图将时域转为时频域，大幅降低序列长度；神经编码则进一步压缩到 ~50–75 token/秒。
 
@@ -60,52 +73,14 @@ BPE / SentencePiece 等子词切分已是成熟方案，词表大小通常 32k�
 视频 = 图像序列 + 时间轴，数据量爆炸。关键是如何压缩时间冗余：
 
 - **帧采样 + 独立编码**：抽关键帧，每帧按图像处理——简单但丢失运动信息
-- **3D patch**：将视频切成时空立方体（如 2 帧×16×16），一次编码空间+时间——Sora / DiT 的做法
+- **3D patch**：将视频切成时空立方体（如 2 帧×16×16），一次编码空间+时间
 - **时间维度单独建模**：图像编码后加 temporal attention 层
 
----
-
-## 3. 生成技术路线
-
-不同模态的生成方法差异很大，本质上由数据特征决定。
-
-### 文本：自回归
-
-逐 token 预测下一个，天然适配离散序列。Transformer decoder 是标准架构。
-
-### 图像：扩散模型
-
-自回归在连续高维空间效果不佳，扩散模型成为主流[^ho-2020-ddpm]：
-
-```
-前向：x₀ (清晰图) → 逐步加噪 → xₜ (纯噪声)
-反向：xₜ (纯噪声) → 学习去噪 → x₀ (生成图)
-```
-
-关键改进：
-
-- **Latent Diffusion**[^rombach-2022-ldm]：在 VAE 潜空间而非像素空间做扩散，计算量降低数十倍
-- **DiT (Diffusion Transformer)**：用 Transformer 替代 UNet 作为去噪骨干，更好地 scale——Sora 的核心架构
-- **Flow Matching**：更高效的采样路径，替代传统 DDPM 噪声调度
-
-### 视频：扩散 + 时间一致性
-
-在图像扩散基础上增加时间维度，但核心挑战不在生成质量而在**一致性**：
-
-- 帧间对象连贯（同一个人不能变脸）
-- 物理合理（重力、碰撞、流体）
-- 镜头运动平滑
-
-技术手段：3D 注意力（空间+时间联合 attention）、temporal super-resolution、运动先验。
-
-### 音频：自回归 + 扩散并存
-
-- **语音合成**：自回归预测 codec token（类似文本生成），或扩散模型在 mel 频谱空间生成
-- **音乐生成**：多数用扩散模型，因为音乐的频谱结构更接近"图像"
+注意：当前视频生成主流是扩散模型（非自回归），详见[扩散模型](./diffusion-models.md)。
 
 ---
 
-## 4. 跨模态对齐
+## 3. 跨模态对齐
 
 让不同模态的表示映射到同一向量空间，是多模态理解的基础。
 
@@ -131,21 +106,17 @@ Gemini、GPT-4o 的做法：从预训练开始就混合多种模态数据联合�
 
 ---
 
-## 5. 开放问题
+## 4. 开放问题
 
 - **多模态幻觉**：模型"看到"图像中不存在的内容（物体计数错误、空间关系误判）——比纯文本幻觉更难检测
 - **评估**：缺乏统一的跨模态评估基准，图像/音频/视频的质量难以用同一把尺子衡量
 - **长视频理解**：当前模型对短片段理解不错，但对几分钟以上视频的长程推理仍困难
-- **统一生成**：Omni-Model（一个模型同时理解和生成所有模态）仍处早期，跨模态生成质量不均衡
+- **统一生成**：一个模型同时用自回归方式生成所有模态仍处早期，跨模态生成质量不均衡
 
 ---
 
 ## 参考资料
 
 [^dosovitskiy-2020-vit]: Dosovitskiy et al. *An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*. 2020. https://arxiv.org/abs/2010.11929
-
-[^ho-2020-ddpm]: Ho et al. *Denoising Diffusion Probabilistic Models*. 2020. https://arxiv.org/abs/2006.11239
-
-[^rombach-2022-ldm]: Rombach et al. *High-Resolution Image Synthesis with Latent Diffusion Models*. 2022. https://arxiv.org/abs/2112.10752
 
 [^radford-2021-clip]: Radford et al. *Learning Transferable Visual Models From Natural Language Supervision*. 2021. https://arxiv.org/abs/2103.00020
