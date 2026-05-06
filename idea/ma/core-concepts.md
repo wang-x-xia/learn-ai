@@ -5,6 +5,7 @@
 | 词汇 | 定义 |
 |------|------|
 | **Task** | 最小执行单元，代表一个原子化的工作项。Task可以按需展开为Plan。详见 [Task 定义](task.md) |
+| **Task Retry** | Task的语义级重试机制：Plan Executor 从原始 Task 克隆出新的 Retry Task 和其 Context 快照执行，并按策略将结果合并回原始 Task。详见 [Task Retry](task-retry.md) |
 | **Task Type** | Task的类型，定义能力契约（输入/输出、redo_strategy、uri_params）。每个Task Type可以有多个Impl |
 | **Impl** | Task Type的具体执行者，可以是LLM、脚本、预定义流程等（通过kind区分）。Impl决定是否将Task展开为Plan（can_expand_to_plan）以及可协作的partners。评价体系针对Impl级别运作 |
 | **Plan Executor** | Plan执行器，负责执行Plan，管理Task调度、Impl选择和Context传递 |
@@ -182,7 +183,7 @@ Plan Executor 负责执行 Plan，管理 Task 的调度和执行流程。
 4. **Context 管理**：管理 Plan Context 的传递和更新
 5. **Plan 校验**：校验 Impl 生成的 Plan 是否合法（partners 范围、参数合法性、DSL 结构）
 6. **Task 展开**：当选中的 Impl 将 Task 展开为 Plan 时，递归执行子 Plan
-7. **异常处理**：处理 Task 执行失败、重试、fallback
+7. **异常处理**：处理 Task 执行失败、执行级重试、Task Retry 和 fallback
 8. **版本管理**：管理 Plan 的版本，处理版本切换（重做策略详见 [Task 类型 - 重做策略](task-type.md#重做策略)）
 
 Plan 数据结构、执行流程和异常处理的详细定义见 [Plan 执行机制](plan.md)。

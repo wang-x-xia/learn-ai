@@ -123,6 +123,10 @@ new → working → done
 - Sub-status 用于内部跟踪和监控，不影响编排逻辑
 - 状态转换由Plan Executor控制，Impl不直接修改Task状态
 
+## Task Retry
+
+当 Task 需要语义级重试时，Plan Executor 可以从原始 Task 克隆出一个新的 Retry Task 和其 Context 快照执行，并按策略将结果合并回原始 Task。详细设计见 [Task Retry](task-retry.md)。
+
 ## Task 展开为 Plan
 
 当选中的 Impl 的 `can_expand_to_plan: true` 时，该 Impl 会为 Task 生成一个子 Plan：

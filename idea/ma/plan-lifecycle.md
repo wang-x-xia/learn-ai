@@ -155,9 +155,18 @@ plan:
 
 ## 重试策略
 
+### 两类重试
+
+系统区分两类重试：
+
+- **执行级重试**：处理网络抖动、API 超时、工具偶发错误等基础设施层失败，不创建新的 Task，仍属于当前 Task 的执行过程
+- **Task Retry**：处理切换 Impl、调整输入、从失败点重新展开、人工介入后再试一版等语义级重试，会创建新的 Retry Task。详细定义见 [Task Retry](task-retry.md)
+
+本节的 `retry` 配置和退避策略，默认都指**执行级重试**。
+
 ### 配置
 
-重试策略在 Task Type 级别定义，Impl 执行时遵守：
+执行级重试策略在 Task Type 级别定义，Impl 执行时遵守：
 
 ```yaml
 task_types:
@@ -196,6 +205,25 @@ sub_status → working.retrying
 等待退避延迟
 sub_status → working.running
 重新执行
+```
+
+### Task Retry 触发
+
+当失败不是临时基础设施问题，而是需要换 Impl、修改输入、调整策略或人工介入后重新尝试时，Plan Executor 不继续在原 Task 上覆盖执行，而是创建新的 Retry Task：
+
+```text
+原始 Task 失败或结果不理想
+  ↓
+是否属于语义级重试？
+  ↓ No → 继续执行级重试流程
+  ↓ Yes
+克隆原始 Task + Context 快照
+  ↓
+创建 Retry Task
+  ↓
+独立执行并产出候选结果
+  ↓
+按 merge_policy 合并回原始 Task 或等待人工采纳
 ```
 
 ## 超时机制
@@ -239,6 +267,7 @@ plan:
 
 - **状态与结果分离**：生命周期状态（state）只管执行到哪了，成功/失败由独立的 result 字段记录
 - **宏观简单，细节可选**：编排逻辑只关心宏观状态，sub-status 用于监控和调试
-- **重试内聚**：重试策略由 Task Type 定义，Plan Executor 执行，Impl 无需关心重试逻辑
+- **重试分层**：执行级重试处理临时失败，Task Retry 处理语义级重试，两者边界清晰
+- **重试内聚**：执行级重试策略由 Task Type 定义，Plan Executor 执行，Impl 无需关心重试逻辑
 - **超时兜底**：防止 Impl 挂死，Task 和 Plan 都有超时机制
 - **进度可观测**：Impl 上报进度，Plan 聚合 Task 状态，用户可实时查看

@@ -96,6 +96,7 @@ task_type_metrics:
 task_evaluation:
   task_id: "task-123"
   task_type: "generate_doc"
+  retry_root: "task-123"      # 可选：若为 Retry Task，则指向原始 Task
   impl: "analyze/gpt-4o"  # 执行该Task的Impl
   
   rating: "qualified"  # qualified | unqualified
@@ -127,6 +128,8 @@ task_evaluation:
     - token_efficiency
 ```
 
+评价结果落在 **Task 实例级别**。对于 Retry Task，可以通过同一个 `retry_root` 聚合同源的多次语义级重试结果，用于比较不同 Impl 和策略的表现。
+
 ## 数据收集机制
 
 **自动化指标**（系统自动收集）：
@@ -146,6 +149,6 @@ task_evaluation:
 - **实时决策**：不合格的Impl降权，连续不合格则淘汰
 - **成本优化**：如果便宜的Impl也能达到合格，优先选用以降低成本
 - **Impl优化**：识别Impl的弱点指标，针对性改进（如调整prompt、更换模型）
+- **Retry比较**：在同一个 `retry_root` 下比较多个 Retry Task 的质量、成本和成功率，帮助选择应采纳的结果
 - **用户信任**：展示评价结果，帮助用户判断是否信任AI执行结果
 - **系统演进**：长期趋势分析，指导产品迭代
-

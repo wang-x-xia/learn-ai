@@ -49,8 +49,17 @@ Task 的完整定义，包含：
 - Task ID（URI 格式、解析规则）
 - Task 实例（字段结构）
 - Task 生命周期（摘要，引用 plan-lifecycle.md）
+- Task Retry（概要，引用 task-retry.md）
 - Task 展开为 Plan
 - Task 与 Impl 的关系
+
+### [Task Retry](task-retry.md)
+Task 的语义级重试机制，包含：
+- 执行级重试与 Task Retry 的区别
+- Retry Task 的派生关系
+- Context 克隆规则
+- 合并回原始 Task 的策略
+- 与评价体系、展示层的关系
 
 ### [Task 类型](task-type.md)
 Task 类型与 Impl 定义，包含：
