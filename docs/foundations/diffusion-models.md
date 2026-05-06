@@ -2,7 +2,7 @@
 title: "扩散模型 (Diffusion Models)"
 description: "扩散模型原理——DDPM、Latent Diffusion、DiT 与 Flow Matching。"
 created: 2026-04-28
-updated: 2026-04-29
+updated: 2026-05-06
 tags: [diffusion, latent-diffusion, dit, flow-matching]
 review: 2026-04-29
 review_note: review 了 DDPM 部分（第1章），修正了前向过程命名，重写了章节结构，添加了 DDIM
@@ -22,7 +22,7 @@ DDPM 是扩散模型的基础架构，通过学习去噪来生成图像。
 
 ### 1.1 核心思想
 
-**学习去噪**：从纯噪声逐步还原成清晰信号。
+**学习去噪**：从纯噪声逐步还原成清晰信号。DDPM 将这个过程形式化为一个前向加噪、反向去噪的概率模型。[^ho-2020-ddpm]
 
 **两阶段过程**：
 
@@ -61,7 +61,7 @@ DDPM 是扩散模型的基础架构，通过学习去噪来生成图像。
 
 ### 2.1 DDIM (Denoising Diffusion Implicit Models)
 
-通过修改推理过程实现加速，可以用更少的步数达到类似质量。
+通过修改推理过程实现加速，可以用更少的步数达到类似质量。[^song-2020-ddim]
 
 **核心改进**：
 - DDPM 需要 1000 步采样，DDIM 可以用 50 步达到类似质量
@@ -72,11 +72,11 @@ DDPM 是扩散模型的基础架构，通过学习去噪来生成图像。
 - 两者都致力于解决 DDPM 采样速度慢的问题
 - DDIM 通过修改离散扩散模型的推理过程来实现加速
 - Flow Matching 通过学习连续向量场来实现更高效的采样
-- DDPM → DDIM → Flow Matching 是扩散模型从离散到连续的演进路径
+- DDPM → DDIM → Flow Matching 是扩散模型从离散到连续的演进路径；如果想先建立一条完整主线，可以配合综述型讲解视频一起看。[^youtube-2024-diffusion]
 
 ### 2.2 Latent Diffusion
 
-在 VAE 潜空间而非像素空间做扩散，计算量降低数十倍。
+在 VAE 潜空间而非像素空间做扩散，计算量降低数十倍。[^rombach-2022-ldm]
 
 ```
 图像 → VAE 编码器 → 潜空间向量（压缩 30-50 倍）→ 扩散模型
@@ -89,7 +89,7 @@ DDPM 是扩散模型的基础架构，通过学习去噪来生成图像。
 
 ### 2.3 DiT (Diffusion Transformer)
 
-用 Transformer 替代 UNet 作为去噪骨干，更好地 scale——Sora 的核心架构。
+用 Transformer 替代 UNet 作为去噪骨干，更好地 scale——Sora 的核心架构。[^peebles-2023-dit]
 
 **优势**：
 - Transformer 的 scaling law 适用，参数量增加效果持续提升
