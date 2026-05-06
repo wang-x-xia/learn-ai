@@ -29,6 +29,12 @@ Agent 的共性概念（执行循环、记忆、协议）见[应用技术](../ap
 
     CrewAI · Python · 角色驱动的 Agent 团队
 
+- :material-source-branch: **[Ruflo](ruflo.md)**
+
+    ---
+
+    RuvNet · TypeScript · Claude Code 的外挂式 Agent 控制平面
+
 - :material-microsoft: **[Semantic Kernel](semantic-kernel.md)**
 
     ---

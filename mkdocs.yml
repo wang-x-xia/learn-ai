@@ -135,6 +135,7 @@ nav:
       - LangGraph: agent-frameworks/langgraph.md
       - AutoGen: agent-frameworks/autogen.md
       - CrewAI: agent-frameworks/crewai.md
+      - Ruflo: agent-frameworks/ruflo.md
       - Semantic Kernel: agent-frameworks/semantic-kernel.md
       - Dify: agent-frameworks/dify.md
       - Coze: agent-frameworks/coze.md
