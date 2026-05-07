@@ -2,9 +2,9 @@
 title: 推理经济性 (Inference Economics)
 description: 租公有云 GPU 卖推理是否赚钱？从 GPU 小时成本、模型吞吐、API 定价三个维度拆解推理服务的盈利模型。
 created: 2026-04-13
-updated: 2026-04-13
+updated: 2026-05-07
 tags: [inference, economics, gpu, pricing, cost]
-review:
+review: 2026-05-07
 ---
 
 # 推理经济性 (Inference Economics)
