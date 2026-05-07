@@ -1,9 +1,9 @@
 ---
 title: "扩散模型 (Diffusion Models)"
-description: "扩散模型原理——DDPM、Latent Diffusion、DiT 与 Flow Matching。"
+description: "扩散模型原理——DDPM、DDIM 与 Flow Matching。"
 created: 2026-04-28
-updated: 2026-05-06
-tags: [diffusion, latent-diffusion, dit, flow-matching]
+updated: 2026-05-07
+tags: [diffusion, ddim, flow-matching]
 review: 2026-04-29
 review_note: review 了 DDPM 部分（第1章），修正了前向过程命名，重写了章节结构，添加了 DDIM
 ---
@@ -68,61 +68,51 @@ DDPM 是扩散模型的基础架构，通过学习去噪来生成图像。
 - 实现非马尔可夫采样，跳过中间步骤
 - 推理过程可以是确定性的（可设置），便于一致性和可控性
 
-**与 Flow Matching 的关联**：
-- 两者都致力于解决 DDPM 采样速度慢的问题
-- DDIM 通过修改离散扩散模型的推理过程来实现加速
-- Flow Matching 通过学习连续向量场来实现更高效的采样
-- DDPM → DDIM → Flow Matching 是扩散模型从离散到连续的演进路径；如果想先建立一条完整主线，可以配合综述型讲解视频一起看。[^youtube-2024-diffusion]
+**技术原理**：
+DDIM 的核心洞察是：同一个训练好的 DDPM 模型，可以对应多个不同的反向过程，只要它们的边际分布一致。DDPM 每步去噪后必须重新添加随机噪声，而 DDIM 用模型预测的噪声替代随机噪声，因此可以是确定性的。由于公式结构改变，不依赖中间步骤，可以直接跳步。
 
-### 2.2 Latent Diffusion
+**直觉类比**：
+- **DDPM**：像走楼梯，必须一级一级走完，每步都要重新买票（加随机噪声）
+- **DDIM**：像坐电梯，可以直接跳到目标楼层，沿着相同的"轨道"（噪声调度）行驶
 
-在 VAE 潜空间而非像素空间做扩散，计算量降低数十倍。[^rombach-2022-ldm]
+### 2.2 Flow Matching
 
-```
-图像 → VAE 编码器 → 潜空间向量（压缩 30-50 倍）→ 扩散模型
-潜空间向量 → VAE 解码器 → 图像
-```
-
-**优势**：
-- 潜空间维度小，计算量大幅降低
-- 保留语义信息，生成质量更高
-
-### 2.3 DiT (Diffusion Transformer)
-
-用 Transformer 替代 UNet 作为去噪骨干，更好地 scale——Sora 的核心架构。[^peebles-2023-dit]
-
-**优势**：
-- Transformer 的 scaling law 适用，参数量增加效果持续提升
-- 全局注意力，长距离依赖建模更好
-
-### 2.4 Flow Matching
-
-学习一个随时间变化的向量场（time varying vector field），实现从噪声到数据的连续变换。
+基于**连续正规化流**（Continuous Normalizing Flows, CNFs）的生成建模范式，通过学习向量场实现从噪声到数据的连续变换。[^lipman-2022-flow-matching]
 
 **核心概念**：
 - **向量场 v_t(x)**：在时刻 t，位置 x 的粒子应该往哪个方向移动
-- **随时间变化**：同一个位置在不同时刻的向量可能不同
-- **连续变换**：通过沿着向量场积分，从噪声逐步"流"到数据
+- **连续变换**：将整个生成过程建模为连续的"流动"，而非离散步骤
+- **概率路径**：定义从噪声分布到数据分布的变换路径，扩散路径只是其中一种特例
 
 **与 DDPM 的区别**：
-- DDPM：离散的逐步去噪，每步有固定的噪声调度
-- Flow Matching：连续的向量场，学习平滑变换路径
 
-**优势**：
+| 维度 | DDPM | Flow Matching |
+|------|------|---------------|
+| 变换方式 | 离散的逐步去噪 | 连续的向量场 |
+| 训练目标 | 学习去噪 | 回归向量场 |
+| 推理方式 | 固定步数迭代 | ODE 求解器数值积分 |
+| 路径选择 | 固定的扩散路径 | 可选多种路径（扩散/OT 等） |
+
+**为什么更快？**
+
+DDPM 每步必须重新加随机噪声，步数固定（通常 1000 步）。Flow Matching 用 ODE 求解器进行数值积分：
+
+- **自适应步长**：求解器可以根据向量场的平滑程度自动调整步长
+- **跳过中间点**：可以用更大的步长直接"跳"到目标状态
+- **无需重加噪声**：沿着向量场连续流动，不需要每步重新采样噪声
+
+**技术优势**：
 - 采样步数更少，速度更快
-- 更稳定的训练过程
+- 训练过程更稳定
+- 兼容多种概率路径（如最优传输 OT 路径），可以进一步优化生成质量
 
 ---
 
-## 3. 应用场景
+## 3. 已知问题
 
-| 模态 | 代表模型 | 特点 |
-|------|----------|------|
-| 图像 | Stable Diffusion, DALL-E 3 | Latent Diffusion 主流 |
-| 视频 | Sora, Runway Gen-3 | 3D patch + 时间一致性 |
-| 音频 | AudioLDM, MusicGen | 在频谱或潜空间扩散 |
+### 3.1 视频生成的特殊挑战
 
-**视频生成的特殊挑战**：
+视频生成相比图像生成面临额外的挑战，主要源于时间维度的引入。
 
 | 挑战 | 具体问题 | 图像生成无此问题 |
 |------|----------|-----------------|
@@ -162,12 +152,8 @@ DDPM 是扩散模型的基础架构，通过学习去噪来生成图像。
 
 ## 参考资料
 
-[^youtube-2024-diffusion]: *Diffusion Models | From DDPM to Flow Matching*. 2024. https://www.youtube.com/watch?v=iv-5mZ_9CPY
-
 [^ho-2020-ddpm]: Ho et al. *Denoising Diffusion Probabilistic Models*. 2020. https://arxiv.org/abs/2006.11239
 
 [^song-2020-ddim]: Song et al. *Denoising Diffusion Implicit Models*. 2020. https://arxiv.org/abs/2010.02502
 
-[^rombach-2022-ldm]: Rombach et al. *High-Resolution Image Synthesis with Latent Diffusion Models*. 2022. https://arxiv.org/abs/2112.10752
-
-[^peebles-2023-dit]: Peebles & Xie. *Scalable Diffusion Models with Transformers*. 2023. https://arxiv.org/abs/2212.09748
+[^lipman-2022-flow-matching]: Lipman et al. *Flow Matching for Generative Modeling*. 2022. https://arxiv.org/abs/2210.02747
