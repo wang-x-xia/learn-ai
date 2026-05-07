@@ -130,16 +130,13 @@ nav:
     - 开源库:
       - libraries/index.md
       - libraries/honcho.md
-    - Agent 框架:
-      - agent-frameworks/index.md
-      - LangGraph: agent-frameworks/langgraph.md
-      - AutoGen: agent-frameworks/autogen.md
-      - CrewAI: agent-frameworks/crewai.md
-      - Ruflo: agent-frameworks/ruflo.md
-      - Semantic Kernel: agent-frameworks/semantic-kernel.md
-      - Dify: agent-frameworks/dify.md
-      - Coze: agent-frameworks/coze.md
-      - NeMo Agent Toolkit: agent-frameworks/nemo-agent-toolkit.md
+    - Agent Workflow:
+      - agent-workflow/index.md
+      - LangGraph: agent-workflow/langgraph.md
+      - Ruflo: agent-workflow/ruflo.md
+      - Microsoft Agent Framework: agent-workflow/maf.md
+      - Dify: agent-workflow/dify.md
+      - NeMo Agent Toolkit: agent-workflow/nemo-agent-toolkit.md
     - 个人 Agent:
       - personal-agents/index.md
       - Hermes Agent: personal-agents/hermes-agent.md

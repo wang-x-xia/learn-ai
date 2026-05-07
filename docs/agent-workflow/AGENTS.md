@@ -1,6 +1,6 @@
-# docs/agent-frameworks/ — Agent 框架档案
+# docs/agent-workflow/ — Agent Workflow 框架档案
 
-每个框架一个 `.md` 文件，聚焦**技术区分度**。
+每个框架一个 `.md` 文件，聚焦**Workflow 技术区分度**。
 
 ## 写法指南
 
@@ -44,7 +44,7 @@ review:
 
 ## 品类共性
 
-Agent 框架的共性概念（执行循环、记忆系统、协议）在 `docs/applied/` 下的品类概述文档中集中说明：
+Agent Workflow 框架的共性概念（执行循环、记忆系统、协议）在 `docs/applied/` 下的品类概述文档中集中说明：
 
 - 执行循环 → `docs/applied/ai-agents.md`
 - 记忆系统 → `docs/applied/memory-systems.md`

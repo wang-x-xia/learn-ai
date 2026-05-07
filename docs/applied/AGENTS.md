@@ -29,7 +29,7 @@
 - Agent 间协议（A2A / ANX）→ `agent-protocols.md`
 - Agent 生命周期钩子 → `agent-hooks.md`
 - Subagent / 多 Agent 架构 → `subagents.md`
-- Agent 框架产品档案 → `docs/agent-frameworks/`
+- Agent 框架产品档案 → `docs/agent-workflow/`
 - Thinking Mode（推理时计算扩展）→ `thinking-mode.md`
 - 提示技巧 / 框架 → `prompt-engineering.md`
 - RAG 新方法 → `rag.md`

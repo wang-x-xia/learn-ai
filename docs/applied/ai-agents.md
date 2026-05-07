@@ -217,8 +217,6 @@ Context Compact 的典型流程：上下文占用超过阈值（如 70%）→ �
 | 模式 | 核心思路 | 详见 |
 |------|---------|------|
 | **Subagent** | 主循环分发任务给子循环，子循环独立执行后回传结果 | [Subagent 实践](subagents.md) |
-| **多 Agent 协作** | 多个独立循环通过消息传递协作 | [AutoGen](../agent-frameworks/autogen.md) 对话模式 |
-| **管道式** | 循环串联，上一个输出作为下一个输入 | [CrewAI](../agent-frameworks/crewai.md) Sequential |
 | **层级式** | Manager 循环调度 Worker 循环 | OpenAI Symphony[^latentspace-2026-harness] |
 
 > 多循环系统的详细架构和各产品实现对比见 [Subagent 实践](subagents.md)。
@@ -236,7 +234,7 @@ Agent 循环的自主性带来安全风险——循环可能失控（无限执�
 | 提示注入 | Observe 步骤（外部输入污染） | 输入清洗、权限隔离 |
 | 信息泄露 | Act 步骤（向外发送数据） | 网络策略、输出过滤 |
 
-> 详细的安全研究与治理框架见 [AI 安全与治理](../research/safety-and-governance.md)。NVIDIA OpenShell 的沙箱方案见 [NeMo Agent Toolkit](../agent-frameworks/nemo-agent-toolkit.md)。
+> 详细的安全研究与治理框架见 [AI 安全与治理](../research/safety-and-governance.md)。NVIDIA OpenShell 的沙箱方案见 [NeMo Agent Toolkit](../agent-workflow/nemo-agent-toolkit.md)。
 
 ---
 
@@ -256,7 +254,7 @@ Agent 循环的自主性带来安全风险——循环可能失控（无限执�
 | 工具接入 | [Agent 工具接入](agent-tools.md) |
 | Agent Skills | [Agent Skills](agent-skills.md) |
 | Agent 间协议 | [Agent 间通信协议](agent-protocols.md) |
-| Agent 框架 | [框架档案](../agent-frameworks/index.md) |
+| Agent 框架 | [框架档案](../agent-workflow/index.md) |
 | 生命周期钩子 | [Agent Hooks](agent-hooks.md) |
 | Subagent 架构 | [Subagent 实践](subagents.md) |
 | 编码 Agent 产品 | [产品档案](../coding-agents/index.md) |
