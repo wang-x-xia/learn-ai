@@ -1,15 +1,15 @@
 ---
 title: 提示工程 (Prompt Engineering)
-description: 提示工程是与 LLM 高效交互的艺术和科学。通过精心设计的提示，可以在不修改模型的情况下极大提升输出质量。
+description: 从手工技巧到系统设计思维——提示工程如何适应 Agent 时代的 AI 交互范式。
 created: 2026-04-07
-updated: 2026-04-07
-tags: [prompt-engineering, cot, few-shot, dspy]
-review:
+updated: 2026-05-07
+tags: [prompt-engineering, cot, few-shot, dspy, agents]
+review: 2026-05-07
 ---
 
 # 提示工程 (Prompt Engineering)
 
-> 提示工程是与 LLM 高效交互的艺术和科学。通过精心设计的提示，可以在不修改模型的情况下极大提升输出质量。
+> 提示工程是与 LLM 高效交互的艺术和科学。随着模型能力提升和 Agent 系统兴起，提示工程从"手工打磨技巧"演变为"系统设计思维"——关注如何通过提示定义 Agent 行为、工具使用和协作模式。
 
 ---
 
@@ -19,24 +19,33 @@ review:
 
 提示工程 (Prompt Engineering) 是设计和优化输入给 LLM 的文本（提示/Prompt），以引导模型生成期望输出的技术。
 
-### 为什么重要
+### 为什么重要（2024-2025 年视角）
 
-- **零成本**: 不需要训练或微调
-- **即时生效**: 修改提示立即看到效果
-- **灵活性**: 同一模型适配不同任务
-- **性价比**: 在大多数场景下效果足够好
+随着模型能力提升和应用范式转变，提示工程的重要性发生了变化：
 
-### 与其他方法的关系
+| 维度 | 2022-2023 年（早期） | 2024-2025 年（当前） |
+|------|---------------------|---------------------|
+| **核心场景** | 直接对话、单轮任务 | Agent 编排、工具调用、多步推理 |
+| **技能门槛** | 高（需要掌握 CoT、Few-shot 等技巧） | 低（模型更"听话"，自然语言即可） |
+| **边际收益** | 10x 性能提升 | 1.2x 性能提升 |
+| **关注点** | 提示词本身 | Agent 行为定义、工具描述、协作协议 |
+| **固化方式** | 手工编写 | 系统提示、产品化配置（Skills、GPTs） |
+
+### 与其他方法的关系（更新）
 
 ```
-提示工程 (简单、快速、零成本)
-    ↓ 不够用时
+提示工程 (交互设计基础)
+    ↓ 
+Agent 编排 (LangGraph、MAF、AutoGen)
+    ↓
+工具调用 (Function Calling、MCP)
+    ↓
 RAG (需要外部知识时)
-    ↓ 不够用时
+    ↓
 微调 (需要特定行为/风格时)
-    ↓ 不够用时
-预训练 (需要全新能力时)
 ```
+
+**关键变化**：提示工程不再是一个独立的"优化手段"，而是 Agent 系统的**基础设施**——通过提示定义 Agent 的行为边界、工具使用策略和协作模式。
 
 ---
 
@@ -480,44 +489,199 @@ prompt = f"""你是一个客服助手，只回答关于产品的问题。
 
 ---
 
-## 10. 发展趋势
+## 10. 发展趋势与 Agent 时代的新角色
 
-### 10.1 提示工程是否会消亡？
+### 10.1 为什么提示工程"热度下降"？
 
-随着模型越来越强，简单的提示就能获得好结果。但：
-- 复杂任务仍需要精心设计的提示
-- 系统级提示 (System Prompt) 变得更重要
-- 提示工程演变为"AI 交互设计"
+2024-2025 年，提示工程作为独立技术话题的讨论热度显著下降，主要原因：
 
-### 10.2 程序化提示 (DSPy)
+1. **模型能力提升，指令遵循增强**
+   - GPT-4.5、Claude 3.5/4、Gemini 2.0 等模型在指令遵循能力上有显著提升
+   - 以前需要精心设计的 CoT 提示词，现在模型自己就能主动推理
+   - 以前需要复杂的格式约束，现在模型能更好地理解结构化输出要求
+   - **结果**：简单的自然语言指令就能得到不错的结果
 
-从手工编写提示 → 程序化定义和自动优化：
-- 定义输入输出 Schema
-- 自动搜索最优提示
-- 版本控制和 A/B 测试
+2. **Agent 和工具调用成为主流**
+   - 开发范式从"提示词工程"转向"Agent 编排"
+   - 通过 Function Calling 调用外部 API/数据库，而非依赖提示词中的知识
+   - 多 Agent 系统通过协作解决问题，而非单一超级提示词
+   - **结果**：工程师关注点从"如何写好提示词"转移到"如何设计 Agent 架构"
 
-### 10.3 模型特定策略
+3. **系统提示词的最佳实践被固化**
+   - 模型厂商在系统提示词中内置了常见最佳实践
+   - 平台层提供预设的提示词模板（Anthropic Skills、OpenAI GPTs）
+   - 企业级应用使用统一的提示词模板库
+   - **结果**：提示词工程变成"配置"而非"工程"，可见度降低
 
-不同模型对提示的响应不同：
-- GPT 系列: 遵循详细指令好
-- Claude: 理解细微语境好
-- Gemini: 多模态指令好
-- 开源模型: 通常需要更明确的指令
+4. **注意力转移到更高层抽象**
+   - Agent 编排（LangGraph、MAF、AutoGen）
+   - 记忆系统（RAG、向量数据库）
+   - 工具生态（MCP、OpenAPI）
+   - 推理优化（KV Cache、量化、蒸馏）
+   - **结果**：这些更高层技术能带来更大杠杆效应，吸引更多关注
 
-### 10.4 Agent Prompt Design
+5. **边际收益递减**
+   - 早期（2022-2023）：精心设计的提示词能带来 10x 性能提升
+   - 现在（2024-2025）：精心设计的提示词可能只带来 1.2x 提升
+   - **机会成本**：同样的时间投入在 Agent 设计或 RAG 系统上，收益更大
 
-为 Agent 系统设计提示成为新挑战：
-- 工具使用提示
-- 多步骤规划提示
-- 错误恢复提示
+6. **产品化工具降低门槛**
+   - ChatGPT Custom Instructions、GPTs
+   - Claude Skills
+   - 低代码平台（Dify、Coze）
+   - **结果**：用户通过 UI 配置就能实现以前需要提示词工程才能做到的效果
+
+### 10.2 提示工程会消亡吗？
+
+**不会，但角色发生了转变**：
+
+| 角色 | 2022-2023 年 | 2024-2025 年 |
+|------|-----------|-----------|
+| **形态** | 手工打磨提示词 | 系统设计思维 |
+| **场景** | 直接对话优化 | Agent 行为定义 |
+| **技能** | 掌握 CoT、Few-shot | 理解 Agent 架构 |
+| **固化** | 代码中的字符串 | Skills、GPTs、配置文件 |
+| **价值** | 直接提升输出质量 | 定义系统边界和行为 |
+
+提示工程从"显性技术"转为"隐性基础设施"，但仍然是 AI 交互的核心能力。
+
+### 10.3 Agent 时代的提示工程
+
+在 Agent 系统中，提示工程的新关注点：
+
+#### Agent 行为定义
+
+```python
+# Agent 系统提示示例
+agent_prompt = """你是一个数据分析 Agent。
+
+你的职责：
+- 接收用户的数据分析请求
+- 决定使用哪些工具（SQL 查询、数据可视化、统计检验）
+- 将复杂任务分解为可执行的步骤
+
+工具使用规则：
+- 只有在需要查询数据库时才使用 SQL 工具
+- 生成图表前先确认数据完整性
+- 遇到异常数据时主动标记并寻求人工确认
+
+协作协议：
+- 如果任务超出你的能力范围，向用户说明并建议替代方案
+- 如果需要人工确认，使用 human-in-the-loop 机制
+"""
+```
+
+#### 工具描述提示
+
+```python
+# Function Calling 的工具描述
+tool_description = """执行 SQL 查询并返回结果。
+
+使用场景：
+- 用户询问具体的数据指标或统计信息
+- 需要从数据库中提取结构化数据
+
+使用规则：
+- 只执行 SELECT 查询，禁止修改操作
+- 查询前先检查 SQL 语法
+- 结果集超过 1000 行时自动聚合
+
+输入格式：
+- query: SQL 查询语句
+- database: 数据库名称（可选）
+
+输出格式：
+- success: 查询是否成功
+- data: 查询结果（JSON 格式）
+- error: 错误信息（如果失败）
+"""
+```
+
+#### 多 Agent 协作提示
+
+```python
+# Router Agent 的路由提示
+router_prompt = """你是一个任务路由 Agent。
+
+你的职责：
+- 分析用户请求的意图和领域
+- 将请求路由到最合适的子 Agent
+
+可用 Agent：
+- data_agent: 数据分析和可视化
+- code_agent: 代码生成和审查
+- research_agent: 信息检索和总结
+
+路由决策依据：
+- 请求的关键词和语义
+- 每个 Agent 的能力描述
+- 上下文中的历史交互
+
+输出格式：
+- target_agent: 目标 Agent 名称
+- reasoning: 路由决策的理由
+- confidence: 决策的置信度 (0-1)
+"""
+```
+
+### 10.4 程序化提示 (DSPy) 在 Agent 时代的价值
+
+DSPy 从手工编写提示 → 程序化定义和自动优化，在 Agent 系统中尤为重要：
+
+```python
+import dspy
+
+class DataAnalysisAgent(dspy.Signature):
+    """数据分析 Agent 的提示定义"""
+    user_request: str = dspy.InputField(desc="用户的数据分析请求")
+    tool_plan: list[str] = dspy.OutputField(desc="需要使用的工具列表")
+    execution_plan: str = dspy.OutputField(desc="执行步骤说明")
+
+# 自动优化 Agent 的提示
+teleprompter = dspy.BootstrapFewShot(metric=agent_success_rate)
+optimized_agent = teleprompter.compile(
+    DataAnalysisAgent, 
+    trainset=agent_examples,
+    valset=validation_cases
+)
+```
+
+**价值**：
+- 将 Agent 行为定义为可测试、可优化的 Schema
+- 自动搜索最优的 Agent 提示策略
+- 版本控制和 A/B 测试不同的 Agent 配置
+
+### 10.5 模型特定策略（更新）
+
+不同模型对提示的响应不同，Agent 系统需要针对性适配：
+
+| 模型 | 特点 | Agent 设计建议 |
+|------|------|---------------|
+| **GPT 系列** | 遵循详细指令好 | 明确的步骤说明、工具使用规则 |
+| **Claude** | 理解细微语境好 | 丰富的背景信息、 nuanced 的约束 |
+| **Gemini** | 多模态指令好 | 图文结合的 Agent、视觉推理任务 |
+| **开源模型** | 需要更明确的指令 | 更详细的工具描述、更多的示例 |
 
 ---
 
 ## 参考资料
 
+### 经典论文
 - Wei et al., "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", 2022 - [arXiv:2201.11903](https://arxiv.org/abs/2201.11903)
 - Wang et al., "Self-Consistency Improves Chain of Thought Reasoning", 2022 - [arXiv:2203.11171](https://arxiv.org/abs/2203.11171)
 - Yao et al., "Tree of Thoughts", 2023 - [arXiv:2305.10601](https://arxiv.org/abs/2305.10601)
 - Yao et al., "ReAct: Synergizing Reasoning and Acting", 2022 - [arXiv:2210.03629](https://arxiv.org/abs/2210.03629)
+
+### 工具和框架
 - DSPy: https://github.com/stanfordnlp/dspy
 - Prompt Engineering Guide: https://www.promptingguide.ai/
+
+### Agent 框架
+- LangGraph: https://github.com/langchain-ai/langgraph
+- Microsoft Agent Framework: https://github.com/microsoft/agent-framework
+- AutoGen: https://github.com/microsoft/autogen
+
+### 相关文档
+- Agent 智能体: [ai-agents.md](ai-agents.md)
+- Agent 工具接入: [agent-tools.md](agent-tools.md)
+- Agent Skills: [agent-skills.md](agent-skills.md)
