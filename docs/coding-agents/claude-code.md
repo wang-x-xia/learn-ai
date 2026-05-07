@@ -2,9 +2,9 @@
 title: "Claude Code"
 description: Anthropic 出品的终端编程 Agent，直接在命令行中完成端到端编码任务。
 created: 2026-04-08
-updated: 2026-04-08
+updated: 2026-05-07
 tags: [product, anthropic, coding, cli, agent]
-review:
+review: 2026-05-07
 ---
 
 # Claude Code
@@ -15,7 +15,7 @@ review:
 |------|-----|
 | 厂商 | Anthropic |
 | 形态 | CLI / VS Code & JetBrains 扩展 / Web |
-| 开源 | 是 ([GitHub](https://github.com/anthropics/claude-code)) |
+| 开源 | 否（插件配置开源 [GitHub](https://github.com/anthropics/claude-code)） |
 | 技术栈 | TypeScript, Node.js, ink (React for CLI) |
 | 底座模型 | Claude Sonnet 4/4.6（默认）、Opus 4/4.6（复杂任务）、Haiku 3.5（轻量子任务） |
 | 官网 | [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code/overview) |
@@ -31,7 +31,7 @@ review:
 
 ## 定价
 
-- CLI 工具免费开源，按 Anthropic API 用量计费
+- 按 Anthropic API 用量计费
 - 也可通过 Claude Pro ($20/月) / Max ($100-200/月) 订阅使用
 
 ## 参考资料
