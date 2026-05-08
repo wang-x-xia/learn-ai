@@ -3,7 +3,7 @@ title: Agent Hooks：生命周期钩子机制
 description: Agent Hook 在执行循环的关键节点插入用户自定义逻辑——验证、拦截、注入、观测。
 created: 2026-04-09
 updated: 2026-04-10
-tags: [agents, hooks, lifecycle, automation, safety]
+tags: [agent, hooks, lifecycle, automation, safety]
 review: 2026-04-10
 ---
 

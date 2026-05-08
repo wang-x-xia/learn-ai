@@ -3,7 +3,7 @@ title: Agent 记忆系统
 description: Agent 记忆系统的分类、技术实现与前沿研究——从上下文窗口到持久化记忆的工程挑战。
 created: 2026-04-10
 updated: 2026-04-10
-tags: [agents, memory, vector-db, context-management]
+tags: [agent, memory, vector-db, context-management]
 review:
 ---
 

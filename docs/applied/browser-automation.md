@@ -3,7 +3,7 @@ title: AI 浏览器自动化
 description: Agent 操控浏览器的核心问题——如何将网页表示为 LLM 能理解并操作的结构。以 Playwright CLI 的 snapshot 格式为中心展开。
 created: 2026-04-10
 updated: 2026-04-10
-tags: [agents, browser, playwright, accessibility-tree, snapshot]
+tags: [agent, browser, playwright, accessibility-tree, snapshot]
 review: 2026-04-10
 ---
 

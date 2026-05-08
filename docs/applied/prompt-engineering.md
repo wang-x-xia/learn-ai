@@ -3,7 +3,7 @@ title: 提示工程 (Prompt Engineering)
 description: 从手工技巧到系统设计思维——提示工程如何适应 Agent 时代的 AI 交互范式。
 created: 2026-04-07
 updated: 2026-05-07
-tags: [prompt-engineering, cot, few-shot, dspy, agents]
+tags: [prompt-engineering, cot, few-shot, dspy, agent]
 review: 2026-05-07
 ---
 

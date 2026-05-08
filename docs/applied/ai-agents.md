@@ -3,7 +3,7 @@ title: AI Agent 智能体
 description: Agent 的核心在于循环——感知、推理、行动、观察的持续迭代。本文聚焦 Agent 生命周期与执行循环的技术本质。
 created: 2026-04-07
 updated: 2026-04-10
-tags: [agents, react, lifecycle, planning, reflexion]
+tags: [agent, react, lifecycle, planning, reflexion]
 review: 2026-04-10
 ---
 

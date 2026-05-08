@@ -14,7 +14,7 @@ review: 2026-04-15
     - **RAG (检索增强生成)**：从知识库检索文档注入 LLM 上下文 → [详见](../applied/rag.md)
     - **用户建模**：根据用户交互历史构建偏好和行为模型
 
-> plastic-labs 出品的开源记忆库，核心区分点是**辩证用户建模**——通过多轮交互让 Agent 构建用户的动态心智模型，而非维护一份静态偏好列表。
+> plastic-labs 出品的开源记忆库[^honcho-2026-github]，核心区分点是**辩证用户建模**——通过多轮交互让 Agent 构建用户的动态心智模型，而非维护一份静态偏好列表。
 
 | 属性 | 值 |
 |------|-----|
@@ -50,7 +50,7 @@ Honcho 的解法是**辩证用户建模**：通过多轮交互逐步构建和修
 
 ### Peer 范式
 
-Honcho 的核心抽象是 **Peer**——用户和 Agent 在系统中都是 Peer，不做区分。这一统一模型支持：
+Honcho 的核心抽象是 **Peer**[^honcho-2026-docs]——用户和 Agent 在系统中都是 Peer，不做区分。这一统一模型支持：
 
 - 多参与者会话（人类用户 + 多个 Agent）
 - 可配置的观察设置（谁观察谁）
@@ -175,5 +175,12 @@ Peer: DevAgent
 
 - **Honcho**：负责用户记忆和心智模型构建
 - **Atropos RL**（Hermes 内置）：负责 RL 训练轨迹生成
+
+---
+
+## 参考资料
+
+[^honcho-2026-github]: Plastic Labs. *Honcho GitHub Repository*. 2026. https://github.com/plastic-labs/honcho
+[^honcho-2026-docs]: Plastic Labs. *Honcho Documentation*. 2026. https://docs.honcho.dev
 
 

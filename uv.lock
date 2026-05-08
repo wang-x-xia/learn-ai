@@ -328,21 +328,26 @@ source = { virtual = "." }
 dependencies = [
     { name = "cairosvg" },
     { name = "mkdocs-material" },
-    { name = "pdfplumber" },
     { name = "pillow" },
-    { name = "pypdf" },
     { name = "pyyaml" },
+]
+
+[package.optional-dependencies]
+pdf = [
+    { name = "pdfplumber" },
+    { name = "pypdf" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "cairosvg", specifier = ">=2.6" },
     { name = "mkdocs-material", specifier = ">=9.7.6" },
-    { name = "pdfplumber", specifier = ">=0.11.9" },
+    { name = "pdfplumber", marker = "extra == 'pdf'", specifier = ">=0.11.9" },
     { name = "pillow", specifier = ">=10.2" },
-    { name = "pypdf", specifier = ">=6.10.2" },
+    { name = "pypdf", marker = "extra == 'pdf'", specifier = ">=6.10.0" },
     { name = "pyyaml", specifier = ">=6.0" },
 ]
+provides-extras = ["pdf"]
 
 [[package]]
 name = "markdown"

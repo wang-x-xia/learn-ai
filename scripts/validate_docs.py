@@ -5,6 +5,10 @@ Checks:
   2. Every [^key] inline citation has a matching [^key]: definition
   3. Every [^key]: definition has at least one [^key] inline usage
   4. No bullet-list references masquerading as footnote definitions
+  5. Cross-reference links point to existing files
+  6. Knowledge docs have a '??? note "背景知识"' section
+  7. Tags are in the allowed vocabulary (scripts/tags.yml)
+  8. Knowledge docs have at least one footnote
 
 Usage:
     uv run scripts/validate_docs.py
@@ -53,13 +57,17 @@ def parse_frontmatter(text: str) -> dict | None:
 KNOWLEDGE_REQUIRED = {"title", "description", "created", "updated", "tags", "review"}
 INDEX_REQUIRED = {"title", "description"}
 
+# Non-knowledge docs that have full frontmatter but skip knowledge-only checks
+# (background knowledge section, footnotes). See AGENTS.md rules.
+_NON_KNOWLEDGE_DOCS = {"resources.md"}
+
 
 def classify(path: Path) -> str:
     """Return 'index', 'knowledge', or 'skip'."""
     rel = path.relative_to(REPO_ROOT).as_posix()
     if not rel.startswith("docs/"):
         return "skip"
-    if path.name == "index.md":
+    if path.name == "index.md" or path.name in _NON_KNOWLEDGE_DOCS:
         return "index"
     return "knowledge"
 
@@ -132,12 +140,89 @@ def check_footnotes(text: str) -> list[str]:
     return errors
 
 
+def has_any_footnotes(text: str) -> bool:
+    """Return True if the text contains at least one footnote definition."""
+    return bool(_FOOTNOTE_DEF.search(text))
+
+
+# ---------------------------------------------------------------------------
+# Cross-reference link checks
+# ---------------------------------------------------------------------------
+
+_MD_LINK = re.compile(r"\[([^\]]*)\]\(([^)]+)\)")
+
+
+def check_cross_references(text: str, source_path: Path) -> list[str]:
+    """Check that relative Markdown links point to existing files."""
+    errors: list[str] = []
+    for m in _MD_LINK.finditer(text):
+        target = m.group(2)
+        # Skip external URLs and anchors-only
+        if target.startswith(("http://", "https://", "#", "mailto:")):
+            continue
+        # Strip anchor part
+        file_part = target.split("#")[0]
+        if not file_part:
+            continue
+        # Resolve relative to the source file's directory
+        resolved = (source_path.parent / file_part).resolve()
+        if not resolved.exists():
+            errors.append(f"broken link: [{m.group(1)}]({target}) → file not found")
+    return errors
+
+
+# ---------------------------------------------------------------------------
+# Background knowledge section check
+# ---------------------------------------------------------------------------
+
+_BG_KNOWLEDGE = re.compile(r'^\?\?\?\s+note\s+"背景知识"', re.MULTILINE)
+
+
+def has_background_knowledge(text: str) -> bool:
+    """Return True if the text contains a '??? note \"背景知识\"' admonition."""
+    return bool(_BG_KNOWLEDGE.search(text))
+
+
+# ---------------------------------------------------------------------------
+# Tag vocabulary check
+# ---------------------------------------------------------------------------
+
+
+def load_tag_vocabulary() -> set[str] | None:
+    """Load allowed tags from scripts/tags.yml. Return None if file missing."""
+    import yaml
+
+    tags_file = REPO_ROOT / "scripts" / "tags.yml"
+    if not tags_file.exists():
+        return None
+    data = yaml.safe_load(tags_file.read_text(encoding="utf-8"))
+    if data and "tags" in data:
+        return set(data["tags"])
+    return None
+
+
+def check_tags(fm: dict, allowed_tags: set[str] | None) -> list[str]:
+    """Check that all tags in frontmatter are in the allowed vocabulary."""
+    if allowed_tags is None:
+        return []
+    warnings: list[str] = []
+    tags = fm.get("tags", [])
+    if not isinstance(tags, list):
+        return []
+    for tag in tags:
+        if str(tag) not in allowed_tags:
+            warnings.append(f"tag '{tag}' not in scripts/tags.yml vocabulary")
+    return warnings
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
 
-def validate_file(path: Path) -> tuple[list[str], list[str]]:
+def validate_file(
+    path: Path, allowed_tags: set[str] | None = None
+) -> tuple[list[str], list[str]]:
     """Return (errors, warnings) for the given file."""
     errors: list[str] = []
     warnings: list[str] = []
@@ -162,12 +247,24 @@ def validate_file(path: Path) -> tuple[list[str], list[str]]:
     if missing:
         errors.append(f"frontmatter missing fields: {', '.join(sorted(missing))}")
 
-    # --- Footnotes (knowledge docs only) ---
-    if kind == "knowledge":
-        errors.extend(check_footnotes(text))
+    # --- Tag vocabulary ---
+    warnings.extend(check_tags(fm, allowed_tags))
 
-    # --- Content length (knowledge docs only) ---
+    # --- Cross-reference links ---
+    errors.extend(check_cross_references(text, path))
+
+    # --- Knowledge-doc-only checks ---
     if kind == "knowledge":
+        # Footnotes
+        errors.extend(check_footnotes(text))
+        if not has_any_footnotes(text):
+            warnings.append("no footnotes — knowledge docs should cite sources")
+
+        # Background knowledge section
+        if not has_background_knowledge(text):
+            warnings.append('missing ??? note "背景知识" section')
+
+        # Content length
         content_lines = count_content_lines(text)
         if content_lines > MAX_CONTENT_LINES:
             errors.append(
@@ -186,6 +283,9 @@ def validate_file(path: Path) -> tuple[list[str], list[str]]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate Markdown files.")
     args = parser.parse_args()
+
+    # Load tag vocabulary
+    allowed_tags = load_tag_vocabulary()
 
     dirs = [REPO_ROOT / "docs"]
 
@@ -212,7 +312,7 @@ def main() -> int:
     total_warnings = 0
 
     for path in files:
-        errs, warns = validate_file(path)
+        errs, warns = validate_file(path, allowed_tags)
         rel = path.relative_to(REPO_ROOT).as_posix()
         for e in errs:
             print(f"  ERROR {rel}: {e}")

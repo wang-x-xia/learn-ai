@@ -6,8 +6,12 @@ requires-python = ">=3.12"
 dependencies = [
     "cairosvg>=2.6",
     "mkdocs-material>=9.7.6",
-    "pdfplumber>=0.11.9",
     "pillow>=10.2",
-    "pypdf>=6.10.2",
     "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+pdf = [
+    "pdfplumber>=0.11.9",
+    "pypdf>=6.10.0",
 ]

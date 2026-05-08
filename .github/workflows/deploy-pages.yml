@@ -25,6 +25,12 @@ jobs:
       - name: Install Cairo (for social cards)
         run: sudo apt-get install -y libcairo2-dev libfreetype6-dev libffi-dev libjpeg-dev libpng-dev libz-dev
 
+      - name: Validate docs
+        run: uv run scripts/validate_docs.py || echo "::warning::validate_docs.py reported issues (see above)"
+
+      - name: Review status
+        run: uv run scripts/review_status.py || echo "::warning::Some docs need review (see above)"
+
       - name: Build site
         run: uv run mkdocs build --strict
 

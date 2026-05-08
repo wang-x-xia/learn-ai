@@ -14,7 +14,7 @@ review: 2026-04-15
     - **Agent Skills**：声明式能力描述和触发机制 → [详见](../applied/agent-skills.md)
     - **多 Agent 协作**：多个 Agent 在隔离上下文中分工协作 → [详见](../applied/subagents.md)
 
-> 自托管 AI 网关，连接聊天渠道和 AI Agent。核心差异化是 Heartbeat 主动汇报、多 Agent 隔离和 ClawHub 生态。
+> 自托管 AI 网关，连接聊天渠道和 AI Agent[^openclaw-2026-github]。核心差异化是 Heartbeat 主动汇报、多 Agent 隔离和 ClawHub 生态。
 
 | 属性 | 值 |
 |------|-----|
@@ -30,7 +30,7 @@ review: 2026-04-15
 
 ### 1. Heartbeat 主动汇报
 
-大多数 Agent 是"被动应答"模式——用户问，Agent 答。Heartbeat 打破了这一范式：Agent **主动**在后台运行，定期检查收件箱、日历、提醒事项，有需要时主动推送给你。
+大多数 Agent 是"被动应答"模式——用户问，Agent 答。Heartbeat 打破了这一范式[^openclaw-2026-docs]：Agent **主动**在后台运行，定期检查收件箱、日历、提醒事项，有需要时主动推送给你。
 
 **配置示例**：
 
@@ -140,5 +140,12 @@ metadata:
 - **Gateway**：单一控制平面，管理 sessions、路由、渠道连接
 - **Pi Agent**：RPC 模式运行，tool streaming 和 block streaming
 - **Session 模型**：主会话直接聊天，群组隔离，激活模式和队列模式
+
+---
+
+## 参考资料
+
+[^openclaw-2026-github]: OpenClaw. *OpenClaw GitHub Repository*. 2026. https://github.com/openclaw/openclaw
+[^openclaw-2026-docs]: OpenClaw. *OpenClaw Documentation*. 2026. https://docs.openclaw.ai
 
 
