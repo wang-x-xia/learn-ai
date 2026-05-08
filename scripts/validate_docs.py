@@ -71,6 +71,37 @@ def classify(path: Path) -> str:
 _ALL_REFS = re.compile(r"\[\^([\w-]+)\]")
 _FOOTNOTE_DEF = re.compile(r"^\[\^([\w-]+)\]:", re.MULTILINE)
 
+# ---------------------------------------------------------------------------
+# Content length check
+# ---------------------------------------------------------------------------
+
+WARN_CONTENT_LINES = 400
+MAX_CONTENT_LINES = 500
+_REFERENCES_HEADING = re.compile(r"^##\s+参考资料\s*$", re.MULTILINE)
+
+
+def count_content_lines(text: str) -> int:
+    """Count content lines excluding frontmatter and '## 参考资料' section."""
+    lines = text.split("\n")
+
+    # Skip frontmatter
+    start = 0
+    if lines and _FM_FENCE.match(lines[0]):
+        for i, line in enumerate(lines[1:], start=1):
+            if _FM_FENCE.match(line):
+                start = i + 1
+                break
+
+    # Find '## 参考资料' heading
+    end = len(lines)
+    for i in range(start, len(lines)):
+        if _REFERENCES_HEADING.match(lines[i]):
+            end = i
+            break
+
+    # Count non-empty lines in the content region
+    return end - start
+
 
 def check_footnotes(text: str) -> list[str]:
     errors: list[str] = []
@@ -106,19 +137,21 @@ def check_footnotes(text: str) -> list[str]:
 # ---------------------------------------------------------------------------
 
 
-def validate_file(path: Path) -> list[str]:
+def validate_file(path: Path) -> tuple[list[str], list[str]]:
+    """Return (errors, warnings) for the given file."""
     errors: list[str] = []
+    warnings: list[str] = []
     text = path.read_text(encoding="utf-8")
 
     kind = classify(path)
     if kind == "skip":
-        return errors
+        return errors, warnings
 
     # --- Frontmatter ---
     fm = parse_frontmatter(text)
     if fm is None:
         errors.append("missing or malformed YAML frontmatter")
-        return errors  # can't check further
+        return errors, warnings  # can't check further
 
     if kind == "index":
         required = INDEX_REQUIRED
@@ -133,7 +166,21 @@ def validate_file(path: Path) -> list[str]:
     if kind == "knowledge":
         errors.extend(check_footnotes(text))
 
-    return errors
+    # --- Content length (knowledge docs only) ---
+    if kind == "knowledge":
+        content_lines = count_content_lines(text)
+        if content_lines > MAX_CONTENT_LINES:
+            errors.append(
+                f"content too long: {content_lines} lines "
+                f"(max {MAX_CONTENT_LINES}, excluding frontmatter and 参考资料)"
+            )
+        elif content_lines > WARN_CONTENT_LINES:
+            warnings.append(
+                f"content approaching limit: {content_lines} lines "
+                f"(warn {WARN_CONTENT_LINES}, max {MAX_CONTENT_LINES})"
+            )
+
+    return errors, warnings
 
 
 def main() -> int:
@@ -162,20 +209,29 @@ def main() -> int:
                 )
                 total_errors += 1
 
-    for path in files:
-        errs = validate_file(path)
-        if errs:
-            rel = path.relative_to(REPO_ROOT).as_posix()
-            for e in errs:
-                print(f"  {rel}: {e}")
-            total_errors += len(errs)
+    total_warnings = 0
 
-    if total_errors:
-        print(f"\n{total_errors} error(s) found.")
-        return 1
+    for path in files:
+        errs, warns = validate_file(path)
+        rel = path.relative_to(REPO_ROOT).as_posix()
+        for e in errs:
+            print(f"  ERROR {rel}: {e}")
+        for w in warns:
+            print(f"  WARN  {rel}: {w}")
+        total_errors += len(errs)
+        total_warnings += len(warns)
+
+    if total_errors or total_warnings:
+        parts = []
+        if total_errors:
+            parts.append(f"{total_errors} error(s)")
+        if total_warnings:
+            parts.append(f"{total_warnings} warning(s)")
+        print(f"\n{', '.join(parts)} found.")
     else:
         print("All files OK.")
-        return 0
+
+    return 1 if total_errors else 0
 
 
 if __name__ == "__main__":

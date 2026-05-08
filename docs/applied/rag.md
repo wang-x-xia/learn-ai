@@ -2,12 +2,18 @@
 title: 检索增强生成 (RAG - Retrieval-Augmented Generation)
 description: RAG 通过将外部知识检索与大语言模型结合，解决了 LLM 知识截止和幻觉问题，是企业级 AI 应用的核心架构之一。
 created: 2026-04-07
-updated: 2026-04-09
-tags: [rag, vector-database, embedding, retrieval, graphrag]
-review:
+updated: 2026-05-08
+tags: [rag, retrieval, graphrag]
+review: 2026-05-08
 ---
 
 # 检索增强生成 (RAG - Retrieval-Augmented Generation)
+
+??? note "背景知识"
+    - **LLM 幻觉**：模型生成看似合理但事实错误的内容，RAG 通过注入真实文档缓解此问题
+    - **向量嵌入 (Embedding)**：将文本映射为高维向量，语义相近的文本在向量空间中距离近
+    - **Transformer**：RAG 中 LLM 和嵌入模型的底层架构 → [详见](../foundations/transformer.md)
+    - **上下文窗口**：LLM 单次能处理的最大 token 数，限制了可注入的检索文档量
 
 > RAG 通过将外部知识检索与大语言模型结合，解决了 LLM 知识截止和幻觉问题，是企业级 AI 应用的核心架构之一。
 
@@ -104,20 +110,6 @@ RAG (Retrieval-Augmented Generation) 是一种将**信息检索**与**文本生�
 | **文档结构** | 按标题/章节切分 | 结构化文档 |
 | **Sliding Window** | 滑动窗口+重叠 | 防止信息断裂 |
 
-### 分块最佳实践
-
-```python
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=512,       # 每块大小 (token)
-    chunk_overlap=50,     # 重叠区域
-    separators=["\n\n", "\n", "。", ".", " ", ""],
-)
-
-chunks = splitter.split_documents(documents)
-```
-
 ### 关键参数
 
 - **chunk_size**: 通常 256-1024 tokens，取决于嵌入模型和应用场景
@@ -126,259 +118,103 @@ chunks = splitter.split_documents(documents)
 
 ---
 
-## 4. 嵌入模型 (Embedding Models)
+## 4. 向量索引原理
 
-### 主流模型对比
+### 向量相似度度量
 
-| 模型 | 厂商 | 维度 | MTEB 排名 | 特点 |
-|------|------|------|-----------|------|
-| **text-embedding-3-large** | OpenAI | 3072 | 高 | 性能最强，支持降维 |
-| **text-embedding-3-small** | OpenAI | 1536 | 中 | 性价比高 |
-| **Cohere Embed v3** | Cohere | 1024 | 高 | 多语言，支持压缩 |
-| **BGE-M3** | BAAI | 1024 | 高 | 开源，多语言多粒度 |
-| **Jina Embeddings v3** | Jina AI | 1024 | 高 | 开源，长文本支持 |
-| **GTE-Qwen2** | 阿里 | 多种 | 高 | 开源，中文优秀 |
-| **E5-Mistral** | Microsoft | 4096 | 高 | 基于 Mistral 的嵌入 |
+在 RAG 系统中，需要找到与查询向量最相似的文档向量。常用的距离度量包括：
 
-### 使用示例
+#### 余弦距离
 
-```python
-from openai import OpenAI
+余弦距离衡量两个向量之间的角度差异，不受向量长度影响：
 
-client = OpenAI()
-
-response = client.embeddings.create(
-    model="text-embedding-3-small",
-    input="检索增强生成是一种重要的技术"
-)
-
-embedding = response.data[0].embedding  # 1536 维向量
+```
+余弦相似度 = cos(θ) = (A · B) / (||A|| × ||B||)
+余弦距离 = 1 - 余弦相似度
 ```
 
-### 选择建议
+**特点**：
+- 关注方向而非大小，适合文本嵌入
+- 值域：[0, 2]，越小越相似
+- 常用于语义相似度搜索
 
-- **追求性能**: text-embedding-3-large 或 Cohere Embed v3
-- **控制成本**: text-embedding-3-small 或开源模型
-- **中文场景**: BGE-M3 或 GTE-Qwen2
-- **本地部署**: sentence-transformers + 开源模型
+**示例**：向量 A = [1, 2, 3]，向量 B = [2, 4, 6]
+- A · B = 1×2 + 2×4 + 3×6 = 28
+- ||A|| = √(1²+2²+3²) = √14 ≈ 3.74
+- ||B|| = √(2²+4²+6²) = √56 ≈ 7.48
+- 余弦相似度 = 28 / (3.74 × 7.48) = 1.0（完全同向）
+
+#### 欧氏距离
+
+欧氏距离是两点之间的直线距离：
+
+```
+d(A, B) = √(Σ(Ai - Bi)²)
+```
+
+**特点**：
+- 受向量长度影响
+- 值域：[0, ∞)，越小越相似
+- 适合需要考虑向量大小的场景
+
+**示例**：向量 A = [1, 2, 3]，向量 B = [2, 4, 6]
+- d(A, B) = √((1-2)² + (2-4)² + (3-6)²) = √(1 + 4 + 9) = √14 ≈ 3.74
+
+### 向量索引
+
+向量索引通过近似最近邻（ANN）算法加速大规模向量检索：
+
+#### 核心思想
+
+暴力搜索需要与所有向量计算距离，时间复杂度 O(n)。向量索引通过以下方式优化：
+
+1. **分区**：将向量空间划分为多个区域，只搜索相关区域
+2. **图结构**：构建向量间的连接图，沿图快速导航
+3. **量化**：用粗略表示减少计算和存储开销
+
+#### 常见索引类型
+
+| 索引类型 | 原理 | 特点 |
+|---------|------|------|
+| **IVF (Inverted File)** | 聚类分区，只搜索最近的聚类中心 | 平衡精度和速度 |
+| **HNSW (Hierarchical NSW)** | 分层图结构，从顶层粗定位到底层精搜索 | 高精度，高召回 |
+| **Annoy** | 随机投影树 | 内存高效 |
+| **FAISS** | Meta 开发，支持多种索引算法 | 高性能，GPU 加速 |
+
+#### HNSW 工作原理
+
+HNSW 构建分层图，类似跳表：
+
+```
+第 2 层:  ── 节点 ── 节点 ── 节点 ──
+第 1 层:  ── 节点 ── 节点 ── 节点 ── 节点 ──
+第 0 层:  ── 节点 ── 节点 ── 节点 ── 节点 ── 节点 ──
+```
+
+搜索时：
+1. 从顶层入口点开始
+2. 在每层找到最近的邻居
+3. 逐层下降到底层进行精确搜索
+
+时间复杂度：O(log n)，比暴力搜索快几个数量级
 
 ---
 
-## 5. 向量数据库 (Vector Databases)
+## 5. 检索策略
 
-### 主流数据库对比
-
-| 数据库 | 类型 | 开源 | 特点 | 适用场景 |
-|--------|------|------|------|----------|
-| **Pinecone** | 云托管 | 否 | 全托管，开箱即用 | 快速上线 |
-| **Weaviate** | 自托管/云 | 是 | 混合搜索，GraphQL | 复杂查询 |
-| **Milvus** | 自托管/云 | 是 | 高性能，大规模 | 企业级部署 |
-| **Qdrant** | 自托管/云 | 是 | Rust 编写，高效 | 高性能需求 |
-| **ChromaDB** | 嵌入式 | 是 | 轻量，易用 | 原型开发 |
-| **pgvector** | PG 扩展 | 是 | 基于 PostgreSQL | 已有 PG 基础设施 |
-| **FAISS** | 库 | 是 | Meta 开发，纯库 | 研究/自定义 |
-
-### 快速上手 (ChromaDB)
-
-```python
-import chromadb
-
-client = chromadb.Client()
-collection = client.create_collection("my_docs")
-
-# 添加文档
-collection.add(
-    documents=["RAG 是一种重要技术", "向量数据库存储嵌入"],
-    ids=["doc1", "doc2"],
-    metadatas=[{"source": "wiki"}, {"source": "blog"}]
-)
-
-# 查询
-results = collection.query(
-    query_texts=["什么是 RAG？"],
-    n_results=2
-)
-```
+- **稠密检索 (Dense Retrieval)**：基于嵌入向量的语义相似度搜索，适合处理同义词和语义相近的查询
+- **稀疏检索 (Sparse Retrieval)**：基于关键词匹配的传统搜索，使用 BM25 或 TF-IDF 算法，擅长精确匹配专有名词
+- **混合搜索 (Hybrid Search)**：结合稠密检索和稀疏检索的优势，通过加权融合提升检索质量
+- **重排序 (Reranking)**：在初步检索后使用更精确的模型对结果重新排序，提高相关性
+- **Multi-Query**：将问题改写为多个查询，合并检索结果以扩大召回范围
+- **Parent Document**：检索小块内容但返回其父文档，提供更完整的上下文
+- **Self-Query**：使用 LLM 自动提取过滤条件和语义查询，支持结构化过滤
+- **HyDE**：先生成假设答案，再用答案的嵌入向量进行检索
+- **Step-back**：先提出更通用的问题进行检索，再基于结果回答原问题
 
 ---
 
-## 6. 检索策略
-
-### 6.1 稠密检索 (Dense Retrieval)
-
-基于嵌入向量的语义相似度搜索：
-```
-查询向量 · 文档向量 = 余弦相似度
-```
-
-### 6.2 稀疏检索 (Sparse Retrieval)
-
-基于关键词匹配的传统搜索：
-- **BM25**: 经典的概率检索模型
-- **TF-IDF**: 词频-逆文档频率
-
-### 6.3 混合搜索 (Hybrid Search)
-
-```
-最终分数 = α × 稠密检索分数 + (1-α) × 稀疏检索分数
-```
-
-混合搜索结合了语义理解和精确匹配的优势，通常效果最好。
-
-### 6.4 重排序 (Reranking)
-
-在初步检索后，使用更精确的模型对结果重新排序：
-
-```python
-# 使用 Cohere Reranker
-import cohere
-
-co = cohere.Client("your-api-key")
-results = co.rerank(
-    model="rerank-v3.5",
-    query="什么是 RAG？",
-    documents=retrieved_docs,
-    top_n=3
-)
-```
-
-常用重排模型：
-- **Cohere Rerank**: 商业方案，效果优秀
-- **bge-reranker**: 开源，BAAI 出品
-- **Cross-Encoder**: sentence-transformers 库
-
-### 6.5 高级检索策略
-
-| 策略 | 说明 |
-|------|------|
-| **Multi-Query** | 将问题改写为多个查询，合并结果 |
-| **Parent Document** | 检索小块，返回其父文档（更完整上下文）|
-| **Self-Query** | LLM 自动提取过滤条件和语义查询 |
-| **HyDE** | 先生成假设答案，用答案做检索 |
-| **Step-back** | 先提出更通用的问题做检索 |
-
----
-
-## 7. 高级 RAG 技术
-
-### RAG 的三个阶段
-
-```
-Naive RAG → Advanced RAG → Modular RAG
- (基础)       (增强)        (模块化)
-```
-
-### 7.1 GraphRAG (Microsoft)
-
-将文档构建为**知识图谱**，利用图结构增强检索：
-
-```
-文档 → 实体抽取 → 关系抽取 → 知识图谱
-                                 ↓
-查询 → 图遍历 + 向量检索 → 更丰富的上下文 → 生成
-```
-
-优势: 能够回答需要跨文档推理的复杂问题
-
-### 7.2 Agentic RAG
-
-将 Agent 能力与 RAG 结合：
-
-```
-用户问题 → Agent 分析 → 决定检索策略
-                           ├── 需要搜索：向量检索
-                           ├── 需要计算：代码执行
-                           ├── 需要最新信息：网络搜索
-                           └── 信息充足：直接回答
-```
-
-### 7.3 Corrective RAG (CRAG)
-
-检索后评估文档相关性，不相关时触发纠正机制：
-
-```
-检索文档 → 评估相关性
-              ├── 相关 → 直接使用
-              ├── 部分相关 → 提取有用部分 + 补充检索
-              └── 不相关 → 换策略重新检索 (如网络搜索)
-```
-
-### 7.4 Self-RAG
-
-模型自主决定是否需要检索，并自我评估生成质量：
-
-```
-问题 → 是否需要检索？
-         ├── 是 → 检索 → 评估文档 → 生成 → 评估答案
-         └── 否 → 直接生成 → 评估答案
-```
-
-### 7.5 Document Optimization for Retrieval via RL（2026.4）
-
-文档扩展（document expansion）是经典的检索优化技术，将补充信息附加到文档上以提升检索召回率。该工作[^doc-opt-rl-2026]将文档扩展建模为**强化学习**问题：
-
-- 将黑盒检索器的排名信号作为 reward，训练生成模型为文档生成最优扩展文本
-- 优势：不需要检索器可微分，适用于任意黑盒检索系统（如商业搜索引擎）
-- 将计算转移到离线阶段，在线查询时无额外开销
-
-### 7.6 LatentAudit: RAG 实时忠实度监控（2026.4）
-
-LatentAudit[^latentaudit-2026] 是一种白盒方法，通过监控 LLM 内部表征来实时检测 RAG 系统中的忠实度偏离（faithfulness drift）：
-
-- 在生成过程中实时分析模型隐层激活，判断输出是否忠于检索上下文
-- 白盒方法比后处理检测更及时（逐 token 监控 vs. 生成完成后评估）
-- 可作为生产 RAG 系统的在线守护层，及时拦截幻觉输出
-
----
-
-## 8. 评估与优化
-
-### 评估指标
-
-| 指标 | 说明 |
-|------|------|
-| **Faithfulness** | 回答是否忠于检索到的文档 |
-| **Answer Relevancy** | 回答与问题的相关性 |
-| **Context Precision** | 检索内容中有用信息的比例 |
-| **Context Recall** | 是否检索到了所有相关信息 |
-
-### 评估框架
-
-| 框架 | 说明 |
-|------|------|
-| **RAGAS** | 最流行的 RAG 评估框架 |
-| **TruLens** | 可观测性+评估 |
-| **DeepEval** | 综合 LLM 评估框架 |
-| **LangSmith** | LangChain 的监控和评估平台 |
-
-### RAGAS 使用示例
-
-```python
-from ragas import evaluate
-from ragas.metrics import faithfulness, answer_relevancy, context_precision
-
-result = evaluate(
-    dataset=eval_dataset,
-    metrics=[faithfulness, answer_relevancy, context_precision]
-)
-
-print(result)
-# {'faithfulness': 0.85, 'answer_relevancy': 0.92, 'context_precision': 0.78}
-```
-
-### 常见问题与优化
-
-| 问题 | 原因 | 优化方案 |
-|------|------|----------|
-| 检索不到相关文档 | 分块太大/太小，嵌入不佳 | 调整分块策略，换嵌入模型 |
-| 检索到但答案不对 | LLM 未利用上下文 | 优化 prompt，换模型 |
-| 答案有幻觉 | 文档不够相关 | 加重排序，提高检索质量 |
-| 延迟太高 | 检索+生成时间长 | 缓存、预计算、流式输出 |
-| 多文档推理弱 | 上下文不连贯 | GraphRAG，多跳检索 |
-
----
-
-## 9. 实践指南
+## 6. 实践指南
 
 ### 何时选择 RAG
 
@@ -411,16 +247,16 @@ print(result)
 
 ---
 
-## 10. 发展趋势
+## 7. 发展趋势
 
-### 10.1 多模态 RAG
+### 7.1 多模态 RAG
 
 不仅检索文本，还检索图像、表格、图表：
 - 多模态嵌入（CLIP 等）
 - 文档中图表的理解和检索
 - 视觉问答 + 检索
 
-### 10.2 长上下文 vs RAG
+### 7.2 长上下文 vs RAG
 
 随着上下文窗口增大 (1M+ tokens)，RAG 是否还有必要？
 
@@ -429,14 +265,14 @@ print(result)
 - RAG 适合: 从大量文档中找到相关内容
 - 最佳实践: 用 RAG 检索 + 长上下文深度处理
 
-### 10.3 RAG + Agent
+### 7.3 RAG + Agent
 
 RAG 与 Agent 的融合是大趋势：
 - Agent 自主决定检索策略
 - 多轮检索和推理
 - 自适应检索 (根据问题复杂度调整)
 
-### 10.4 结构化 RAG
+### 7.4 结构化 RAG
 
 - Text-to-SQL RAG (将自然语言转为 SQL 查询)
 - Table RAG (专门针对表格数据)
@@ -450,7 +286,4 @@ RAG 与 Agent 的融合是大趋势：
 - Gao et al., "Retrieval-Augmented Generation for Large Language Models: A Survey", 2024 - [arXiv:2312.10997](https://arxiv.org/abs/2312.10997)
 - Edge et al., "From Local to Global: A Graph RAG Approach", 2024 - [arXiv:2404.16130](https://arxiv.org/abs/2404.16130)
 - Yan et al., "Corrective Retrieval Augmented Generation", 2024 - [arXiv:2401.15884](https://arxiv.org/abs/2401.15884)
-- RAGAS Documentation: https://docs.ragas.io/
 - LangChain RAG Guide: https://python.langchain.com/docs/tutorials/rag/
-[^doc-opt-rl-2026]: "Document Optimization for Black-Box Retrieval via Reinforcement Learning". 2026. https://arxiv.org/abs/2604.05087
-[^latentaudit-2026]: "LatentAudit: Real-Time White-Box Faithfulness Monitoring for RAG". 2026. https://arxiv.org/abs/2604.05358

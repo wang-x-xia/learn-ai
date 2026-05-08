@@ -9,6 +9,12 @@ review:
 
 # 推理与规划 (Reasoning & Planning)
 
+??? note "背景知识"
+    - **LLM (大语言模型)**：基于 Transformer 的自回归语言模型 → [详见](../foundations/transformer.md)
+    - **Chain-of-Thought (CoT)**：让模型逐步推理而非直接给答案，显著提升复杂任务表现
+    - **RLHF**：用人类反馈训练奖励模型，再用奖励模型优化 LLM 输出
+    - **Scaling Laws**：模型性能随参数量、数据量、计算量的可预测提升规律
+
 > 推理模型是 2024-2026 年 AI 领域最重要的突破之一，本文档追踪推理模型、test-time compute、过程奖励模型等方向的最新进展。
 
 ---

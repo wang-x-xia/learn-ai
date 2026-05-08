@@ -7,6 +7,12 @@ tags: [safety, alignment, anthropic, mythos, system-card, cybersecurity, model-w
 review:
 ---
 
+??? note "背景知识"
+    - **AI 对齐 (Alignment)**：让模型行为符合人类意图，通过 RLHF 等技术实现
+    - **可解释性 / SAE**：用稀疏自编码器等方法逆向工程模型内部表示 → [详见](../research/interpretability.md)
+    - **Red Teaming**：对抗性测试以发现模型安全漏洞和有害输出
+    - **AI 安全与治理**：安全研究、全球治理框架和人机协作议题 → [详见](../research/safety-and-governance.md)
+
 ## System Card
 
 > 原文：Anthropic, *System Card: Claude Mythos Preview*, 2026-04-07, 245 页 PDF[^system-card]。本文是结构化中文摘要，保留核心技术细节；关于 Project Glasswing 的背景参见 [AI 安全与治理 §1.3](../research/safety-and-governance.md#13-project-glasswing-claude-mythos20264)。

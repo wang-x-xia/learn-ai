@@ -12,9 +12,10 @@
 uv run scripts/validate_docs.py          # 检查 docs/ 目录
 ```
 
-检查项：
+检查项（错误，阻断 CI）：
 - Frontmatter 存在性和必填字段（含 `review`）
 - 脚注引用与定义的匹配（无孤立引用、无未使用的定义）
+- 内容行数超限（>500 行，不计 frontmatter 和 `## 参考资料` 以下部分）
 
 ## Review 清单
 

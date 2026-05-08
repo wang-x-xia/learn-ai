@@ -9,6 +9,11 @@ review: 2026-04-15
 
 # Hermes Agent
 
+??? note "背景知识"
+    - **Agent 执行循环**：思考→行动→观察的迭代 → [详见](../applied/ai-agents.md)
+    - **Agent Skills**：声明式能力描述，可在使用中自动积累 → [详见](../applied/agent-skills.md)
+    - **Agent 记忆系统**：跨会话的知识持久化，支持 Agent 自我进化 → [详见](../applied/memory-systems.md)
+
 > Nous Research 出品的自进化个人 AI Agent。核心区分点不是"又一个 Agent 壳"，而是**闭环学习循环**——Agent 在使用中自动积累 Skill 和记忆，跨会话变得越来越强。
 
 | 属性 | 值 |

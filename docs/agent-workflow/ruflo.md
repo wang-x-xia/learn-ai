@@ -9,6 +9,12 @@ review: 2026-05-06
 
 # Ruflo
 
+??? note "背景知识"
+    - **Agent 执行循环**：思考→行动→观察的迭代 → [详见](../applied/ai-agents.md)
+    - **MCP (Model Context Protocol)**：Agent 与工具之间的标准连接协议 → [详见](../applied/agent-tools.md#2-mcpmodel-context-protocol)
+    - **GOAP (Goal-Oriented Action Planning)**：从目标状态反向搜索行动序列的规划方法
+    - **Agent 记忆系统**：跨会话的知识持久化与检索 → [详见](../applied/memory-systems.md)
+
 > RuvNet 出品，值得关注的不是"又一个 Agent SDK"，而是把多 Agent 编排拆成三个层面：**本地控制平面、浏览器里的多模型 Chat 前端、以及独立的目标规划前端**。[^ruflo-readme-2026][^ruflo-init-2026]
 
 | 属性 | 值 |

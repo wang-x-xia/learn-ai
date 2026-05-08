@@ -9,6 +9,11 @@ review: 2026-04-10
 
 # Agent 间通信协议
 
+??? note "背景知识"
+    - **Agent**：LLM 驱动的自主执行循环，能使用工具完成任务 → [详见](ai-agents.md)
+    - **MCP (Model Context Protocol)**：Agent 与工具之间的标准连接协议 → [详见](agent-tools.md#2-mcpmodel-context-protocol)
+    - **Agent Card / Skill 声明**：描述 Agent 能力的元数据，供其他 Agent 发现和调用
+
 > 当一个 Agent 的能力不够时，它需要找到另一个 Agent 并委派任务——这需要标准化的发现和通信协议。
 
 与[工具协议](agent-tools.md)的区别：工具是"被调用的函数"，没有自主性；另一个 Agent 是"有自主决策能力的合作者"，能自行规划执行步骤。这一本质差异决定了 Agent 间协议需要处理**任务生命周期、进度通知、结果协商**等工具协议不需要的问题。

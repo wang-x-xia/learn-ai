@@ -9,6 +9,12 @@ review:
 
 # 可解释性 (Interpretability)
 
+??? note "背景知识"
+    - **Transformer 架构**：多层自注意力 + FFN 的堆叠，当前 LLM 的底层结构 → [详见](../foundations/transformer.md)
+    - **表示学习**：模型自动学习特征表示，代价是黑箱化 → [详见](../foundations/representation-learning.md)
+    - **Embedding 空间**：模型将输入映射到的高维连续向量空间，语义相近的概念距离近
+    - **Superposition 假说**：神经网络在低维空间中用叠加方式编码高维特征
+
 > 表示学习让模型自己学特征，代价是黑箱化（见 [从规则到表示学习](../foundations/representation-learning.md)）。可解释性研究试图在不牺牲性能的前提下打开这个黑箱。
 >
 > 本文档覆盖两个层次的"理解"：**理论框架**（为什么模型能工作）和**逆向工程方法**（模型内部到底在做什么）。

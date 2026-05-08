@@ -9,6 +9,12 @@ review: 2026-05-07
 
 # 推理经济性 (Inference Economics)
 
+??? note "背景知识"
+    - **LLM 推理**：模型接收输入并生成输出的过程，消耗 GPU 计算和显存资源
+    - **Prefill/Decode 两阶段**：推理分为并行处理输入(Prefill)和逐 token 生成(Decode) → [详见](../foundations/kv-cache.md#3-kv)
+    - **KV Cache**：推理时缓存历史 K/V 向量，显存占用随序列长度增长 → [详见](../foundations/kv-cache.md)
+    - **GPU 显存 (HBM)**：GPU 高带宽内存，容量有限，是并发和上下文长度的硬约束
+
 > 核心问题：**如果以租借公有云 GPU 为主要运营成本，推理服务能否盈利？**
 >
 > 结论：取决于架构和运营效率。Dense 大模型（70B+）以常规 TP 部署在 GPU 市场价下亏损；小模型暴利；**MoE 模型 + 大规模 Expert Parallelism 可以实现数倍利润**（DeepSeek 实证：成本利润率 545%）。关键不在于模型大不大，而在于每张 GPU 实际处理多少参数、batch 能做多大。

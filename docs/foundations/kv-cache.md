@@ -9,6 +9,12 @@ review: 2026-04-28
 
 # KV Cache 与推理优化
 
+??? note "背景知识"
+    - **自注意力机制**：每个 token 通过 Q·K 点积计算与其他 token 的相关度，再对 V 加权求和 → [详见](./transformer.md#2)
+    - **自回归生成**：每步预测下一个 token，追加到序列末尾，重复直到结束 → [详见](./transformer.md#1)
+    - **GQA/MQA**：多个 Q 头共用 KV 头，减少 KV 数量的注意力变体 → [详见](./transformer.md#gqa-mqa-kv)
+    - **GPU 显存 (HBM)**：GPU 的高带宽内存，是模型权重和中间状态的存储位置，容量有限（H100 为 80GB）
+
 > KV Cache 是 LLM 自回归推理的核心加速机制——用显存换计算，避免重复运算。本文档聚焦它的存储特征和各种优化手段的设计权衡。
 >
 > 相关文档：[Transformer 架构](./transformer.md) | [Mamba 与状态空间模型](./mamba-and-ssm.md)

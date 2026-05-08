@@ -9,6 +9,11 @@ review: 2026-04-10
 
 # AI Agent 智能体
 
+??? note "背景知识"
+    - **LLM (大语言模型)**：基于 Transformer 的自回归语言模型，Agent 的"大脑" → [详见](../foundations/transformer.md)
+    - **Function Calling**：LLM 输出结构化工具调用请求，由运行时执行并返回结果 → [详见](agent-tools.md)
+    - **Prompt**：发送给 LLM 的输入文本，包含系统指令、用户消息和上下文信息
+
 > Agent 的本质不是"一个聪明的模型"，而是**一个循环**——让 LLM 反复经历"思考 → 行动 → 观察"直至任务完成。
 
 ---

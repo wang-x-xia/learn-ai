@@ -7,6 +7,14 @@ tags: [deepseek, conditional-memory, n-gram, moe, sparsity, long-context, rag]
 review: 2026-04-28
 ---
 
+# Engram
+
+??? note "背景知识"
+    - **Transformer Embedding**：将 token 映射为高维向量，是模型处理文本的第一步 → [详见](../foundations/transformer.md)
+    - **MoE (Mixture of Experts)**：多个小 FFN 中选择性激活，实现稀疏计算 → [详见](../foundations/transformer.md#moe)
+    - **RAG (检索增强生成)**：从外部知识库检索文档注入上下文 → [详见](../applied/rag.md)
+    - **N-gram**：连续 N 个 token 的组合，用于文本的局部模式匹配
+
 > 原文：Cheng et al. *Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models*. 2026[^engram-2026]。本文提炼论文中的核心技术方案与设计权衡。
 
 ---

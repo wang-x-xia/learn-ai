@@ -9,6 +9,12 @@ review: 2026-04-28
 
 # 多模态 AI (Multimodal AI)
 
+??? note "背景知识"
+    - **Transformer**：基于自注意力的序列模型，输入是 token 序列 → [详见](./transformer.md)
+    - **Tokenization**：将原始数据（文本、图像等）切分为模型可处理的离散单元（token）
+    - **自回归生成**：逐 token 预测下一个，适用于离散序列（文本） → [详见](./transformer.md#1)
+    - **扩散模型**：通过逐步去噪从噪声生成连续信号（图像/视频），当前生成主流 → [详见](./diffusion-models.md)
+
 > 本文档聚焦于 **Transformer/自回归路线**的多模态技术——如何将不同模态转换为 token 序列并用 Transformer 处理，以及跨模态对齐方法。
 >
 > 图像/视频生成主流是扩散模型（非自回归），详见[扩散模型](./diffusion-models.md)。

@@ -9,6 +9,12 @@ review:
 
 # AI 安全与治理 (Safety & Governance)
 
+??? note "背景知识"
+    - **LLM 对齐 (Alignment)**：让模型行为符合人类意图和价值观的训练技术
+    - **RLHF**：用人类反馈训练奖励模型来优化 LLM 行为，是当前主流对齐方法
+    - **Red Teaming**：通过对抗性测试发现模型的安全漏洞和有害行为
+    - **可解释性**：理解模型内部决策机制的研究方向 → [详见](interpretability.md)
+
 > 涵盖 AI 安全研究、全球治理框架、以及 AI 与人类协作等重要议题。
 >
 > 可解释性研究已拆分为独立文档：**[可解释性](./interpretability.md)**

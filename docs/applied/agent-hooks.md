@@ -9,6 +9,11 @@ review: 2026-04-10
 
 # Agent Hooks：生命周期钩子机制
 
+??? note "背景知识"
+    - **Agent 执行循环**：思考→行动→观察的迭代，Hook 在每步之间拦截和验证 → [详见](ai-agents.md)
+    - **工具调用 (Function Calling)**：Agent 调用外部工具的机制，Hook 可拦截工具调用 → [详见](agent-tools.md)
+    - **System Prompt**：定义 Agent 行为的系统级指令，Hook 将约束从提示转为代码执行
+
 > Hook 不驱动 Agent 行为，而是**验证、拦截、注入、观测** Agent 的每一步动作。核心价值：**将工程约束从自然语言提示（不可靠）转为代码执行（确定性）**。
 
 ---

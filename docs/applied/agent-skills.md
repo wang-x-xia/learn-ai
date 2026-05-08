@@ -9,6 +9,12 @@ review: 2026-05-07
 
 # Agent Skills
 
+??? note "背景知识"
+    - **Agent 工具调用**：Function Calling 和 MCP 定义"能做什么" → [详见](agent-tools.md)
+    - **Prompt Engineering**：通过自然语言指令控制 LLM 行为 → [详见](prompt-engineering.md)
+    - **Agent 执行循环**：思考→行动→观察的迭代过程 → [详见](ai-agents.md)
+    - **MCP (Model Context Protocol)**：标准化的工具发现与连接协议 → [详见](agent-tools.md#2-mcpmodel-context-protocol)
+
 > [工具](agent-tools.md)告诉 Agent "能做什么"，Skill 告诉 Agent "遇到这类问题该怎么做"。
 
 Agent Skills 最初由 Claude Code 提出并实现，随后 Anthropic 将其作为开放规范发布[^agent-skills-spec]，现已成为编码 Agent 领域的**事实标准**，被 Devin、Cursor、Windsurf 等主流产品采用。

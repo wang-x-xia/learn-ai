@@ -9,6 +9,11 @@ review: 2026-04-10
 
 # Agent 工具接入
 
+??? note "背景知识"
+    - **Agent 执行循环**：思考→行动→观察的迭代，Act 步骤需要调用外部工具 → [详见](ai-agents.md)
+    - **JSON Schema**：描述 JSON 数据结构的标准格式，用于定义工具的参数签名
+    - **RPC (远程过程调用)**：跨进程/网络调用函数的通信模式
+
 > Agent [执行循环](ai-agents.md)的 Act 步骤需要外部能力。Function Calling 和 MCP 是两个基础层——前者定义"怎么调用"，后者定义"怎么发现和连接"。更高层的能力编排见 [Agent Skills](agent-skills.md)。
 
 ---

@@ -9,6 +9,12 @@ review: 2026-04-28
 
 # Mamba 与状态空间模型 (SSM)
 
+??? note "背景知识"
+    - **Transformer 自注意力**：O(n²) 复杂度，每个 token 看所有历史 token → [详见](./transformer.md#2)
+    - **KV Cache**：自回归推理时缓存历史 K/V 向量，显存随序列长度线性增长 → [详见](./kv-cache.md)
+    - **RNN (循环神经网络)**：按时间步顺序处理序列，用隐状态传递历史信息，训练无法并行
+    - **离散化**：将连续时间的微分方程转换为离散时间步的递推公式，使其可在数字计算机上执行
+
 > 状态空间模型是 Transformer 之外最重要的序列建模范式。本文档覆盖 SSM 核心原理、Mamba 的选择性突破、替代架构的探索，以及 Transformer-SSM 混合架构的前沿实践。
 >
 > 相关文档：[Transformer 架构](./transformer.md)

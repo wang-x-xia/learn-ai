@@ -7,6 +7,12 @@ tags: [deepseek, moe, long-context, sparse-attention, muon, fp4, architecture]
 review:
 ---
 
+??? note "背景知识"
+    - **Transformer 架构**：自注意力 + FFN 的堆叠，当前 LLM 的底层结构 → [详见](../foundations/transformer.md)
+    - **MoE (Mixture of Experts)**：多个 Expert 中选择性激活，扩大参数量同时控制计算量 → [详见](../foundations/transformer.md#moe)
+    - **KV Cache**：推理时缓存 K/V 向量避免重复计算 → [详见](../foundations/kv-cache.md)
+    - **FP8/FP4 量化**：降低数值精度以减少显存占用和计算量，是训练和推理加速的关键手段
+
 > 原文：DeepSeek-AI. *DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence*. 2026[^deepseek-v4-2026]。本文提炼论文中的核心技术方案与设计权衡。
 
 ---

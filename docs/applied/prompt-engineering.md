@@ -9,6 +9,12 @@ review: 2026-05-07
 
 # 提示工程 (Prompt Engineering)
 
+??? note "背景知识"
+    - **LLM (大语言模型)**：基于 Transformer 的自回归模型，提示是与之交互的主要接口 → [详见](../foundations/transformer.md)
+    - **Agent 系统**：LLM 驱动的自主执行循环，提示定义其行为和约束 → [详见](ai-agents.md)
+    - **Token**：LLM 处理的最小文本单元，提示长度以 token 计费和受限
+    - **System Prompt vs User Prompt**：系统提示定义角色和规则，用户提示传递具体任务
+
 > 提示工程是与 LLM 高效交互的艺术和科学。随着模型能力提升和 Agent 系统兴起，提示工程从"手工打磨技巧"演变为"系统设计思维"——关注如何通过提示定义 Agent 行为、工具使用和协作模式。
 
 ---

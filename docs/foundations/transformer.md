@@ -9,6 +9,12 @@ review: 2026-04-28
 
 # Transformer 架构
 
+??? note "背景知识"
+    - **词嵌入 (Embedding)**：将离散 token 映射为连续向量，使神经网络能处理文本 → [Word2Vec 论文](https://arxiv.org/abs/1301.3781)
+    - **残差连接 (Residual Connection)**：跳跃连接让梯度直接回传，解决深层网络训练困难 → [ResNet 论文](https://arxiv.org/abs/1512.03385)
+    - **Softmax**：将任意实数向量归一化为概率分布（所有值 ∈ (0,1) 且求和为 1）
+    - **表示学习**：模型自动从原始数据中学习有用的特征表示 → [详见](./representation-learning.md)
+
 > Transformer 是当前几乎所有前沿语言模型的底层架构。本文档聚焦其核心机制的技术原理和设计权衡，不涉及具体模型。
 >
 > 相关文档：[KV Cache 与推理优化](./kv-cache.md) | [Mamba 与状态空间模型](./mamba-and-ssm.md)

@@ -9,6 +9,12 @@ review:
 
 # 新兴前沿方向 (Emerging Frontiers)
 
+??? note "背景知识"
+    - **Transformer 与 SSM**：两大序列建模范式，各有效率和能力的权衡 → [详见](../foundations/transformer.md) | [详见](../foundations/mamba-and-ssm.md)
+    - **Agent 系统**：LLM 驱动的自主执行循环 → [详见](../applied/ai-agents.md)
+    - **Scaling Laws**：模型性能随参数量、数据量、计算量的可预测提升规律
+    - **上下文窗口**：LLM 单次能处理的最大 token 数，当前前沿在 128K–2M
+
 > 追踪 AI for Science、世界模型、小模型与效率、长上下文、多智能体系统等新兴研究方向及未来展望。
 
 ---
