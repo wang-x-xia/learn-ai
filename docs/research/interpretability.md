@@ -4,7 +4,7 @@ description: "LLM 可解释性研究——从理论框架到逆向工程方法�
 created: 2026-04-14
 updated: 2026-04-14
 tags: [interpretability, mechanistic-interpretability, representation-engineering, emergence, grokking]
-review:
+review: 2026-05-08
 ---
 
 # 可解释性 (Interpretability)

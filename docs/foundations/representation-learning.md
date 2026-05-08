@@ -4,7 +4,7 @@ description: "机器学习三阶段演进——规则系统、特征工程、表
 created: 2026-04-14
 updated: 2026-04-14
 tags: [representation-learning, feature-engineering, history]
-review:
+review: 2026-05-08
 ---
 
 # 从规则到表示学习

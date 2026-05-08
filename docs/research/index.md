@@ -9,12 +9,6 @@ description: 快速演进的前沿方向——推理与规划、AI 安全、新�
 
 <div class="grid cards" markdown>
 
-- :material-lightbulb-on: **[推理与规划](reasoning-and-planning.md)**
-
-    ---
-
-    Chain-of-Thought、Tree-of-Thought、推理模型、搜索与验证
-
 - :material-magnify: **[可解释性](interpretability.md)**
 
     ---
@@ -26,12 +20,6 @@ description: 快速演进的前沿方向——推理与规划、AI 安全、新�
     ---
 
     安全研究、红队测试、政策法规、人机协作
-
-- :material-rocket-launch: **[新兴前沿方向](emerging-frontiers.md)**
-
-    ---
-
-    AI for Science、世界模型、小模型效率、长上下文
 
 - :material-database: **[Engram](engram.md)**
 

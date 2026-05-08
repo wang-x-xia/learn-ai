@@ -55,7 +55,7 @@
 2. **工程亮点**：巧妙的系统设计、性能突破、独到的取舍决策 → 高优先
 3. **解决已知难题的新方法** → 中优先
 4. 纯功能发布（"我们也支持 X 了"）→ 跳过，除非背后有独到的技术实现
-5. 产品/模型对比清单、评估基准表 → 移至 `landscape/` 或跳过
+5. 产品/模型对比清单、评估基准表 → 跳过
 6. 教程、代码示例、工具使用指南 → 跳过
 7. 通用知识、行业共识 → 跳过，不重复记录
 
@@ -72,8 +72,7 @@ learn-ai/
 │   ├── model/                  # 模型档案（重要模型深度分析）
 │   ├── coding-agents/          # 编码 Agent 产品档案
 │   ├── personal-agents/        # 个人 AI Agent 产品档案
-│   ├── agent-frameworks/       # Agent 框架产品档案
-│   └── landscape/              # 行业全景（模型跟踪）
+│   └── agent-frameworks/       # Agent 框架产品档案
 ├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 MkDocs）
 ├── scripts/                     # 自动化脚本
 ├── mkdocs.yml                   # 站点配置 & 导航

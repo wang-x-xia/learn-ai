@@ -117,35 +117,11 @@ description: 个人 AI 前沿知识库。系统梳理 AI 核心技术，每日�
 
 <div class="grid cards" markdown>
 
-- :material-lightbulb-on: **[推理与规划](research/reasoning-and-planning.md)**
-
-    ---
-
-    Test-time compute、PRM、o-series、DeepSeek-R1
-
 - :material-shield-check: **[AI 安全与治理](research/safety-and-governance.md)**
 
     ---
 
     可解释性、全球监管、人机协作
-
-- :material-rocket-launch: **[新兴前沿方向](research/emerging-frontiers.md)**
-
-    ---
-
-    AI for Science、世界模型、小模型、长上下文、多智能体
-
-</div>
-
-### 行业全景
-
-<div class="grid cards" markdown>
-
-- :material-chart-line: **[模型动态跟踪](landscape/model-tracker.md)**
-
-    ---
-
-    闭源/开源模型发布追踪、评估排行
 
 </div>
 

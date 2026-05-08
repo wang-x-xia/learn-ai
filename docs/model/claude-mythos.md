@@ -4,7 +4,7 @@ description: Anthropic 迄今最强前沿模型——因攻击性网络安全能
 created: 2026-04-13
 updated: 2026-04-13
 tags: [safety, alignment, anthropic, mythos, system-card, cybersecurity, model-welfare]
-review:
+review: 2026-05-08
 ---
 
 ??? note "背景知识"

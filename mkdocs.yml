@@ -101,10 +101,8 @@ nav:
     - 推理经济性: applied/inference-economics.md
   - 前沿研究:
     - research/index.md
-    - 推理与规划: research/reasoning-and-planning.md
     - 可解释性: research/interpretability.md
     - AI 安全与治理: research/safety-and-governance.md
-    - 新兴前沿方向: research/emerging-frontiers.md
     - Engram: research/engram.md
   - 模型档案:
     - model/index.md
@@ -128,9 +126,6 @@ nav:
       - personal-agents/index.md
       - Hermes Agent: personal-agents/hermes-agent.md
       - OpenClaw: personal-agents/openclaw.md
-  - 行业全景:
-    - landscape/index.md
-    - 模型动态跟踪: landscape/model-tracker.md
   - 精选资源: resources.md
 
 

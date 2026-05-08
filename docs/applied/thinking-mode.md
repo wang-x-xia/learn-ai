@@ -13,7 +13,6 @@ review:
     - **LLM 推理**：模型根据输入生成输出 token 的过程，每个 token 消耗计算资源 → [详见](../foundations/transformer.md)
     - **Chain-of-Thought (CoT)**：让模型逐步推理而非直接给答案，提升复杂任务准确率
     - **Agent 执行循环**：思考→行动→观察的迭代，Thinking 影响"思考"环节的深度 → [详见](ai-agents.md)
-    - **Test-time Compute**：推理阶段投入更多计算来提升输出质量 → [详见](../research/reasoning-and-planning.md)
 
 > Thinking mode 是 2025 年引入的重要技术，让模型能够在回答前进行深度推理，显著提升复杂任务的表现。本文档重点分析其核心优势、自适应推理机制，以及与其他方法的权衡。
 
