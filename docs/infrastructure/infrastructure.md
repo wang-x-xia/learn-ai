@@ -2,8 +2,8 @@
 title: AI 基础设施 (AI Infrastructure)
 description: 从硬件加速器到网络协议，AI 基础设施决定了大模型能否高效训练和部署。本文档梳理当前 AI 基础设施的核心技术栈。
 created: 2026-04-07
-updated: 2026-05-08
-tags: [infrastructure, gpu, network, nvlink, infiniband, roce]
+updated: 2026-05-11
+tags: [infrastructure, gpu, network, nvlink, infiniband, roce, nvme-of]
 review: 2026-05-08
 ---
 
@@ -99,8 +99,8 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 **关键差异**：
 - **InfiniBand**：专为 HPC/AI 设计，最低延迟，支持 in-network computing（SHARP），但成本高，生态封闭
-- **RoCE v2**：基于以太网的 RDMA，平衡性能和成本，华为昇腾内置网卡，NVIDIA 需外接 ConnectX
-- **Ethernet**：通用性强，成本最低，但延迟较高，适合推理或小规模训练
+- **RoCE v2**：基于以太网的 RDMA，平衡性能和成本，支持 NVMe-oF over RDMA 实现低延迟存储访问，华为昇腾内置网卡，NVIDIA 需外接 ConnectX
+- **Ethernet**：通用性强，成本最低，支持 NVMe-oF over TCP，适合现有以太网基础设施，但延迟较高
 
 ### 2.4 交换机对比
 
@@ -131,7 +131,52 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 **关键洞察**：显存带宽是 LLM 推理的主要瓶颈（内存带宽受限 / memory-bound），而非计算能力。
 
-### 2.6 存储访问技术
+### 2.6 NVMe over Fabrics (NVMe-oF)
+
+NVMe-oF 将 NVMe 存储协议扩展到网络，实现远程存储访问。它定义了如何通过网络访问 NVMe 设备，支持多种传输层。
+
+#### NVMe-oF 与传输层的关系
+
+NVMe-oF 是协议框架，NVMe over TCP/RDMA/FC 是具体传输实现：
+
+```
+NVMe-oF (框架/总称)
+├── NVMe over RDMA  (一种实现)
+├── NVMe over TCP   (一种实现)
+└── NVMe over FC    (一种实现)
+```
+
+**类比**：NVMe-oF 是"汽车"，NVMe over TCP/RDMA/FC 是"燃油车/电动车/氢能车"。
+
+#### 传输层选择
+
+**传输层对比**（详见 2.3 节网卡对比）：
+- **NVMe over RDMA**：最低延迟（微秒级），适合 AI 训练，需 RDMA 网卡
+- **NVMe over TCP**：兼容性好，适合现有以太网，延迟略高，可通过 SmartNIC/DPU 卸载 TCP 协议栈降低延迟
+- **NVMe over FC**：传统企业存储，与 FC SAN 兼容
+
+#### NVMe-oF 核心功能
+
+- **远程存储访问**：通过网络访问远程 NVMe 设备，像访问本地存储一样
+- **队列管理**：保留 NVMe 原生队列机制（Admin Queue + I/O Queue），无需协议转换
+- **发现机制**：Discovery Service 自动发现网络上的 NVMe 目标
+- **认证与安全**：DH-HMAC-CHAP 双向认证、TLS 加密（TCP 传输层）
+- **连接管理**：支持多路径、多连接提高吞吐和可靠性
+- **传输层抽象**：传输层对上层透明，应用层无需关心
+
+#### 与本地 NVMe 的对比
+
+| 功能 | 本地 NVMe | NVMe-oF |
+|------|-----------|---------|
+| 队列机制 | ✅ 相同 | ✅ 相同 |
+| 命令集 | ✅ 相同 | ✅ 相同 |
+| 传输方式 | PCIe | 网络（RDMA/TCP/FC） |
+| 发现 | PCIe 枚举 | Discovery Service |
+| 认证 | 无 | ✅ DH-HMAC-CHAP |
+
+**关键设计**：NVMe-oF 尽量保留本地 NVMe 的语义，只是把 PCIe 传输换成网络传输，应用层代码基本无需改动。
+
+### 2.7 存储访问技术
 
 传统存储访问路径需要经过 CPU 内存（bounce buffer），成为 I/O 瓶颈。GPUDirect Storage 提供存储到 GPU 的直接数据路径。
 

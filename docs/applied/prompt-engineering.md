@@ -11,7 +11,7 @@ review: 2026-05-07
 
 ??? note "背景知识"
     - **LLM (大语言模型)**：基于 Transformer 的自回归模型，提示是与之交互的主要接口 → [详见](../foundations/transformer.md)
-    - **Agent 系统**：LLM 驱动的自主执行循环，提示定义其行为和约束 → [详见](ai-agents.md)
+    - **Agent 系统**：LLM 驱动的自主执行循环，提示定义其行为和约束 → [详见](../agent/ai-agents.md)
     - **Token**：LLM 处理的最小文本单元，提示长度以 token 计费和受限
     - **System Prompt vs User Prompt**：系统提示定义角色和规则，用户提示传递具体任务
 
@@ -167,6 +167,6 @@ DSPy 从手工编写提示转向程序化定义和自动优化，在 Agent 系�
 [^dspy-2023]: Stanford NLP. *DSPy: Declarative Self-improving Language Programs, Pythonically*. 2023. https://github.com/stanfordnlp/dspy
 
 ### 相关文档
-- Agent 智能体: [ai-agents.md](ai-agents.md)
-- Agent 工具接入: [agent-tools.md](agent-tools.md)
-- Agent Skills: [agent-skills.md](agent-skills.md)
+- Agent 智能体: [ai-agents.md](../agent/ai-agents.md)
+- Agent 工具接入: [agent-tools.md](../agent/agent-tools.md)
+- Agent Skills: [agent-skills.md](../agent/agent-skills.md)

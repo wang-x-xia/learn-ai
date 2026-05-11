@@ -10,9 +10,9 @@ review: 2026-05-07
 # Claude Code
 
 ??? note "背景知识"
-    - **Agent 执行循环**：思考→行动→观察的迭代过程 → [详见](../applied/ai-agents.md)
-    - **Subagent**：主 Agent 将子任务分派到独立上下文并发执行 → [详见](../applied/subagents.md)
-    - **工具调用 (Function Calling)**：LLM 输出结构化请求来调用外部工具 → [详见](../applied/agent-tools.md)
+    - **Agent 执行循环**：思考→行动→观察的迭代过程 → [详见](../agent/ai-agents.md)
+    - **Subagent**：主 Agent 将子任务分派到独立上下文并发执行 → [详见](../agent/subagents.md)
+    - **工具调用 (Function Calling)**：LLM 输出结构化请求来调用外部工具 → [详见](../agent/agent-tools.md)
 
 > Anthropic 出品的终端编程 Agent，直接在命令行中完成端到端编码任务。
 

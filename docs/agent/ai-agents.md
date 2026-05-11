@@ -247,7 +247,7 @@ Agent 循环的自主性带来安全风险——循环可能失控（无限执�
 
 - **长运行持久循环**：Agent 从"一次性任务"走向"持续运行的守护进程"。Springdrift（2026.4 arXiv）提出可审计的持久运行时，具备案例记忆、规范性安全保障和环境自我感知
 - **Harness Engineering**[^latentspace-2026-harness]：当 Agent 循环失败时，不是优化 prompt，而是问"循环缺什么能力/上下文/结构？"然后补全之。OpenAI 的 Dark Factory 模式（>100 万行代码库、~10 亿 token/天、0% 人工参与）验证了这一思路
-- **自主计算机使用**：循环的 Act 步骤从 API 调用扩展到 GUI 操控——Agent 直接操作屏幕完成任务（Claude Computer Use、Browser Agent）。浏览器场景的技术方案见 [AI 浏览器自动化](browser-automation.md)
+- **自主计算机使用**：循环的 Act 步骤从 API 调用扩展到 GUI 操控——Agent 直接操作屏幕完成任务（Claude Computer Use、Browser Agent）。浏览器场景的技术方案见 [AI 浏览器自动化](../applied/browser-automation.md)
 
 ---
 

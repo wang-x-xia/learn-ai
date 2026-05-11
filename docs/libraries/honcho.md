@@ -10,7 +10,7 @@ review: 2026-04-15
 # Honcho
 
 ??? note "背景知识"
-    - **Agent 记忆系统**：决定 Agent 记住什么、忘记什么、如何检索 → [详见](../applied/memory-systems.md)
+    - **Agent 记忆系统**：决定 Agent 记住什么、忘记什么、如何检索 → [详见](../agent/memory-systems.md)
     - **RAG (检索增强生成)**：从知识库检索文档注入 LLM 上下文 → [详见](../applied/rag.md)
     - **用户建模**：根据用户交互历史构建偏好和行为模型
 

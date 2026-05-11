@@ -40,6 +40,7 @@ tags:
   - function-calling
   - gpu
   - gqa
+  - hpc
   - governance
   - graphrag
   - grokking
@@ -57,6 +58,7 @@ tags:
   - lifecycle
   - long-context
   - low-code
+  - lustre
   - mamba
   - mcp
   - mechanistic-interpretability
@@ -77,6 +79,7 @@ tags:
   - open-source
   - openclaw
   - parallel-execution
+  - parallel-filesystem
   - personal-agent
   - personalization
   - planning
@@ -106,6 +109,7 @@ tags:
   - sparsity
   - ssm
   - state-space-model
+  - storage
   - subagents
   - system-card
   - test-time-compute

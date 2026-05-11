@@ -10,12 +10,12 @@ review: 2026-04-10
 # AI 浏览器自动化
 
 ??? note "背景知识"
-    - **Agent 执行循环**：思考→行动→观察的迭代，浏览器操作是 Act 步骤的扩展 → [详见](ai-agents.md)
+    - **Agent 执行循环**：思考→行动→观察的迭代，浏览器操作是 Act 步骤的扩展 → [详见](../agent/ai-agents.md)
     - **DOM / Accessibility Tree**：网页的结构化表示，前者面向渲染，后者面向辅助技术和 AI 消费
     - **Token 预算**：LLM 上下文窗口有限，网页内容必须压缩后才能送入模型
     - **Playwright**：微软开源的浏览器自动化库，支持 Chrome/Firefox/WebKit
 
-> Agent [执行循环](ai-agents.md)的 Act 步骤从 API 调用扩展到浏览器操控时，首要问题不是"怎么点击"，而是**"怎么让 LLM 看懂网页"**。Playwright CLI 的 snapshot 格式是当前最具工程价值的回答。
+> Agent [执行循环](../agent/ai-agents.md)的 Act 步骤从 API 调用扩展到浏览器操控时，首要问题不是"怎么点击"，而是**"怎么让 LLM 看懂网页"**。Playwright CLI 的 snapshot 格式是当前最具工程价值的回答。
 
 ---
 

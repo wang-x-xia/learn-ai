@@ -67,12 +67,15 @@
 learn-ai/
 ├── docs/                        # 知识文档（MkDocs 源文件）
 │   ├── foundations/             # 基础理论（低频更新）
-│   ├── applied/                # 应用技术（中频更新）
+│   ├── agent/                  # Agent 技术栈（中频更新）
+│   ├── applied/                # 通用 AI 应用技术（中频更新）
+│   ├── infrastructure/         # 基础设施 & 经济性（中频更新）
 │   ├── research/               # 前沿研究（高频更新）
 │   ├── model/                  # 模型档案（重要模型深度分析）
 │   ├── coding-agents/          # 编码 Agent 产品档案
 │   ├── personal-agents/        # 个人 AI Agent 产品档案
-│   └── agent-frameworks/       # Agent 框架产品档案
+│   ├── agent-workflow/         # Agent Workflow 框架产品档案
+│   └── libraries/              # 开源库产品档案
 ├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 MkDocs）
 ├── scripts/                     # 自动化脚本
 ├── mkdocs.yml                   # 站点配置 & 导航
@@ -125,6 +128,8 @@ learn-ai/
 ## mkdocs.yml 维护
 
 每新增一个 `.md` 文件，必须同时在 `mkdocs.yml` 的 `nav:` 中添加对应条目，以及更新对应的 `index.md`。
+
+**顶级 nav 条目数 ≤ 5**：`nav:` 的第一级列表项不得超过 5 个（由 `validate_docs.py` 校验，超出报 ERROR 阻断 CI）。新增内容应归入现有顶级分类的子节。
 
 ---
 

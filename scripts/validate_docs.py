@@ -9,6 +9,7 @@ Checks:
   6. Knowledge docs have a '??? note "背景知识"' section
   7. Tags are in the allowed vocabulary (scripts/tags.yml)
   8. Knowledge docs have at least one footnote
+  9. Top-level nav items in mkdocs.yml <= MAX_NAV_TOP_ITEMS
 
 Usage:
     uv run scripts/validate_docs.py
@@ -78,6 +79,48 @@ def classify(path: Path) -> str:
 
 _ALL_REFS = re.compile(r"\[\^([\w-]+)\]")
 _FOOTNOTE_DEF = re.compile(r"^\[\^([\w-]+)\]:", re.MULTILINE)
+
+# ---------------------------------------------------------------------------
+# Nav structure check
+# ---------------------------------------------------------------------------
+
+MAX_NAV_TOP_ITEMS = 5
+
+
+def check_nav_top_items() -> list[str]:
+    """Check that mkdocs.yml nav has at most MAX_NAV_TOP_ITEMS top-level items."""
+    import yaml
+
+    # Custom loader that ignores unknown tags like !ENV
+    class _SafeLoaderIgnoreUnknown(yaml.SafeLoader):
+        pass
+
+    _SafeLoaderIgnoreUnknown.add_multi_constructor(
+        "",
+        lambda loader, suffix, node: loader.construct_mapping(node)
+        if isinstance(node, yaml.MappingNode)
+        else loader.construct_sequence(node)
+        if isinstance(node, yaml.SequenceNode)
+        else loader.construct_scalar(node),
+    )
+
+    mkdocs_path = REPO_ROOT / "mkdocs.yml"
+    if not mkdocs_path.exists():
+        return ["mkdocs.yml not found"]
+    data = yaml.load(  # noqa: S506
+        mkdocs_path.read_text(encoding="utf-8"), Loader=_SafeLoaderIgnoreUnknown
+    )
+    nav = data.get("nav")
+    if not isinstance(nav, list):
+        return ["mkdocs.yml: nav is missing or not a list"]
+    count = len(nav)
+    if count > MAX_NAV_TOP_ITEMS:
+        return [
+            f"mkdocs.yml: nav has {count} top-level items "
+            f"(max {MAX_NAV_TOP_ITEMS})"
+        ]
+    return []
+
 
 # ---------------------------------------------------------------------------
 # Content length check
@@ -297,6 +340,12 @@ def main() -> int:
     files = [f for f in files if f.name != "AGENTS.md"]
 
     total_errors = 0
+
+    # --- Nav structure check ---
+    nav_errors = check_nav_top_items()
+    for e in nav_errors:
+        print(f"  ERROR {e}")
+    total_errors += len(nav_errors)
 
     # --- AGENTS.md presence check ---
     docs_dir = REPO_ROOT / "docs"

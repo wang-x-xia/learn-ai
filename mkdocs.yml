@@ -77,7 +77,9 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - 首页: index.md
+  - 首页:
+    - index.md
+    - 精选资源: resources.md
   - 基础理论:
     - foundations/index.md
     - Transformer 架构: foundations/transformer.md
@@ -87,32 +89,36 @@ nav:
     - 扩散模型: foundations/diffusion-models.md
     - 从规则到表示学习: foundations/representation-learning.md
   - 应用技术:
-    - applied/index.md
     - Agent 技术栈:
-      - AI Agent 智能体: applied/ai-agents.md
-      - Agent 记忆系统: applied/memory-systems.md
-      - Agent 工具接入: applied/agent-tools.md
-      - Agent Skills: applied/agent-skills.md
-      - Agent 间协议: applied/agent-protocols.md
-      - Agent Hooks: applied/agent-hooks.md
-      - Subagent 实践: applied/subagents.md
-    - 其他应用技术:
+      - agent/index.md
+      - AI Agent 智能体: agent/ai-agents.md
+      - Agent 记忆系统: agent/memory-systems.md
+      - Agent 工具接入: agent/agent-tools.md
+      - Agent Skills: agent/agent-skills.md
+      - Agent 间协议: agent/agent-protocols.md
+      - Agent Hooks: agent/agent-hooks.md
+      - Subagent 实践: agent/subagents.md
+    - 通用技术:
+      - applied/index.md
       - Thinking Mode: applied/thinking-mode.md
       - 提示工程: applied/prompt-engineering.md
       - 检索增强生成 (RAG): applied/rag.md
       - AI 浏览器自动化: applied/browser-automation.md
-      - AI 基础设施: applied/infrastructure.md
-      - 推理经济性: applied/inference-economics.md
-  - 前沿研究:
-    - research/index.md
-    - 可解释性: research/interpretability.md
-    - AI 安全与治理: research/safety-and-governance.md
-    - Engram: research/engram.md
-  - 模型档案:
-    - model/index.md
-    - Claude Mythos Preview: model/claude-mythos.md
-    - DeepSeek-V4: model/deepseek-v4.md
-  - 产品档案:
+    - 基础设施:
+      - infrastructure/index.md
+      - AI 基础设施: infrastructure/infrastructure.md
+      - Lustre 并行文件系统: infrastructure/lustre.md
+      - 推理经济性: infrastructure/inference-economics.md
+  - 研究、模型与产品:
+    - 前沿研究:
+      - research/index.md
+      - 可解释性: research/interpretability.md
+      - AI 安全与治理: research/safety-and-governance.md
+      - Engram: research/engram.md
+    - 模型档案:
+      - model/index.md
+      - Claude Mythos Preview: model/claude-mythos.md
+      - DeepSeek-V4: model/deepseek-v4.md
     - 编码工具:
       - coding-agents/index.md
       - Claude Code: coding-agents/claude-code.md
@@ -130,7 +136,6 @@ nav:
       - personal-agents/index.md
       - Hermes Agent: personal-agents/hermes-agent.md
       - OpenClaw: personal-agents/openclaw.md
-  - 精选资源: resources.md
 
 
 extra_css:

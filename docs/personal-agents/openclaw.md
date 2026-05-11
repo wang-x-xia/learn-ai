@@ -10,9 +10,9 @@ review: 2026-04-15
 # OpenClaw
 
 ??? note "背景知识"
-    - **Agent 系统**：LLM 驱动的自主执行循环 → [详见](../applied/ai-agents.md)
-    - **Agent Skills**：声明式能力描述和触发机制 → [详见](../applied/agent-skills.md)
-    - **多 Agent 协作**：多个 Agent 在隔离上下文中分工协作 → [详见](../applied/subagents.md)
+    - **Agent 系统**：LLM 驱动的自主执行循环 → [详见](../agent/ai-agents.md)
+    - **Agent Skills**：声明式能力描述和触发机制 → [详见](../agent/agent-skills.md)
+    - **多 Agent 协作**：多个 Agent 在隔离上下文中分工协作 → [详见](../agent/subagents.md)
 
 > 自托管 AI 网关，连接聊天渠道和 AI Agent[^openclaw-2026-github]。核心差异化是 Heartbeat 主动汇报、多 Agent 隔离和 ClawHub 生态。
 

@@ -11,9 +11,9 @@ review: 2026-05-07
 
 ??? note "背景知识"
     - **Agent 框架**：LangChain/CrewAI 等构建 Agent 的开发框架
-    - **Agent 执行循环**：思考→行动→观察的迭代 → [详见](../applied/ai-agents.md)
+    - **Agent 执行循环**：思考→行动→观察的迭代 → [详见](../agent/ai-agents.md)
     - **可观测性 (Observability)**：对 Agent 运行过程的监控、追踪和调试能力
-    - **Guardrails**：对 Agent 输入输出的安全校验和约束机制 → [详见](../applied/agent-hooks.md)
+    - **Guardrails**：对 Agent 输入输出的安全校验和约束机制 → [详见](../agent/agent-hooks.md)
 
 > NVIDIA 出品，定位不是"又一个 Agent 框架"，而是坐在 LangChain/CrewAI 之上的**元框架**——解决"Agent 怎么安全运行、跨框架优化"的工程问题。
 

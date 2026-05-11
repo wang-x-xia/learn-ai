@@ -26,7 +26,7 @@ review: 2026-04-10
 
 **设计要点**：
 
-- 函数描述的质量直接影响调用准确率（本质上是 [prompt engineering](prompt-engineering.md)）
+- 函数描述的质量直接影响调用准确率（本质上是 [prompt engineering](../applied/prompt-engineering.md)）
 - 并行函数调用（parallel function calling）减少循环轮次
 - 模型需要在"调用工具"和"直接回答"之间做判断
 

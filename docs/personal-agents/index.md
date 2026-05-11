@@ -35,7 +35,7 @@ description: 通用型个人 AI Agent 产品档案——聚焦跨会话学习、
 
 个人 Agent 的核心机制在应用技术文档中集中说明：
 
-- [AI Agent 执行循环](../applied/ai-agents.md)
-- [记忆系统](../applied/memory-systems.md)
-- [工具接入](../applied/agent-tools.md)
-- [Agent Skills](../applied/agent-skills.md)
+- [AI Agent 执行循环](../agent/ai-agents.md)
+- [记忆系统](../agent/memory-systems.md)
+- [工具接入](../agent/agent-tools.md)
+- [Agent Skills](../agent/agent-skills.md)

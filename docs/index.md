@@ -41,51 +41,57 @@ description: 个人 AI 前沿知识库。系统梳理 AI 核心技术，每日�
 
 </div>
 
-### 应用技术 — *how*
+### Agent 技术栈
 
 <div class="grid cards" markdown>
 
-- :material-robot: **[AI Agent 智能体](applied/ai-agents.md)**
+- :material-robot: **[AI Agent 智能体](agent/ai-agents.md)**
 
     ---
 
     执行循环（ReAct、Plan-and-Execute、Reflexion）、生命周期
 
-- :material-brain: **[Agent 记忆系统](applied/memory-systems.md)**
+- :material-brain: **[Agent 记忆系统](agent/memory-systems.md)**
 
     ---
 
     工作记忆、长期记忆、检索与遗忘
 
-- :material-wrench: **[Agent 工具接入](applied/agent-tools.md)**
+- :material-wrench: **[Agent 工具接入](agent/agent-tools.md)**
 
     ---
 
     Function Calling、MCP
 
-- :material-puzzle: **[Agent Skills](applied/agent-skills.md)**
+- :material-puzzle: **[Agent Skills](agent/agent-skills.md)**
 
     ---
 
     声明式能力编排——语义触发、工具+子 Agent 组合
 
-- :material-swap-horizontal: **[Agent 间协议](applied/agent-protocols.md)**
+- :material-swap-horizontal: **[Agent 间协议](agent/agent-protocols.md)**
 
     ---
 
     A2A、ANX
 
-- :material-webhook: **[Agent Hooks](applied/agent-hooks.md)**
+- :material-webhook: **[Agent Hooks](agent/agent-hooks.md)**
 
     ---
 
     生命周期钩子机制——验证、拦截、注入、观测
 
-- :material-account-group: **[Subagent 实践](applied/subagents.md)**
+- :material-account-group: **[Subagent 实践](agent/subagents.md)**
 
     ---
 
     上下文隔离、并行执行、各产品实现对比
+
+</div>
+
+### 应用技术 — *how*
+
+<div class="grid cards" markdown>
 
 - :material-chat-processing: **[提示工程](applied/prompt-engineering.md)**
 
@@ -105,7 +111,7 @@ description: 个人 AI 前沿知识库。系统梳理 AI 核心技术，每日�
 
     Playwright CLI snapshot、元素标识策略、token 优化
 
-- :material-server: **[AI 基础设施](applied/infrastructure.md)**
+- :material-server: **[AI 基础设施](infrastructure/infrastructure.md)**
 
     ---
 

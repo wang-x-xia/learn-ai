@@ -10,8 +10,8 @@ review: 2026-05-07
 # Microsoft Agent Framework
 
 ??? note "背景知识"
-    - **Agent 执行循环**：思考→行动→观察的迭代 → [详见](../applied/ai-agents.md)
-    - **Agent Skills**：声明式能力描述，告诉 Agent 遇到特定问题该怎么做 → [详见](../applied/agent-skills.md)
+    - **Agent 执行循环**：思考→行动→观察的迭代 → [详见](../agent/ai-agents.md)
+    - **Agent Skills**：声明式能力描述，告诉 Agent 遇到特定问题该怎么做 → [详见](../agent/agent-skills.md)
     - **有向图工作流**：用节点和边建模 Agent 的执行步骤与状态转移
 
 > Microsoft 出品的生产级 AI Agent 框架，是 Semantic Kernel 和 AutoGen 的继任者。核心定位是**构建生产就绪的 AI Agent 和多 Agent 工作流**——以图-based Workflow 实现显式编排，以多源 Skills 架构统一知识管理。

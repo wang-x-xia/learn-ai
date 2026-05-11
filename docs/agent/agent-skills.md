@@ -11,7 +11,7 @@ review: 2026-05-07
 
 ??? note "背景知识"
     - **Agent 工具调用**：Function Calling 和 MCP 定义"能做什么" → [详见](agent-tools.md)
-    - **Prompt Engineering**：通过自然语言指令控制 LLM 行为 → [详见](prompt-engineering.md)
+    - **Prompt Engineering**：通过自然语言指令控制 LLM 行为 → [详见](../applied/prompt-engineering.md)
     - **Agent 执行循环**：思考→行动→观察的迭代过程 → [详见](ai-agents.md)
     - **MCP (Model Context Protocol)**：标准化的工具发现与连接协议 → [详见](agent-tools.md#2-mcpmodel-context-protocol)
 
@@ -213,7 +213,7 @@ flowchart LR
     I --> E[模型按指令执行]
 ```
 
-这意味着 `description` 的写法直接决定触发准确率——本质上是 [prompt engineering](prompt-engineering.md) 问题。规范建议 description 应同时描述**做什么**和**何时用**，并包含具体关键词帮助匹配。
+这意味着 `description` 的写法直接决定触发准确率——本质上是 [prompt engineering](../applied/prompt-engineering.md) 问题。规范建议 description 应同时描述**做什么**和**何时用**，并包含具体关键词帮助匹配。
 
 ### 与其他机制的协作
 

@@ -7,7 +7,7 @@ description: 主流 Agent Workflow 框架的技术档案，聚焦架构差异与
 
 每个框架一个文件，聚焦**技术区分度**——架构差异、核心抽象、独到的设计决策。跳过所有框架共有的通用能力。
 
-Agent 的共性概念（执行循环、记忆、协议）见[应用技术](../applied/ai-agents.md)。
+Agent 的共性概念（执行循环、记忆、协议）见[应用技术](../agent/ai-agents.md)。
 
 <div class="grid cards" markdown>
 
