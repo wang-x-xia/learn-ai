@@ -51,6 +51,9 @@ plugins:
   - social:
       enabled: !ENV [CI, false]
 
+hooks:
+  - docs/hooks.py
+
 markdown_extensions:
   - footnotes
   - tables

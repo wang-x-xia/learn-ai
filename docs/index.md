@@ -7,138 +7,31 @@ description: 个人 AI 前沿知识库。系统梳理 AI 核心技术，每日�
 
 个人 AI 前沿知识库。系统梳理 AI 核心技术，每日自动追踪社区与行业动态。
 
----
-
-## 知识体系
-
-### 基础理论 — *what*
-
-<div class="grid cards" markdown>
-
-- :material-chip: **[Transformer 架构](foundations/transformer.md)**
-
-    ---
-
-    自注意力、MoE
-
-- :material-memory: **[KV Cache 与推理优化](foundations/kv-cache.md)**
-
-    ---
-
-    KV Cache 存储特征、GQA、Prefill/Decode、压缩权衡
-
-- :material-wave: **[Mamba 与 SSM](foundations/mamba-and-ssm.md)**
-
-    ---
-
-    状态空间模型、选择性扫描、线性复杂度替代架构
-
-- :material-image-multiple: **[多模态 AI](foundations/multimodal-ai.md)**
-
-    ---
-
-    文本/图像/音频/视频的数据特征差异与技术路线对比
-
-</div>
-
-### Agent 技术栈
-
-<div class="grid cards" markdown>
-
-- :material-robot: **[AI Agent 智能体](agent/ai-agents.md)**
-
-    ---
-
-    执行循环（ReAct、Plan-and-Execute、Reflexion）、生命周期
-
-- :material-brain: **[Agent 记忆系统](agent/memory-systems.md)**
-
-    ---
-
-    工作记忆、长期记忆、检索与遗忘
-
-- :material-wrench: **[Agent 工具接入](agent/agent-tools.md)**
-
-    ---
-
-    Function Calling、MCP
-
-- :material-puzzle: **[Agent Skills](agent/agent-skills.md)**
-
-    ---
-
-    声明式能力编排——语义触发、工具+子 Agent 组合
-
-- :material-swap-horizontal: **[Agent 间协议](agent/agent-protocols.md)**
-
-    ---
-
-    A2A、ANX
-
-- :material-webhook: **[Agent Hooks](agent/agent-hooks.md)**
-
-    ---
-
-    生命周期钩子机制——验证、拦截、注入、观测
-
-- :material-account-group: **[Subagent 实践](agent/subagents.md)**
-
-    ---
-
-    上下文隔离、并行执行、各产品实现对比
-
-</div>
-
-### 应用技术 — *how*
-
-<div class="grid cards" markdown>
-
-- :material-chat-processing: **[提示工程](applied/prompt-engineering.md)**
-
-    ---
-
-    CoT、Few-shot、提示框架 (CRISPE/CO-STAR/DSPy)、安全防御
-
-- :material-magnify: **[检索增强生成 (RAG)](applied/rag.md)**
-
-    ---
-
-    分块/嵌入/向量库/检索策略、GraphRAG、Agentic RAG
-
-- :material-web: **[AI 浏览器自动化](applied/browser-automation.md)**
-
-    ---
-
-    Playwright CLI snapshot、元素标识策略、token 优化
-
-- :material-server: **[AI 基础设施](infrastructure/infrastructure.md)**
-
-    ---
-
-    GPU/TPU、推理优化、量化压缩、MLOps、成本优化
-
-</div>
-
-### 前沿研究 — *what's next*
-
-<div class="grid cards" markdown>
-
-- :material-shield-check: **[AI 安全与治理](research/safety-and-governance.md)**
-
-    ---
-
-    可解释性、全球监管、人机协作
-
-</div>
-
-### 精选资源
-
-<div class="grid cards" markdown>
-
-- :material-rss: **[精选资源](resources.md)**
-
-    ---
-
-    论文预印本、厂商官方博客、社区独立博主
-
-</div>
+## 网站主题
+
+本知识库聚焦 **AI 技术方案革新与工程亮点**，记录值得长期关注的技术突破，而非功能清单或通用知识。
+
+### 知识体系拓扑
+
+```mermaid
+graph TD
+    A[Learn AI 知识库] --> B[基础理论<br/>what]
+    A --> C[应用技术<br/>how]
+    A --> D[研究、模型与产品<br/>reference]
+
+    C --> C1[Agent 技术栈]
+    C --> C2[通用技术]
+    C --> C3[基础设施]
+
+    D --> D1[前沿研究]
+    D --> D2[模型档案]
+    D --> D3[编码工具]
+    D --> D4[开源库]
+    D --> D5[Agent Workflow]
+    D --> D6[个人 Agent]
+
+    style A fill:#FF5C77,stroke:#E84862,stroke-width:2px,color:#fff
+    style B fill:#FF8A9E,stroke:#E84862,stroke-width:1px
+    style C fill:#FF8A9E,stroke:#E84862,stroke-width:1px
+    style D fill:#FF8A9E,stroke:#E84862,stroke-width:1px
+```

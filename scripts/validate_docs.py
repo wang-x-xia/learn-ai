@@ -10,6 +10,7 @@ Checks:
   7. Tags are in the allowed vocabulary (scripts/tags.yml)
   8. Knowledge docs have at least one footnote
   9. Top-level nav items in mkdocs.yml <= MAX_NAV_TOP_ITEMS
+  10. docs/changelog.yaml schema and link validity
 
 Usage:
     uv run scripts/validate_docs.py
@@ -79,6 +80,131 @@ def classify(path: Path) -> str:
 
 _ALL_REFS = re.compile(r"\[\^([\w-]+)\]")
 _FOOTNOTE_DEF = re.compile(r"^\[\^([\w-]+)\]:", re.MULTILINE)
+
+# ---------------------------------------------------------------------------
+# Changelog validation
+# ---------------------------------------------------------------------------
+
+MAX_CHANGELOG_ENTRIES = 20
+CHANGELOG_PATH = REPO_ROOT / "docs" / "changelog.yaml"
+
+
+def check_changelog() -> list[str]:
+    """Check docs/changelog.yaml schema, link validity, and entry count."""
+    import yaml
+
+    if not CHANGELOG_PATH.exists():
+        return [f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: file not found"]
+
+    errors: list[str] = []
+
+    try:
+        data = yaml.safe_load(CHANGELOG_PATH.read_text(encoding="utf-8"))
+    except yaml.YAMLError as e:
+        return [f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: YAML parse error: {e}"]
+
+    if not isinstance(data, dict):
+        return [
+            f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: root must be a dict with 'entries' key"
+        ]
+
+    if "entries" not in data:
+        return [
+            f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: missing 'entries' key at root"
+        ]
+
+    entries = data["entries"]
+    if not isinstance(entries, list):
+        return [
+            f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: 'entries' must be a list"
+        ]
+
+    # Check entry count
+    if len(entries) > MAX_CHANGELOG_ENTRIES:
+        errors.append(
+            f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: "
+            f"has {len(entries)} entries (max {MAX_CHANGELOG_ENTRIES})"
+        )
+
+    # Check each entry
+    required_fields = ["date", "type", "title", "description"]
+    allowed_types = {"knowledge", "design", "feature"}
+
+    for idx, entry in enumerate(entries):
+        prefix = f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: entries[{idx}]"
+
+        if not isinstance(entry, dict):
+            errors.append(f"{prefix}: must be a dict")
+            continue
+
+        # Check required fields and order
+        entry_keys = list(entry.keys())
+        for field in required_fields:
+            if field not in entry:
+                errors.append(f"{prefix}: missing required field '{field}'")
+
+        # Check field order (date, type, title, description, link)
+        expected_order = ["date", "type", "title", "description", "link"]
+        actual_order = [k for k in entry_keys if k in expected_order]
+        if actual_order != expected_order[: len(actual_order)]:
+            errors.append(
+                f"{prefix}: fields not in expected order "
+                f"(expected: {expected_order[: len(actual_order)]}, got: {actual_order})"
+            )
+
+        # Check field types
+        if "date" in entry:
+            # Allow both string and date types (YAML may parse dates as date objects)
+            date_value = entry["date"]
+            if isinstance(date_value, str):
+                date_str = date_value
+            elif hasattr(date_value, "isoformat"):
+                # YAML date object
+                date_str = date_value.isoformat()
+            else:
+                errors.append(f"{prefix}: 'date' must be a string")
+                continue
+
+            # Validate date format (YYYY-MM-DD)
+            if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
+                errors.append(f"{prefix}: 'date' must be in YYYY-MM-DD format")
+
+        if "type" in entry:
+            if not isinstance(entry["type"], str):
+                errors.append(f"{prefix}: 'type' must be a string")
+            elif entry["type"] not in allowed_types:
+                errors.append(
+                    f"{prefix}: 'type' must be one of {sorted(allowed_types)}, "
+                    f"got '{entry['type']}'"
+                )
+
+        if "title" in entry and not isinstance(entry["title"], str):
+            errors.append(f"{prefix}: 'title' must be a string")
+
+        if "description" in entry and not isinstance(entry["description"], str):
+            errors.append(f"{prefix}: 'description' must be a string")
+
+        # Check link validity
+        if "link" in entry:
+            if entry["link"] is not None:
+                if not isinstance(entry["link"], str):
+                    errors.append(f"{prefix}: 'link' must be a string or null")
+                else:
+                    link = entry["link"]
+                    # Check if it's an external URL or a relative path
+                    if link.startswith(("http://", "https://")):
+                        # External URL - no file check needed
+                        pass
+                    else:
+                        # Relative path - check if file exists
+                        resolved = (REPO_ROOT / "docs" / link).resolve()
+                        if not resolved.exists():
+                            errors.append(
+                                f"{prefix}: broken link '{link}' → file not found"
+                            )
+
+    return errors
+
 
 # ---------------------------------------------------------------------------
 # Nav structure check
@@ -340,6 +466,12 @@ def main() -> int:
     files = [f for f in files if f.name != "AGENTS.md"]
 
     total_errors = 0
+
+    # --- Changelog check ---
+    changelog_errors = check_changelog()
+    for e in changelog_errors:
+        print(f"  ERROR {e}")
+    total_errors += len(changelog_errors)
 
     # --- Nav structure check ---
     nav_errors = check_nav_top_items()
