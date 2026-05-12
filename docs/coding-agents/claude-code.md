@@ -3,7 +3,12 @@ title: "Claude Code"
 description: Anthropic 出品的终端编程 Agent，直接在命令行中完成端到端编码任务。
 created: 2026-04-08
 updated: 2026-05-07
-tags: [product, anthropic, coding, cli, agent]
+tags:
+  - product
+  - anthropic
+  - coding
+  - cli
+  - agent
 review: 2026-05-07
 ---
 

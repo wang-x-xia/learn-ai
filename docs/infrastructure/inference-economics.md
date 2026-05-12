@@ -3,7 +3,12 @@ title: 推理经济性 (Inference Economics)
 description: 租公有云 GPU 卖推理是否赚钱？从 GPU 小时成本、模型吞吐、API 定价三个维度拆解推理服务的盈利模型。
 created: 2026-04-13
 updated: 2026-05-07
-tags: [inference, economics, gpu, pricing, cost]
+tags:
+  - inference
+  - economics
+  - gpu
+  - pricing
+  - cost
 review: 2026-05-07
 ---
 
@@ -324,11 +329,10 @@ DeepSeek 生产数据显示 **56.3% 的输入 token 命中了 KV Cache 磁盘缓
 
 ## 参考资料
 
-[^cloud-pricing-2026]: 超大规模云价格按实例折算（AWS p5.48xlarge $98.32/hr ÷ 8 GPU）；GPU 市场价参考 Lambda Labs、CoreWeave、RunPod 官网。截至 2026 年 4 月。
-[^vllm-benchmark]: vLLM Project. Benchmark results. https://github.com/vllm-project/vllm
-[^trtllm-benchmark]: NVIDIA. TensorRT-LLM Performance. https://github.com/NVIDIA/TensorRT-LLM
-[^openai-pricing]: OpenAI. API Pricing. https://openai.com/api/pricing/ （GPT-5.4 系列，2026.4 抓取）
-[^anthropic-pricing]: Anthropic. Models. https://docs.anthropic.com/en/docs/about-claude/models （Claude 4.6 系列，2026.4 抓取）
-[^google-pricing]: Google. Gemini API Pricing. https://ai.google.dev/pricing （Gemini 3.x 系列，2026.4 抓取）
-[^together-pricing]: Together AI. Pricing. https://www.together.ai/pricing （开源模型 API，2026.4 抓取）
-[^deepseek-inference-2025]: DeepSeek. *DeepSeek-V3 / R1 推理系统概览*. 2025.3. https://zhuanlan.zhihu.com/p/27181462601 （含 2025.2.27-28 生产统计数据、EP 架构、负载均衡策略）
+[^vllm-benchmark]: vLLM. "Performance Benchmarks". https://docs.vllm.ai/en/latest/performance/benchmarks.html
+[^trtllm-benchmark]: NVIDIA. "TensorRT-LLM Benchmarks". https://nvidia.github.io/TensorRT-LLM/performance/benchmarks.html
+[^deepseek-inference-2025]: DeepSeek. "DeepSeek V3 Inference System". 2025. https://github.com/deepseek-ai/DeepSeek-V3/blob/main/docs/inference.md
+[^openai-pricing]: OpenAI. "Pricing". https://openai.com/pricing
+[^anthropic-pricing]: Anthropic. "Pricing". https://www.anthropic.com/pricing
+[^google-pricing]: Google. "Pricing". https://cloud.google.com/vertex-ai/pricing
+[^together-pricing]: Together AI. "Pricing". https://together.ai/pricing

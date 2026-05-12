@@ -3,7 +3,12 @@ title: Lustre 并行文件系统
 description: HPC/AI 超算存储的事实标准——元数据与数据分离、对象化条带存储、自建网络协议层，如何让单一文件系统扩展到数百 PB 和 TB/s 级吞吐。
 created: 2026-05-11
 updated: 2026-05-11
-tags: [infrastructure, storage, hpc, lustre, parallel-filesystem]
+tags:
+  - infrastructure
+  - storage
+  - hpc
+  - lustre
+  - parallel-filesystem
 review:
 ---
 

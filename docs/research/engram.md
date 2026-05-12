@@ -3,7 +3,14 @@ title: Engram
 description: 条件记忆模块——通过现代化 N-gram embeddings 实现 O(1) 知识查找，与 MoE 条件计算形成互补稀疏性轴。适用于静态高频模式（实体、公式、API），无法动态更新，需与 RAG 配合处理动态外部知识。
 created: 2026-04-27
 updated: 2026-04-28
-tags: [deepseek, conditional-memory, n-gram, moe, sparsity, long-context, rag]
+tags:
+  - deepseek
+  - conditional-memory
+  - n-gram
+  - moe
+  - sparsity
+  - long-context
+  - rag
 review: 2026-04-28
 ---
 

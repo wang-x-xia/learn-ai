@@ -3,7 +3,11 @@ title: AI 安全与治理
 description: AI 安全研究、全球治理框架、人机协作等方向。
 created: 2026-04-07
 updated: 2026-04-14
-tags: [safety, governance, alignment, regulation]
+tags:
+  - safety
+  - governance
+  - alignment
+  - regulation
 review: 2026-05-08
 ---
 

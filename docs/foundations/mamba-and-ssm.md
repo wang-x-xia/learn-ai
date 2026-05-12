@@ -3,7 +3,12 @@ title: "Mamba 与状态空间模型 (SSM)"
 description: "状态空间模型核心原理、Mamba 选择性机制、Mamba-2 的 SSD 框架以及 Transformer-SSM 混合架构的深度解析。"
 created: 2026-04-08
 updated: 2026-04-28
-tags: [mamba, ssm, state-space-model, jamba, hybrid-architecture]
+tags:
+  - mamba
+  - ssm
+  - state-space-model
+  - jamba
+  - hybrid-architecture
 review: 2026-04-28
 ---
 

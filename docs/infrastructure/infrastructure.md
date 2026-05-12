@@ -3,7 +3,14 @@ title: AI 基础设施 (AI Infrastructure)
 description: 从硬件加速器到网络协议，AI 基础设施决定了大模型能否高效训练和部署。本文档梳理当前 AI 基础设施的核心技术栈。
 created: 2026-04-07
 updated: 2026-05-11
-tags: [infrastructure, gpu, network, nvlink, infiniband, roce, nvme-of]
+tags:
+  - infrastructure
+  - gpu
+  - network
+  - nvlink
+  - infiniband
+  - roce
+  - nvme-of
 review: 2026-05-08
 ---
 

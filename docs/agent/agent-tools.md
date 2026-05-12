@@ -3,7 +3,11 @@ title: Agent 工具接入
 description: Agent 获得外部能力的基础机制——Function Calling 和 MCP 的技术方案与设计要点。
 created: 2026-04-10
 updated: 2026-04-10
-tags: [agent, tools, mcp, function-calling]
+tags:
+  - agent
+  - tools
+  - mcp
+  - function-calling
 review: 2026-04-10
 ---
 

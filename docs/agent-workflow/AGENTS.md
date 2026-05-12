@@ -16,7 +16,7 @@ title: "框架名"
 description: 一句话定位
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-tags: [framework, vendor-name, agent]
+tags: framework, vendor-name, agent
 review:
 ---
 

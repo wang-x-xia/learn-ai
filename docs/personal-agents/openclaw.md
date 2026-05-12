@@ -3,7 +3,11 @@ title: OpenClaw
 description: Peter Steinberger 开发的自托管 AI 网关，核心差异化是 Heartbeat 主动汇报、多 Agent 隔离和 ClawHub 生态。
 created: 2026-04-15
 updated: 2026-04-15
-tags: [product, openclaw, personal-agent, open-source]
+tags:
+  - product
+  - openclaw
+  - personal-agent
+  - open-source
 review: 2026-04-15
 ---
 

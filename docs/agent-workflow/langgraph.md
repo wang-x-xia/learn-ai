@@ -3,7 +3,12 @@ title: LangGraph
 description: LangChain 团队出品的图驱动 Agent 编排框架，用有向图建模 Agent 工作流。
 created: 2026-04-10
 updated: 2026-05-07
-tags: [framework, langchain, agent, python, javascript]
+tags:
+  - framework
+  - langchain
+  - agent
+  - python
+  - javascript
 review: 2026-05-07
 ---
 

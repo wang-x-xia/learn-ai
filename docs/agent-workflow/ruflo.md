@@ -3,7 +3,12 @@ title: Ruflo
 description: RuvNet 的 Agent 控制平面与双前端产品：flo.ruv.io 负责多模型 Chat + MCP 工具调用，goal.ruv.io 负责 GOAP 目标规划与 live agents。
 created: 2026-05-06
 updated: 2026-05-06
-tags: [framework, ruvnet, agent, typescript, claude-code]
+tags:
+  - framework
+  - ruvnet
+  - agent
+  - typescript
+  - claude-code
 review: 2026-05-06
 ---
 

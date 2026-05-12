@@ -3,7 +3,14 @@ title: Claude Mythos Preview
 description: Anthropic 迄今最强前沿模型——因攻击性网络安全能力过强而未公开发布，仅通过 Project Glasswing 限制性提供给安全合作伙伴。
 created: 2026-04-13
 updated: 2026-04-13
-tags: [safety, alignment, anthropic, mythos, system-card, cybersecurity, model-welfare]
+tags:
+  - safety
+  - alignment
+  - anthropic
+  - mythos
+  - system-card
+  - cybersecurity
+  - model-welfare
 review: 2026-05-08
 ---
 
@@ -270,7 +277,7 @@ SWE-bench 的题目来自开源仓库，内容可能出现在训练语料中。A
 
 检测方法是一个 **Claude 审计器 + 规则检查**的组合：
 
-- **Claude 审计器**：逐题比较模型生成 patch 与标准 patch，赋予 [0, 1] 的记忆概率。审计器权衡具体信号——存在替代方案时仍逐字复现、独特注释文本匹配标准答案等——同时被指示**忽略任何合格 solver 在给定约束下都会产生的相似性**
+- **Claude 审计器**：逐题比较模型生成 patch 与标准 patch，赋予 `0, 1` 的记忆概率。审计器权衡具体信号——存在替代方案时仍逐字复现、独特注释文本匹配标准答案等——同时被指示**忽略任何合格 solver 在给定约束下都会产生的相似性**
 - **规则检查**：标记与标准答案有大段逐字注释重叠的 patch（注释无功能必要性，逐字一致是强记忆信号）
 - **保守策略**：对所有模型（Mythos、Opus 4.6、Sonnet 4.6）的所有尝试统一检测，**任何模型的任何一次尝试被标记即移除该题**——这对 Mythos 偏保守，因为基线模型记忆的题也被一并移除
 

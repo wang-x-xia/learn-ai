@@ -3,7 +3,10 @@ title: "KV Cache 与推理优化"
 description: "KV Cache 的存储特征、注意力变体（GQA）、推理阶段差异与压缩手段的设计权衡。"
 created: 2026-04-09
 updated: 2026-04-28
-tags: [kv-cache, gqa, inference]
+tags:
+  - kv-cache
+  - gqa
+  - inference
 review: 2026-04-28
 ---
 

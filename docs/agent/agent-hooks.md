@@ -3,7 +3,12 @@ title: Agent Hooks：生命周期钩子机制
 description: Agent Hook 在执行循环的关键节点插入用户自定义逻辑——验证、拦截、注入、观测。
 created: 2026-04-09
 updated: 2026-04-10
-tags: [agent, hooks, lifecycle, automation, safety]
+tags:
+  - agent
+  - hooks
+  - lifecycle
+  - automation
+  - safety
 review: 2026-04-10
 ---
 
@@ -82,7 +87,7 @@ flowchart LR
 
 | 框架 | 核心抽象 | 拦截粒度 | 文档 |
 |------|----------|----------|------|
-| **LangGraph** | BaseCallbackHandler（Python 类） | 工具级 + LLM 调用级 | [Callbacks][^langchain-docs] |
+| **LangGraph** | BaseCallbackHandler（Python 类） | 工具级 + LLM 调用级 | Callbacks[^langchain-docs] |
 | **AutoGen** | `register_hook` 消息拦截器 | 消息级（发送前 / 回复前） | — |
 | **CrewAI** | `step_callback` / `task_callback` | 任务级，粒度粗，无拦截能力 | — |
 

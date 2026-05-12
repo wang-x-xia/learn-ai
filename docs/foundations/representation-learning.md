@@ -3,7 +3,10 @@ title: "从规则到表示学习"
 description: "机器学习三阶段演进——规则系统、特征工程、表示学习——人类如何逐步退出特征设计环节。"
 created: 2026-04-14
 updated: 2026-04-14
-tags: [representation-learning, feature-engineering, history]
+tags:
+  - representation-learning
+  - feature-engineering
+  - history
 review: 2026-05-08
 ---
 

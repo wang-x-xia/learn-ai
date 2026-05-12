@@ -3,7 +3,12 @@ title: Subagent 实践：从架构到工程模式
 description: Subagent 是解决单一 Agent 串行瓶颈与上下文膨胀的核心架构模式。本文从技术原理、调用机制到反模式，系统梳理 subagent 的工程实践。
 created: 2026-04-09
 updated: 2026-05-08
-tags: [agent, subagents, multi-agent, context-management, parallel-execution]
+tags:
+  - agent
+  - subagents
+  - multi-agent
+  - context-management
+  - parallel-execution
 review: 2026-05-08
 ---
 

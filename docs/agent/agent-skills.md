@@ -3,7 +3,11 @@ title: Agent Skills
 description: 从代码定义到自然语言定义——Skills 如何用声明式指令将工具、子 Agent 和领域知识组合成可复用的能力单元。
 created: 2026-04-10
 updated: 2026-05-07
-tags: [agent, skills, prompt-engineering, tools]
+tags:
+  - agent
+  - skills
+  - prompt-engineering
+  - tools
 review: 2026-05-07
 ---
 

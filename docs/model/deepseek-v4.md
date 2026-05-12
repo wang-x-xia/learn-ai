@@ -3,7 +3,14 @@ title: DeepSeek-V4
 description: 首个原生百万 token 上下文的开源 MoE 模型——混合压缩注意力架构将 1M 推理 FLOPs 降至 V3.2 的 27%，KV Cache 缩至 10%。
 created: 2026-04-27
 updated: 2026-04-27
-tags: [deepseek, moe, long-context, sparse-attention, muon, fp4, architecture]
+tags:
+  - deepseek
+  - moe
+  - long-context
+  - sparse-attention
+  - muon
+  - fp4
+  - architecture
 review:
 ---
 

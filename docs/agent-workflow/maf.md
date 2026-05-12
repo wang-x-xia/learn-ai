@@ -3,7 +3,14 @@ title: Microsoft Agent Framework
 description: Microsoft 的生产级 AI Agent 框架，融合 AutoGen 和 Semantic Kernel，以图-based Workflow 编排和多源 Skills 架构支持企业级多 Agent 系统。
 created: 2026-04-10
 updated: 2026-05-07
-tags: [framework, microsoft, agent, csharp, python, enterprise, workflow]
+tags:
+  - framework
+  - microsoft
+  - agent
+  - csharp
+  - python
+  - enterprise
+  - workflow
 review: 2026-05-07
 ---
 

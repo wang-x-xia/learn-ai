@@ -3,7 +3,12 @@ title: Dify
 description: 开源的可视化 AI 应用开发平台，用拖拽式界面构建 Agent 和 RAG 工作流。
 created: 2026-04-10
 updated: 2026-05-07
-tags: [framework, dify, agent, python, low-code]
+tags:
+  - framework
+  - dify
+  - agent
+  - python
+  - low-code
 review: 2026-05-07
 ---
 

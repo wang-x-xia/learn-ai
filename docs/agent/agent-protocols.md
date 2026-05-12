@@ -3,7 +3,12 @@ title: Agent 间通信协议
 description: Agent 与 Agent 之间如何发现、通信和协作——A2A 和 ANX 协议的交互流程与设计权衡。
 created: 2026-04-10
 updated: 2026-04-10
-tags: [agent, a2a, anx, protocols, multi-agent]
+tags:
+  - agent
+  - a2a
+  - anx
+  - protocols
+  - multi-agent
 review: 2026-04-10
 ---
 

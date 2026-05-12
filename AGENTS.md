@@ -4,7 +4,7 @@
 
 个人 AI 前沿知识库。知识文档用中文编写，代码和配置用英文。
 
-- 站点使用 MkDocs Material 生成，推送 `main` 后由 GitHub Actions 自动部署到 GitHub Pages
+- 站点使用 Zensical 生成，推送 `main` 后由 GitHub Actions 自动部署到 GitHub Pages
 - 依赖管理统一使用 `uv`，Python 版本要求 `>=3.12`
 
 ## 内容偏好
@@ -65,7 +65,7 @@
 
 ```
 learn-ai/
-├── docs/                        # 知识文档（MkDocs 源文件）
+├── docs/                        # 知识文档（Zensical 源文件）
 │   ├── foundations/             # 基础理论（低频更新）
 │   ├── agent/                  # Agent 技术栈（中频更新）
 │   ├── applied/                # 通用 AI 应用技术（中频更新）
@@ -76,9 +76,9 @@ learn-ai/
 │   ├── personal-agents/        # 个人 AI Agent 产品档案
 │   ├── agent-workflow/         # Agent Workflow 框架产品档案
 │   └── libraries/              # 开源库产品档案
-├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 MkDocs）
+├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 Zensical）
 ├── scripts/                     # 自动化脚本
-├── mkdocs.yml                   # 站点配置 & 导航
+├── mkdocs.yml                   # 站点配置 & 导航（Zensical 可直接读取）
 └── pyproject.toml               # Python 依赖
 ```
 
@@ -131,13 +131,15 @@ learn-ai/
 
 **顶级 nav 条目数 ≤ 5**：`nav:` 的第一级列表项不得超过 5 个（由 `validate_docs.py` 校验，超出报 ERROR 阻断 CI）。新增内容应归入现有顶级分类的子节。
 
+注意：项目使用 Zensical 作为静态站点生成器，但继续使用 `mkdocs.yml` 配置文件，因为 Zensical 可以直接读取 MkDocs 配置，确保平滑迁移。
+
 ---
 
 ## 构建 & 验证
 
 ```bash
-uv run mkdocs serve              # 本地预览
-uv run mkdocs build --strict     # 严格构建（CI 使用，警告视为错误）
+uv run zensical serve            # 本地预览
+uv run zensical build            # 构建站点
 uv run scripts/validate_docs.py  # 检查 frontmatter 和脚注规范
 uv run scripts/review_status.py  # 查看待 review 清单
 ```

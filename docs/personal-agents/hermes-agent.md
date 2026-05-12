@@ -3,7 +3,13 @@ title: Hermes Agent
 description: Nous Research 的自进化个人 AI Agent，核心区分点是闭环学习循环——自动创建 Skill、使用中自我改进、跨会话知识持久化。
 created: 2026-04-10
 updated: 2026-04-15
-tags: [product, nous-research, personal-agent, agent, skills, memory]
+tags:
+  - product
+  - nous-research
+  - personal-agent
+  - agent
+  - skills
+  - memory
 review: 2026-04-15
 ---
 

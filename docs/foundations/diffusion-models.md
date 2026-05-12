@@ -3,7 +3,10 @@ title: "扩散模型 (Diffusion Models)"
 description: "扩散模型原理——DDPM、DDIM 与 Flow Matching。"
 created: 2026-04-28
 updated: 2026-05-07
-tags: [diffusion, ddim, flow-matching]
+tags:
+  - diffusion
+  - ddim
+  - flow-matching
 review: 2026-05-07
 ---
 

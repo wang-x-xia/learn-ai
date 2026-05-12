@@ -3,7 +3,11 @@ title: Thinking Mode (思考模式)
 description: 推理时计算扩展的核心优势、自适应推理机制、与普通 completion 和 plan/execute 的权衡。
 created: 2026-04-17
 updated: 2026-04-17
-tags: [thinking-mode, reasoning, test-time-compute, claude]
+tags:
+  - thinking-mode
+  - reasoning
+  - test-time-compute
+  - claude
 review:
 ---
 

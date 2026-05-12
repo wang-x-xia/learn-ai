@@ -3,7 +3,12 @@ title: "多模态 AI (Multimodal AI)"
 description: "文本、图像、音频、视频四种模态的数据特征差异，以及各自的离散化、生成与跨模态对齐技术路线。"
 created: 2026-04-07
 updated: 2026-04-28
-tags: [multimodal, vision-language, diffusion, audio, cross-modal-alignment]
+tags:
+  - multimodal
+  - vision-language
+  - diffusion
+  - audio
+  - cross-modal-alignment
 review: 2026-04-28
 ---
 

@@ -5,9 +5,9 @@ description = "Personal AI knowledge base"
 requires-python = ">=3.12"
 dependencies = [
     "cairosvg>=2.6",
-    "mkdocs-material>=9.7.6",
     "pillow>=10.2",
     "pyyaml>=6.0",
+    "zensical>=0.0.40",
 ]
 
 [project.optional-dependencies]

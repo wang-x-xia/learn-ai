@@ -3,7 +3,12 @@ title: "可解释性"
 description: "LLM 可解释性研究——从理论框架到逆向工程方法，理解模型为什么有效、如何打开黑箱。"
 created: 2026-04-14
 updated: 2026-04-14
-tags: [interpretability, mechanistic-interpretability, representation-engineering, emergence, grokking]
+tags:
+  - interpretability
+  - mechanistic-interpretability
+  - representation-engineering
+  - emergence
+  - grokking
 review: 2026-05-08
 ---
 

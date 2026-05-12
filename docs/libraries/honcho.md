@@ -3,7 +3,11 @@ title: Honcho
 description: plastic-labs 开源的记忆库，通过辩证用户建模让 Agent 构建动态、可推理的用户心智模型，而非静态偏好列表。
 created: 2026-04-15
 updated: 2026-04-15
-tags: [memory, personalization, plastic-labs, open-source]
+tags:
+  - memory
+  - personalization
+  - plastic-labs
+  - open-source
 review: 2026-04-15
 ---
 

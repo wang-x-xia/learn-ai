@@ -3,7 +3,12 @@ title: AI 浏览器自动化
 description: Agent 操控浏览器的核心问题——如何将网页表示为 LLM 能理解并操作的结构。以 Playwright CLI 的 snapshot 格式为中心展开。
 created: 2026-04-10
 updated: 2026-04-10
-tags: [agent, browser, playwright, accessibility-tree, snapshot]
+tags:
+  - agent
+  - browser
+  - playwright
+  - accessibility-tree
+  - snapshot
 review: 2026-04-10
 ---
 
@@ -71,7 +76,7 @@ Playwright CLI[^pw-cli] 读取浏览器的 Accessibility 树，输出一种专�
 
 - **role**：ARIA 角色（`button`、`link`、`textbox`、`heading`、`list`...），来自 HTML 语义或显式 ARIA 标注
 - **"name"**：Accessible Name，即屏幕阅读器会朗读的名字
-- **[attribute=value]**：ARIA 状态属性（`checked`、`disabled`、`expanded`、`level`、`selected`...）
+- `` `[attribute=value]` ``：ARIA 状态属性（`checked`、`disabled`、`expanded`、`level`、`selected`...）
 
 一个真实页面的 snapshot 示例：
 

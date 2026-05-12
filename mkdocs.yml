@@ -9,6 +9,7 @@ exclude_docs: |
 
 theme:
   name: material
+  variant: classic
   language: zh
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -50,9 +51,6 @@ plugins:
   - tags
   - social:
       enabled: !ENV [CI, false]
-
-hooks:
-  - docs/hooks.py
 
 markdown_extensions:
   - footnotes

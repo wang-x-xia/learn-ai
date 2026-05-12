@@ -17,7 +17,7 @@ title: "产品名"
 description: 一句话定位
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-tags: [product, vendor-name, coding, form-factor, agent]
+tags: product, vendor-name, coding, form-factor, agent
 review:
 ---
 

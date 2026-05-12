@@ -3,7 +3,13 @@ title: NeMo Agent Toolkit
 description: NVIDIA 的跨框架 Agent 元工具包——可观测性、安全沙箱、本地推理，解决"Agent 怎么安全运行和优化"的工程问题。
 created: 2026-04-10
 updated: 2026-05-07
-tags: [framework, nvidia, agent, python, observability, security]
+tags:
+  - framework
+  - nvidia
+  - agent
+  - python
+  - observability
+  - security
 review: 2026-05-07
 ---
 
