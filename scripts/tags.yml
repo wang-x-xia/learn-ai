@@ -11,6 +11,7 @@ tags:
   - attention
   - audio
   - automation
+  - bm25
   - browser
   - claude
   - claude-code
@@ -48,6 +49,7 @@ tags:
   - hooks
   - hybrid-architecture
   - infiniband
+  - information-retrieval
   - inference
   - infrastructure
   - interpretability
@@ -118,5 +120,6 @@ tags:
   - transformer
   - typescript
   - vector-db
+  - vector-search
   - vision-language
   - workflow

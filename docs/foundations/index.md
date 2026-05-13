@@ -45,4 +45,10 @@ description: AI 基础理论知识——Transformer、大语言模型、状态�
 
     规则系统 → 特征工程 → 表示学习：三次范式转换的技术瓶颈与突破点
 
+- :material-magnify: **[信息检索基础](information-retrieval.md)**
+
+    ---
+
+    BM25、向量检索、混合检索与 RRF 融合算法
+
 </div>

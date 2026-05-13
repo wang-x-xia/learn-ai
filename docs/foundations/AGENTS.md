@@ -11,6 +11,7 @@
 | `mamba-and-ssm.md` | SSM / Mamba / 替代架构 |
 | `multimodal-ai.md` | 多模态 AI |
 | `representation-learning.md` | 从规则到表示学习 |
+| `information-retrieval.md` | 信息检索基础（BM25、向量检索、混合检索） |
 
 ## 收录哪些内容
 
@@ -19,6 +20,7 @@
 - SSM / Mamba / 替代架构 → `mamba-and-ssm.md`
 - 多模态数据特征与技术路线 → `multimodal-ai.md`
 - ML 范式演进（规则系统 → 特征工程 → 表示学习）→ `representation-learning.md`
+- 信息检索基础（BM25、向量检索、混合检索）→ `information-retrieval.md`
 
 ## 不收录
 

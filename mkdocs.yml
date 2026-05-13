@@ -91,6 +91,7 @@ nav:
     - 多模态 AI: foundations/multimodal-ai.md
     - 扩散模型: foundations/diffusion-models.md
     - 从规则到表示学习: foundations/representation-learning.md
+    - 信息检索基础: foundations/information-retrieval.md
   - 应用技术:
     - Agent 技术栈:
       - agent/index.md

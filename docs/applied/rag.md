@@ -17,6 +17,7 @@ review: 2026-05-08
     - **向量嵌入 (Embedding)**：将文本映射为高维向量，语义相近的文本在向量空间中距离近
     - **Transformer**：RAG 中 LLM 和嵌入模型的底层架构 → [详见](../foundations/transformer.md)
     - **上下文窗口**：LLM 单次能处理的最大 token 数，限制了可注入的检索文档量
+    - **信息检索基础**：BM25、向量检索、混合检索等检索算法原理 → [详见](../foundations/information-retrieval.md)
 
 > RAG 通过将外部知识检索与大语言模型结合，解决了 LLM 知识截止和幻觉问题，是企业级 AI 应用的核心架构之一。
 
@@ -47,7 +48,7 @@ RAG (Retrieval-Augmented Generation) 是一种将**信息检索**与**文本生�
 | **微调** | 需要特定行为/风格 | 高 | 低 |
 | **RAG + 微调** | 最高质量要求 | 最高 | 中 |
 
-原始论文: [Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", 2020](https://arxiv.org/abs/2005.11401)
+原始论文: Lewis et al., 2020[^lewis-2020-rag]
 
 ---
 
@@ -206,8 +207,8 @@ HNSW 构建分层图，类似跳表：
 ## 5. 检索策略
 
 - **稠密检索 (Dense Retrieval)**：基于嵌入向量的语义相似度搜索，适合处理同义词和语义相近的查询
-- **稀疏检索 (Sparse Retrieval)**：基于关键词匹配的传统搜索，使用 BM25 或 TF-IDF 算法，擅长精确匹配专有名词
-- **混合搜索 (Hybrid Search)**：结合稠密检索和稀疏检索的优势，通过加权融合提升检索质量
+- **稀疏检索 (Sparse Retrieval)**：基于关键词匹配的传统搜索，使用 BM25 或 TF-IDF 算法，擅长精确匹配专有名词 → [BM25 详解](../foundations/information-retrieval.md#2-bm25-概率检索)
+- **混合搜索 (Hybrid Search)**：结合稠密检索和稀疏检索的优势，通过 RRF 或加权融合提升检索质量 → [混合检索详解](../foundations/information-retrieval.md#4-混合检索)
 - **重排序 (Reranking)**：在初步检索后使用更精确的模型对结果重新排序，提高相关性
 - **Multi-Query**：将问题改写为多个查询，合并检索结果以扩大召回范围
 - **Parent Document**：检索小块内容但返回其父文档，提供更完整的上下文
@@ -285,8 +286,4 @@ RAG 与 Agent 的融合是大趋势：
 
 ## 参考资料
 
-- Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", 2020 - [arXiv:2005.11401](https://arxiv.org/abs/2005.11401)
-- Gao et al., "Retrieval-Augmented Generation for Large Language Models: A Survey", 2024 - [arXiv:2312.10997](https://arxiv.org/abs/2312.10997)
-- Edge et al., "From Local to Global: A Graph RAG Approach", 2024 - [arXiv:2404.16130](https://arxiv.org/abs/2404.16130)
-- Yan et al., "Corrective Retrieval Augmented Generation", 2024 - [arXiv:2401.15884](https://arxiv.org/abs/2401.15884)
-- LangChain RAG Guide: https://python.langchain.com/docs/tutorials/rag/
+[^lewis-2020-rag]: Lewis et al. *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*. 2020. https://arxiv.org/abs/2005.11401
