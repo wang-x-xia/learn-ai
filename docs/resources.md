@@ -4,7 +4,7 @@ description: 持续追踪的 AI 信息源
 created: 2026-04-27
 updated: 2026-04-27
 tags:
-  - - resources
+  - resources
   - feeds
 review: 2026-04-27
 ---

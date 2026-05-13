@@ -16,6 +16,13 @@ review: 2026-05-08
 
 # AI 基础设施 (AI Infrastructure)
 
+??? note "背景知识"
+    - **GPU (Graphics Processing Unit)**：图形处理器，通过大规模并行计算单元加速 AI 训练和推理
+    - **带宽 (Bandwidth)**：单位时间内数据传输量，决定训练/推理的数据吞吐能力
+    - **延迟 (Latency)**：数据从源到目的的传输时间，影响实时性要求高的任务
+    - **RDMA (Remote Direct Memory Access)**：远程直接内存访问，绕过 CPU 实现零拷贝网络传输
+    - **PCIe (Peripheral Component Interconnect Express)**：计算机扩展总线标准，用于连接 GPU、网卡等设备
+
 > 从硬件加速器到网络协议，AI 基础设施决定了大模型能否高效训练和部署。本文档梳理当前 AI 基础设施的核心技术栈。
 
 ---
@@ -82,8 +89,8 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 ||| **Infinity Fabric** | AMD | - | - | - | MI300X |
 
 **关键差异**：
-- **NVLink + NVSwitch**：非阻塞交换芯片，任意 GPU 间 900 GB/s 直连，适合大模型张量并行
-- **HCCS**：点对点互联，无交换芯片，总带宽 392 GB/s，依赖软件优化弥补硬件差距
+- **NVLink + NVSwitch**：非阻塞交换芯片，任意 GPU 间 900 GB/s 直连，适合大模型张量并行[^nvidia-nvlink]
+- **HCCS**：点对点互联，无交换芯片，总带宽 392 GB/s，依赖软件优化弥补硬件差距[^huawei-hccs]
 
 ### 2.2 超节点互联技术
 
@@ -240,6 +247,5 @@ NVMe-oF (框架/总称)
 
 ## 参考资料
 
-- Kwon et al., "Efficient Memory Management for Large Language Model Serving with PagedAttention" (vLLM), 2023 - [arXiv:2309.06180](https://arxiv.org/abs/2309.06180)
-- Rajbhandari et al., "ZeRO: Memory Optimizations Toward Training Trillion Parameter Models" (DeepSpeed), 2019 - [arXiv:1910.02054](https://arxiv.org/abs/1910.02054)
-- vLLM: https://github.com/vllm-project/vllm
+[^nvidia-nvlink]: NVIDIA. NVLink and NVSwitch 技术文档
+[^huawei-hccs]: 华为. HCCS 互联技术文档
