@@ -1,6 +1,6 @@
 entries:
-  - date: 2025-01-12
-    type: design
-    title: 首页优化
-    description: 添加网站拓扑介绍和最近更新区域，改进首页视觉效果
+  - date: 2026-05-13
+    type: feature
+    title: 添加数学公式渲染支持
+    description: 集成 KaTeX，支持 LaTeX 数学公式渲染（行内用 $ 包裹，块级用 $$ 包裹）
     link: null
