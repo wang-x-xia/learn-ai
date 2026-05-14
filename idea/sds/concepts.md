@@ -35,6 +35,7 @@
 | [Draft](requirement/draft.md) | `DRAFT-\d+` | `requirement/draft.md` | 唯一的非结构化入口——人类原始意图 |
 | [Requirement](requirement/requirement.md) | `REQ-\d+` | `requirement/requirement.md` | 消歧后的结构化需求 |
 | [User Story](requirement/user-story.md) | `US-\d+` | `requirement/user-story.md` | 面向实现的需求分解单元 |
+| [Business Concept](requirement/business-concept.md) | `BC-\d+` | `requirement/business-concept.md` | 业务概念——语义位置到技术制品的对齐 |
 
 ### 契约域
 
@@ -130,6 +131,9 @@ graph TD
     subgraph requirement["需求域"]
         DRAFT["Draft"] -->|DISAMBIGUATED_INTO| REQ["Requirement"]
         REQ -->|DECOMPOSES_INTO| US["User Story"]
+        BC["Business Concept"]
+        DRAFT -.->|USES| BC
+        REQ -.->|USES| BC
     end
 
     subgraph module_boundary["Module（组织边界）"]
