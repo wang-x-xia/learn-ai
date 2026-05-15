@@ -11,7 +11,7 @@ tags:
   - infiniband
   - roce
   - nvme-of
-review: 2026-05-08
+review: 2026-05-15
 ---
 
 # AI 基础设施 (AI Infrastructure)
@@ -82,11 +82,11 @@ review: 2026-05-08
 
 GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
-||| 技术 | 厂商 | 带宽 | 拓扑 | 交换芯片 | 代表产品 |
-|||------|------|------|------|----------|----------|
-||| **NVLink 4.0** | NVIDIA | 900 GB/s | 全互连 | NVSwitch 3.0 | H100/H200 |
-||| **HCCS v2** | 华为 | 392 GB/s | Full-Mesh | 无 | 昇腾 910B |
-||| **Infinity Fabric** | AMD | - | - | - | MI300X |
+| 技术 | 厂商 | 带宽 | 拓扑 | 交换芯片 | 代表产品 |
+|------|------|------|------|----------|----------|
+| **NVLink 4.0** | NVIDIA | 900 GB/s | 全互连 | NVSwitch 3.0 | H100/H200 |
+| **HCCS v2** | 华为 | 392 GB/s | Full-Mesh | 无 | 昇腾 910B |
+| **Infinity Fabric** | AMD | - | - | - | MI300X |
 
 **关键差异**：
 - **NVLink + NVSwitch**：非阻塞交换芯片，任意 GPU 间 900 GB/s 直连，适合大模型张量并行[^nvidia-nvlink]
@@ -94,10 +94,10 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 ### 2.2 超节点互联技术
 
-||| 技术 | 厂商 | 规模 | 延迟 | 交换层级 | 代表产品 |
-|||------|------|------|------|----------|----------|
-||| **UB 灵衡** | 华为 | 384 NPU | 150-200 ns | L1/L2 两级交换 | CloudMatrix 384 |
-||| **NVLink-Network** | NVIDIA | 256 GPU | - | 外部 NVLink Switch | - |
+| 技术 | 厂商 | 规模 | 延迟 | 交换层级 | 代表产品 |
+|------|------|------|------|----------|----------|
+| **UB 灵衡** | 华为 | 384 NPU | 150-200 ns | L1/L2 两级交换 | CloudMatrix 384 |
+| **NVLink-Network** | NVIDIA | 256 GPU | - | 外部 NVLink Switch | - |
 
 **UB 灵衡**：华为超节点技术，通过两级交换实现 384 NPU 跨节点统一内存域，单跳时延 150-200 ns。
 
@@ -105,11 +105,11 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 网卡负责节点间的高速数据传输，协议选择影响集群扩展性和成本。
 
-||| 协议 | 带宽 | 延迟 | 成本 | 生态 | 代表产品 |
-|||------|------|------|------|------|----------|
-||| **InfiniBand NDR** | 400 Gb/s | 极低 | 高 | 专有生态 | ConnectX-7 |
-||| **RoCE v2** | 200-400 Gb/s | 低 | 中 | 以太网生态 | 内置 RoCE 网卡 |
-||| **Ethernet** | 100-400 Gb/s | 中 | 低 | 通用生态 | 标准以太网网卡 |
+| 协议 | 带宽 | 延迟 | 成本 | 生态 | 代表产品 |
+|------|------|------|------|------|----------|
+| **InfiniBand NDR** | 400 Gb/s | 极低 | 高 | 专有生态 | ConnectX-7 |
+| **RoCE v2** | 200-400 Gb/s | 低 | 中 | 以太网生态 | 内置 RoCE 网卡 |
+| **Ethernet** | 100-400 Gb/s | 中 | 低 | 通用生态 | 标准以太网网卡 |
 
 **关键差异**：
 - **InfiniBand**：专为 HPC/AI 设计，最低延迟，支持 in-network computing（SHARP），但成本高，生态封闭
@@ -120,11 +120,11 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 交换机构建集群网络拓扑，端口密度和聚合带宽决定集群规模上限。
 
-||| 类型 | 端口 | 聚合带宽 | 拓扑支持 | 成本 | 代表产品 |
-|||------|------|----------|----------|------|----------|
-||| **InfiniBand 交换机** | 64×400G | 51.2 Tb/s | Fat-Tree, Dragonfly | 高 | Quantum QM9700 |
-||| **以太网交换机** | 64×400G | 25.6 Tb/s | Spine-Leaf, Clos | 中 | CloudEngine, Spectrum-4 |
-||| **智能网卡 (SmartNIC)** | - | - | - | 高 | BlueField-3 DPU |
+| 类型 | 端口 | 聚合带宽 | 拓扑支持 | 成本 | 代表产品 |
+|------|------|----------|----------|------|----------|
+| **InfiniBand 交换机** | 64×400G | 51.2 Tb/s | Fat-Tree, Dragonfly | 高 | Quantum QM9700 |
+| **以太网交换机** | 64×400G | 25.6 Tb/s | Spine-Leaf, Clos | 中 | CloudEngine, Spectrum-4 |
+| **智能网卡 (SmartNIC)** | - | - | - | 高 | BlueField-3 DPU |
 
 **关键差异**：
 - **InfiniBand 交换机**：专为 AI/HPC 优化，支持自适应路由、SHARP in-network computing，但成本高
@@ -135,13 +135,13 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 计算芯片是 AI 基础设施的核心，算力、显存、互联带宽共同决定训练/推理性能。
 
-||| 芯片 | 厂商 | 架构 | 显存 | 显存带宽 | FP16 算力 | 互联 |
-|||------|------|------|------|----------|-----------|------|
-||| **H100 SXM** | NVIDIA | Hopper | 80GB HBM3 | 3.35 TB/s | 989 TFLOPS | NVLink 4.0 |
-||| **H200** | NVIDIA | Hopper | 141GB HBM3e | 4.8 TB/s | 989 TFLOPS | NVLink 4.0 |
-||| **B200** | NVIDIA | Blackwell | 192GB HBM3e | 8 TB/s | ~2250 TFLOPS | NVLink 5.0 |
-||| **昇腾 910B** | 华为 | Da Vinci | 64GB HBM2e | ~1.2 TB/s | ~600 TFLOPS | HCCS v2 |
-||| **MI300X** | AMD | CDNA 3 | 192GB HBM3 | 5.3 TB/s | ~1300 TFLOPS | Infinity Fabric |
+| 芯片 | 厂商 | 架构 | 显存 | 显存带宽 | FP16 算力 | 互联 |
+|------|------|------|------|----------|-----------|------|
+| **H100 SXM** | NVIDIA | Hopper | 80GB HBM3 | 3.35 TB/s | 989 TFLOPS | NVLink 4.0 |
+| **H200** | NVIDIA | Hopper | 141GB HBM3e | 4.8 TB/s | 989 TFLOPS | NVLink 4.0 |
+| **B200** | NVIDIA | Blackwell | 192GB HBM3e | 8 TB/s | ~2250 TFLOPS | NVLink 5.0 |
+| **昇腾 910B** | 华为 | Da Vinci | 64GB HBM2e | ~1.2 TB/s | ~600 TFLOPS | HCCS v2 |
+| **MI300X** | AMD | CDNA 3 | 192GB HBM3 | 5.3 TB/s | ~1300 TFLOPS | Infinity Fabric |
 
 **关键洞察**：显存带宽是 LLM 推理的主要瓶颈（内存带宽受限 / memory-bound），而非计算能力。
 
@@ -194,10 +194,10 @@ NVMe-oF (框架/总称)
 
 传统存储访问路径需要经过 CPU 内存（bounce buffer），成为 I/O 瓶颈。GPUDirect Storage 提供存储到 GPU 的直接数据路径。
 
-||| 技术 | 厂商 | 带宽 | 路径 | 特性 |
-|||------|------|------|------|------|
-||| **GPUDirect Storage** | NVIDIA | 可叠加（多设备） | 存储 → GPU | 绕过 CPU bounce buffer |
-||| **传统方式** | - | 受限于 PCIe | 存储 → CPU → GPU | 需要 CPU 参与 |
+| 技术 | 厂商 | 带宽 | 路径 | 特性 |
+|------|------|------|------|------|
+| **GPUDirect Storage** | NVIDIA | 可叠加（多设备） | 存储 → GPU | 绕过 CPU bounce buffer |
+| **传统方式** | - | 受限于 PCIe | 存储 → CPU → GPU | 需要 CPU 参与 |
 
 **GPUDirect Storage 优势**：
 - **直接路径**：存储设备（NVMe/NVMe-oF）的 DMA 引擎直接访问 GPU 内存
