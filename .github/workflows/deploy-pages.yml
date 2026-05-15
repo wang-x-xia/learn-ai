@@ -29,7 +29,7 @@ jobs:
         run: uv run scripts/review_status.py || echo "::warning::Some docs need review (see above)"
 
       - name: Build site
-        run: uv run zensical build
+        run: uv run zensical build --strict
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

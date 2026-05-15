@@ -49,7 +49,7 @@ review: 2026-05-07
 
 GPU 云市场存在明显的两层定价：超大规模云（AWS/Azure/GCP）价格含配套 CPU/RAM/网络/SLA，比 GPU 市场（Lambda/CoreWeave/RunPod）贵 3-5 倍。
 
-| GPU | 超大规模云 ($/hr)[^cloud-pricing-2026] | GPU 市场 ($/hr) | 倍数 |
+| GPU | 超大规模云 ($/hr) | GPU 市场 ($/hr) | 倍数 |
 |-----|---------------------------------------|----------------|------|
 | **H100 80GB SXM** | $11 – $12 | $2.0 – $3.3 | ~4x |
 | **H200 141GB** | $12 – $14 | $3.0 – $4.0 | ~3.5x |
@@ -329,7 +329,6 @@ DeepSeek 生产数据显示 **56.3% 的输入 token 命中了 KV Cache 磁盘缓
 
 ## 参考资料
 
-[^cloud-pricing-2026]: 云服务商 GPU 定价数据（2026 年实时抓取）。包括 AWS、Azure、GCP 超大规模云与 Lambda、CoreWeave、RunPod 等 GPU 市场的价格对比。
 [^vllm-benchmark]: vLLM. "Performance Benchmarks". https://docs.vllm.ai/en/latest/performance/benchmarks.html
 [^trtllm-benchmark]: NVIDIA. "TensorRT-LLM Benchmarks". https://nvidia.github.io/TensorRT-LLM/performance/benchmarks.html
 [^deepseek-inference-2025]: DeepSeek. "DeepSeek V3 Inference System". 2025. https://github.com/deepseek-ai/DeepSeek-V3/blob/main/docs/inference.md

@@ -51,7 +51,7 @@ review:
 当记忆库膨胀后，检索质量成为瓶颈。主流方案：
 
 - **向量相似度检索**：embedding + ANN 搜索，适合语义匹配
-- **混合检索**：BM25 + 向量 + 元数据过滤，通过 RRF 融合提升准确率（与 [RAG](../applied/rag.md) 技术高度重合）→ [混合检索详解](../foundations/information-retrieval.md#4-混合检索)
+- **混合检索**：BM25 + 向量 + 元数据过滤，通过 RRF 融合提升准确率（与 [RAG](../applied/rag.md) 技术高度重合）→ [混合检索详解](../foundations/information-retrieval.md#4)
 - **时间衰减**：近期记忆权重更高，模拟人类遗忘曲线
 
 ### 遗忘：什么该丢弃

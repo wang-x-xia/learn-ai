@@ -16,6 +16,7 @@ tags:
   - claude
   - claude-code
   - cli
+  - craq
   - coding
   - conditional-memory
   - context-management
@@ -28,6 +29,7 @@ tags:
   - deepseek
   - dify
   - diffusion
+  - distributed-filesystem
   - dspy
   - economics
   - emergence
@@ -96,6 +98,7 @@ tags:
   - rag
   - react
   - reasoning
+  - rdma
   - reflexion
   - regulation
   - representation-engineering

@@ -35,3 +35,18 @@ graph TD
     style C fill:#FF8A9E,stroke:#E84862,stroke-width:1px
     style D fill:#FF8A9E,stroke:#E84862,stroke-width:1px
 ```
+
+---
+
+## 最近更新
+
+<div class="grid cards" markdown>
+
+{% for entry in changelog.entries[:5] %}
+- **{{ entry.date }} — {% if entry.link %}[{{ entry.title }}]({{ entry.link }}){% else %}{{ entry.title }}{% endif %}**
+
+    {{ entry.description }}
+
+{% endfor %}
+
+</div>

@@ -207,8 +207,8 @@ HNSW 构建分层图，类似跳表：
 ## 5. 检索策略
 
 - **稠密检索 (Dense Retrieval)**：基于嵌入向量的语义相似度搜索，适合处理同义词和语义相近的查询
-- **稀疏检索 (Sparse Retrieval)**：基于关键词匹配的传统搜索，使用 BM25 或 TF-IDF 算法，擅长精确匹配专有名词 → [BM25 详解](../foundations/information-retrieval.md#2-bm25-概率检索)
-- **混合搜索 (Hybrid Search)**：结合稠密检索和稀疏检索的优势，通过 RRF 或加权融合提升检索质量 → [混合检索详解](../foundations/information-retrieval.md#4-混合检索)
+- **稀疏检索 (Sparse Retrieval)**：基于关键词匹配的传统搜索，使用 BM25 或 TF-IDF 算法，擅长精确匹配专有名词 → [BM25 详解](../foundations/information-retrieval.md#2-bm25)
+- **混合搜索 (Hybrid Search)**：结合稠密检索和稀疏检索的优势，通过 RRF 或加权融合提升检索质量 → [混合检索详解](../foundations/information-retrieval.md#4)
 - **重排序 (Reranking)**：在初步检索后使用更精确的模型对结果重新排序，提高相关性
 - **Multi-Query**：将问题改写为多个查询，合并检索结果以扩大召回范围
 - **Parent Document**：检索小块内容但返回其父文档，提供更完整的上下文

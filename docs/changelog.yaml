@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-05-15
+    type: feature
+    title: 添加 3FS 分布式文件系统文档
+    description: 新增 DeepSeek 3FS 架构文档，涵盖四层设计、CRAQ 协议、FoundationDB 元数据、NVMe SSD 集群等核心技术
+    link: infrastructure/3fs.md
   - date: 2026-05-13
     type: feature
     title: 添加数学公式渲染支持

@@ -329,6 +329,9 @@ def check_cross_references(text: str, source_path: Path) -> list[str]:
         # Skip external URLs and anchors-only
         if target.startswith(("http://", "https://", "#", "mailto:")):
             continue
+        # Skip Jinja2 template syntax (e.g., {{ entry.link }})
+        if "{{" in target or "}}" in target:
+            continue
         # Strip anchor part
         file_part = target.split("#")[0]
         if not file_part:

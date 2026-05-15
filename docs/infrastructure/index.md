@@ -21,6 +21,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     HPC/AI 超算存储——元数据与数据分离、条带化、LNet
 
+- :material-harddisk: **[3FS 分布式文件系统](3fs.md)**
+
+    ---
+
+    DeepSeek AI 训练存储——CRAQ 强一致性、FoundationDB 元数据、NVMe SSD 集群
+
 - :material-cash-multiple: **[推理经济性](inference-economics.md)**
 
     ---

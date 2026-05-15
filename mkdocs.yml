@@ -78,6 +78,9 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: true
+  - zensical.extensions.macros:
+      include_yaml:
+        changelog: docs/changelog.yaml
 
 nav:
   - 首页:
@@ -112,6 +115,7 @@ nav:
       - infrastructure/index.md
       - AI 基础设施: infrastructure/infrastructure.md
       - Lustre 并行文件系统: infrastructure/lustre.md
+      - 3FS 分布式文件系统: infrastructure/3fs.md
       - 推理经济性: infrastructure/inference-economics.md
   - 研究、模型与产品:
     - 前沿研究:
