@@ -17,6 +17,10 @@ tags:
   - claude-code
   - cli
   - craq
+  - checkpoint
+  - data-loading
+  - distributed-training
+  - parallelism
   - coding
   - conditional-memory
   - context-management

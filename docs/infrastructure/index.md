@@ -15,6 +15,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     GPU 加速器、NVLink、InfiniBand/RoCE、GPUDirect Storage
 
+- :material-chart-line: **[分布式训练](distributed-training.md)**
+
+    ---
+
+    数据流、存储、并行策略、检查点机制——从数据加载到梯度更新的完整链路
+
 - :material-harddisk: **[Lustre 并行文件系统](lustre.md)**
 
     ---

@@ -1,6 +1,11 @@
 entries:
   - date: 2026-05-15
     type: feature
+    title: 添加分布式训练文档
+    description: 新增分布式训练基础设施文档，涵盖数据流、存储、并行策略、检查点机制等核心技术
+    link: infrastructure/distributed-training.md
+  - date: 2026-05-15
+    type: feature
     title: 添加 3FS 分布式文件系统文档
     description: 新增 DeepSeek 3FS 架构文档，涵盖四层设计、CRAQ 协议、FoundationDB 元数据、NVMe SSD 集群等核心技术
     link: infrastructure/3fs.md
