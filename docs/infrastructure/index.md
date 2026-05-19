@@ -15,6 +15,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     GPU 加速器、NVLink、InfiniBand/RoCE、GPUDirect Storage
 
+- :material-history: **[训练范式演进](training-evolution.md)**
+
+    ---
+
+    从 CPU 单卡到 GPU 单卡再到分布式训练的技术演进——以 MNIST 为例
+
 - :material-chart-line: **[分布式训练](distributed-training.md)**
 
     ---

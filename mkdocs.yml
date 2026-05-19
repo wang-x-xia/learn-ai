@@ -114,6 +114,7 @@ nav:
     - 基础设施:
       - infrastructure/index.md
       - AI 基础设施: infrastructure/infrastructure.md
+      - 训练范式演进: infrastructure/training-evolution.md
       - 分布式训练: infrastructure/distributed-training.md
       - Lustre 并行文件系统: infrastructure/lustre.md
       - 3FS 分布式文件系统: infrastructure/3fs.md
@@ -134,6 +135,7 @@ nav:
     - 开源库:
       - libraries/index.md
       - libraries/honcho.md
+      - OneVL: libraries/onevl.md
     - Agent Workflow:
       - agent-workflow/index.md
       - LangGraph: agent-workflow/langgraph.md

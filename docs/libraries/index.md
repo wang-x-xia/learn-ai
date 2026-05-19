@@ -8,4 +8,5 @@ description: 记录值得关注的 AI 相关开源库，聚焦技术实现上的
 | 库 | 定位 | 核心技术 |
 |----|------|---------|
 | [Honcho](honcho.md) | Agent 记忆库 | 辩证用户建模，心智模型 vs 偏好列表 |
+| [OneVL](onevl.md) | VLA 框架 | 双模态辅助解码器，Emu3.5 + Qwen3-VL 集成 |
 
