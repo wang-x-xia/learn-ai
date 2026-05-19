@@ -116,6 +116,7 @@ nav:
       - AI 基础设施: infrastructure/infrastructure.md
       - 训练范式演进: infrastructure/training-evolution.md
       - 分布式训练: infrastructure/distributed-training.md
+      - 推理过程主要阶段: infrastructure/inference-stages.md
       - Lustre 并行文件系统: infrastructure/lustre.md
       - 3FS 分布式文件系统: infrastructure/3fs.md
       - 推理经济性: infrastructure/inference-economics.md

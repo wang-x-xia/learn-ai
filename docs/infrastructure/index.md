@@ -27,6 +27,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     数据流、存储、并行策略、检查点机制——从数据加载到梯度更新的完整链路
 
+- :material-chip: **[推理过程主要阶段](inference-stages.md)**
+
+    ---
+
+    KV Cache 加载、Prefill、Decode——从输入到输出的完整推理流程，以及 MTP、Chunked Prefilling 等优化技术
+
 - :material-harddisk: **[Lustre 并行文件系统](lustre.md)**
 
     ---

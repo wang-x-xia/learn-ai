@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-05-19
+    type: feature
+    title: 添加推理过程主要阶段文档
+    description: 新增推理过程主要阶段文档，涵盖 KV Cache 加载、Prefill、Decode 完整流程，以及 MTP、Chunked Prefilling 等优化技术
+    link: infrastructure/inference-stages.md
   - date: 2025-01-19
     type: feature
     title: 添加 OneVL 开源库档案
