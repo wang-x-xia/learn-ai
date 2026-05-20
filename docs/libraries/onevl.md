@@ -3,7 +3,12 @@ title: "OneVL：双模态 Latent CoT 的视觉-语言-动作框架"
 description: "OneVL 通过双模态辅助解码器将 Emu3.5 的视觉 tokenizer 与 Qwen3-VL 的语言模型集成，实现了首个超越显式 CoT 的 latent CoT 方法"
 created: "2025-01-19"
 updated: "2025-01-19"
-tags: ["multimodal", "vision-language", "cot", "reasoning", "architecture"]
+tags:
+  - multimodal
+  - vision-language
+  - cot
+  - reasoning
+  - architecture
 review: "2025-01-19"
 ---
 

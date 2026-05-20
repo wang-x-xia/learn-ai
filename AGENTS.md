@@ -97,6 +97,15 @@ learn-ai/
 
 每个 `.md` 文件必须有 YAML frontmatter。知识文档要求六个字段（`title`、`description`、`created`、`updated`、`tags`、`review`），索引页只需 `title` + `description`。各目录的具体要求见对应的 `AGENTS.md`。
 
+**tags 字段格式**：必须使用 YAML 列表格式（连字符缩进），禁止使用 JSON 数组格式（会导致 Zensical 构建警告）。
+
+```yaml
+tags:
+  - multimodal
+  - vision-language
+  - reasoning
+```
+
 `review` 字段记录维护者最后一次阅读/审校该文档的日期（`YYYY-MM-DD`），留空表示从未 review。Review 过程中不要更新 `review` 日期，等维护者确认 review 完成后再更新。用 `uv run scripts/review_status.py` 查看待 review 清单。
 
 `review_note`（可选）：当一篇文档只 review 了部分章节时，用此字段记录进度（如 `"review 到了第 3 章"`）。Review 全部完成后删除此字段。
