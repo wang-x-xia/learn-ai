@@ -148,7 +148,7 @@ tags:
 
 ```bash
 uv run zensical serve            # 本地预览
-uv run zensical build            # 构建站点
+uv run zensical build --strict   # 构建站点
 uv run scripts/validate_docs.py  # 检查 frontmatter 和脚注规范
 uv run scripts/review_status.py  # 查看待 review 清单
 ```

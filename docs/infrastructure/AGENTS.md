@@ -9,6 +9,8 @@ AI 系统的物理层与运营层，中频更新。
 | `infrastructure.md` | 硬件 / 网络 / 部署基础设施 |
 | `training-evolution.md` | 训练范式演进（CPU → GPU → 分布式） |
 | `distributed-training.md` | 分布式训练的数据流、存储与并行架构 |
+| `dp.md` | 数据并行（DP）的技术设计 |
+| `pp.md` | 流水线并行（PP）的调度策略 |
 | `inference-stages.md` | 推理过程主要阶段（KV Cache、Prefill、Decode）及优化技术（MTP、Chunked Prefilling） |
 | `lustre.md` | Lustre 并行文件系统（HPC/AI 超算存储） |
 | `3fs.md` | 3FS 分布式文件系统（DeepSeek AI 训练存储） |

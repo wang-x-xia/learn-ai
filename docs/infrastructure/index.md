@@ -21,11 +21,29 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     从 CPU 单卡到 GPU 单卡再到分布式训练的技术演进——以 MNIST 为例
 
+- :material-school: **[LLM 训练流程](llm-training.md)**
+
+    ---
+
+    大语言模型的三阶段训练流程——预训练、指令微调、强化学习对齐
+
 - :material-chart-line: **[分布式训练](distributed-training.md)**
 
     ---
 
     数据流、存储、并行策略、检查点机制——从数据加载到梯度更新的完整链路
+
+- :material-view-module: **[数据并行](dp.md)**
+
+    ---
+
+    数据并行的技术设计——梯度同步、通信优化、常见实现（DDP、FSDP、ZeRO）
+
+- :material-pipe: **[流水线并行](pp.md)**
+
+    ---
+
+    流水线并行的调度策略——GPipe、1F1B、Interleaved 1F1B 的技术权衡
 
 - :material-chip: **[推理过程主要阶段](inference-stages.md)**
 

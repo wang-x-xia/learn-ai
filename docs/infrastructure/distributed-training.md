@@ -132,6 +132,35 @@ for epoch in range(num_epochs):
 - **通信计算 overlap**：在 GPU 计算的同时进行通信，用计算掩盖通信延迟
 - **压缩通信**：量化梯度（FP16/FP8）减少通信量
 
+### NCCL：NVIDIA 集合通信库
+
+**NCCL（NVIDIA Collective Communication Library）** 是 NVIDIA 提供的 GPU 集合通信库，为分布式训练提供高性能的通信原语（All-Reduce、All-Gather 等）。
+
+**拓扑感知通信**：
+- NCCL 自动检测硬件拓扑（PCIe、NVLink、NVSwitch、InfiniBand、RoCE）
+- 根据拓扑结构选择最优通信路径和算法
+- 跨节点通信时考虑网络拓扑（如多数据中心场景）
+
+**通信协议**：
+NCCL 提供三种通信协议，针对不同消息大小优化带宽和延迟[^nccl-2025-demystifying]：
+
+| 协议 | 适用场景 | 特点 |
+|------|----------|------|
+| Simple | 大消息（>1MB） | 最大化带宽利用率，使用内存栅栏同步 |
+| LL（Low Latency） | 小消息（<1MB） | 优化延迟，使用轻量级 flag 同步（4字节数据+4字节flag） |
+| LL128 | 中等消息 | 平衡带宽和延迟，128字节传输单元（120字节数据+8字节flag） |
+
+**集合通信算法**：
+- **Ring AllReduce**：环形拓扑，每个 GPU 只与相邻 GPU 通信，带宽利用率高
+- **Tree AllReduce**：树形拓扑，层次化 reduce-scatter + allgather，适合大规模集群
+- NCCL 动态选择算法，根据消息大小、GPU 数量、网络拓扑等因素
+
+**单 kernel 实现**：
+- 每个集合通信操作由单个 CUDA kernel 实现
+- 避免多次 kernel 启动和内存拷贝的开销
+- 使用 GPUDirect Peer-to-Peer 直接访问 GPU 间内存
+- 当 P2P 不可用时，通过 pinned system memory 中转
+
 ---
 
 ## 并行策略拓扑
@@ -140,21 +169,9 @@ for epoch in range(num_epochs):
 
 ### 数据并行（Data Parallel, DP）
 
-```
-模型副本 A ←─→ 模型副本 B ←─→ 模型副本 C ←─→ 模型副本 D
-   ↓              ↓              ↓              ↓
-GPU 0          GPU 1          GPU 2          GPU 3
-处理 batch 1   处理 batch 2   处理 batch 3   处理 batch 4
+每个 GPU 有完整模型副本，处理不同 batch 的数据，通过 All-Reduce 同步梯度。详见[数据并行技术文档](./dp.md)。
 
-梯度同步：All-Reduce（所有 GPU 的梯度求和并分发）
-```
-
-**特点**：
-- 每个 GPU 有完整模型副本
-- 处理不同 batch 的数据
-- 通过 All-Reduce 同步梯度
-
-**适用场景**：模型能放入单卡显存，需要加速训练
+**适用场景**：模型能放入单卡显存，需要加速训练。
 
 ### 模型并行（Tensor Parallel, TP）
 
@@ -177,39 +194,13 @@ GPU 3: 部分 D  ←─→      GPU 3: 部分 D
 
 ### 流水线并行（Pipeline Parallel, PP）
 
-```
-GPU 0: Layer 1-8
-GPU 1: Layer 9-16
-GPU 2: Layer 17-24
-GPU 3: Layer 25-32
+模型按层切分到不同 GPU，微批次像流水线一样在 GPU 间流动。通过调度策略（GPipe、1F1B、Interleaved 1F1B）减少 GPU 空闲时间。详见[流水线并行技术文档](./pp.md)。
 
-数据流：batch 1 → GPU 0 → GPU 1 → GPU 2 → GPU 3
-       batch 2 → GPU 0 → GPU 1 → GPU 2 → GPU 3
-       （流水线式处理）
-```
-
-**特点**：
-- 模型按层切分到不同 GPU
-- 不同 GPU 处理不同层
-- 数据像流水线一样在 GPU 间流动
-
-**适用场景**：模型层数很多，需要跨 GPU
+**适用场景**：模型层数很多，需要跨 GPU。
 
 ### 混合并行（3D Parallel）
 
-```
-结合 DP + TP + PP：
-- 4 个 GPU 组成一个 TP 组（处理模型的一部分）
-- 4 个 TP 组组成 PP（处理不同的层）
-- 多个 PP 组组成 DP（处理不同的 batch）
-
-通信层次：
-1. TP 组内：All-Reduce（层内同步）
-2. PP 组间：P2P 通信（层间传递激活值）
-3. DP 组间：All-Reduce（梯度同步）
-```
-
-**适用场景**：超大规模模型训练（如 GPT-3、DeepSeek-V3）
+结合 DP + TP + PP，适用于超大规模模型训练（如 GPT-3、DeepSeek-V3）。通信层次包括 TP 组内的 All-Reduce、PP 组间的 P2P 通信、DP 组间的梯度同步。详见[数据并行](./dp.md)和[流水线并行](./pp.md)。
 
 ---
 
@@ -317,3 +308,5 @@ checkpoint/
 ---
 
 ## 参考资料
+
+[^nccl-2025-demystifying]: Hu et al. *Demystifying NCCL: An In-depth Analysis of GPU Communication Protocols and Algorithms*. 2025. https://arxiv.org/html/2507.04786v2
