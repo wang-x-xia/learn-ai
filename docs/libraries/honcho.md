@@ -175,7 +175,7 @@ Peer: DevAgent
 
 ## 与 Hermes Agent 的关系
 
-[Hermes Agent](../personal-agents/hermes-agent.md) 使用 Honcho 做用户建模，两者相互独立：
+[Hermes Agent](../ai-personal-software/hermes-agent.md) 使用 Honcho 做用户建模，两者相互独立：
 
 - **Honcho**：负责用户记忆和心智模型构建
 - **Atropos RL**（Hermes 内置）：负责 RL 训练轨迹生成

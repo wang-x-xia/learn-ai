@@ -267,7 +267,7 @@ Rules 是 Skills 的前身：它们都是 Markdown 文件，都注入上下文�
 
 **下一步：自演化 Skills（2026.4）**
 
-[Hermes Agent](../personal-agents/hermes-agent.md) 将 Skill 从"人写 → Agent 用"推进到"Agent 写 → Agent 改"：
+[Hermes Agent](../ai-personal-software/hermes-agent.md) 将 Skill 从"人写 → Agent 用"推进到"Agent 写 → Agent 改"：
 
 - **自主创建**：Agent 完成复杂任务后自动将多步操作凝练为新 Skill，无需人工编写 SKILL.md
 - **使用中改进**：每次执行后根据效果迭代改进 Skill 内容，形成闭环

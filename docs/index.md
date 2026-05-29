@@ -25,10 +25,19 @@ graph TD
 
     D --> D1[前沿研究]
     D --> D2[模型档案]
-    D --> D3[编码工具]
+    D --> D3[AI 个人软件]
     D --> D4[开源库]
     D --> D5[Agent Workflow]
-    D --> D6[个人 Agent]
+
+    click B href "foundations/"
+    click C1 href "agent/"
+    click C2 href "applied/"
+    click C3 href "infrastructure/"
+    click D1 href "research/"
+    click D2 href "model/"
+    click D3 href "ai-personal-software/"
+    click D4 href "libraries/"
+    click D5 href "agent-workflow/"
 
     style A fill:#FF5C77,stroke:#E84862,stroke-width:2px,color:#fff
     style B fill:#FF8A9E,stroke:#E84862,stroke-width:1px

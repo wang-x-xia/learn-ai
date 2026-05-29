@@ -27,6 +27,5 @@ Agent 核心知识体系，中频更新。
 ## 不收录
 
 - **Agent 框架产品档案** → `docs/agent-workflow/`
-- **编码 Agent 产品档案** → `docs/coding-agents/`
-- **个人 Agent 产品档案** → `docs/personal-agents/`
+- **AI 个人软件产品档案** → `docs/ai-personal-software/`
 - **通用 AI 应用技术**（提示工程、RAG、浏览器自动化）→ `docs/applied/`

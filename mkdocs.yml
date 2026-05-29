@@ -133,9 +133,11 @@ nav:
       - model/index.md
       - Claude Mythos Preview: model/claude-mythos.md
       - DeepSeek-V4: model/deepseek-v4.md
-    - 编码工具:
-      - coding-agents/index.md
-      - Claude Code: coding-agents/claude-code.md
+    - AI 个人软件:
+      - ai-personal-software/index.md
+      - Claude Code: ai-personal-software/claude-code.md
+      - Hermes Agent: ai-personal-software/hermes-agent.md
+      - OpenClaw: ai-personal-software/openclaw.md
     - 开源库:
       - libraries/index.md
       - libraries/honcho.md
@@ -147,10 +149,6 @@ nav:
       - Microsoft Agent Framework: agent-workflow/maf.md
       - Dify: agent-workflow/dify.md
       - NeMo Agent Toolkit: agent-workflow/nemo-agent-toolkit.md
-    - 个人 Agent:
-      - personal-agents/index.md
-      - Hermes Agent: personal-agents/hermes-agent.md
-      - OpenClaw: personal-agents/openclaw.md
 
 
 extra_css:
@@ -162,6 +160,7 @@ extra:
   generator: false
 
 extra_javascript:
+  - javascripts/mermaid.mjs
   - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js
   - https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js
   - javascripts/katex.js

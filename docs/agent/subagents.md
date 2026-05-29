@@ -186,4 +186,4 @@ Return a summary of each, not the full file contents.
 
 [^claude-blog-2026]: Anthropic. "How and when to use subagents in Claude Code". 2026. https://claude.com/blog/subagents-in-claude-code
 [^anthropic-docs-2026]: Anthropic. "Create custom subagents - Claude Code Docs". 2026. https://docs.anthropic.com/en/docs/claude-code/sub-agents
-[^claude-code-product]: Claude Code 产品技术分析，见本库 `docs/coding-agents/claude-code.md`
+[^claude-code-product]: Claude Code 产品技术分析，见本库 `docs/ai-personal-software/claude-code.md`

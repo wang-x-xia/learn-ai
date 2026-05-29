@@ -10,7 +10,7 @@ Checks:
   7. Tags are in the allowed vocabulary (scripts/tags.yml)
   8. Knowledge docs have at least one footnote
   9. Top-level nav items in mkdocs.yml <= MAX_NAV_TOP_ITEMS
-  10. docs/changelog.yaml schema and link validity
+  10. docs/changelog.yaml schema, link validity, and reverse chronological order
 
 Usage:
     uv run scripts/validate_docs.py
@@ -202,6 +202,30 @@ def check_changelog() -> list[str]:
                             errors.append(
                                 f"{prefix}: broken link '{link}' → file not found"
                             )
+
+    # Check chronological descending order
+    dates: list[str] = []
+    for idx, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            continue
+        date_value = entry.get("date")
+        if date_value is None:
+            continue
+        if hasattr(date_value, "isoformat"):
+            date_str = date_value.isoformat()
+        elif isinstance(date_value, str):
+            date_str = date_value
+        else:
+            continue
+        dates.append(date_str)
+
+    for i in range(1, len(dates)):
+        if dates[i] > dates[i - 1]:
+            errors.append(
+                f"{CHANGELOG_PATH.relative_to(REPO_ROOT)}: entries[{i}] date "
+                f"{dates[i]} is after entries[{i - 1}] date {dates[i - 1]} "
+                f"— entries must be in reverse chronological order"
+            )
 
     return errors
 

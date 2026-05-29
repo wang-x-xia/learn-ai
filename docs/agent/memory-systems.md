@@ -226,7 +226,7 @@ review: 2026-05-15
 - **Intrinsic Memory Agents**：角色对齐的记忆模板，支持多 Agent 协作
 
 ### 辩证用户建模
-传统的用户记忆是**偏好列表**——"用户喜欢简洁回复"、"用户用 Python"。[Hermes Agent](../personal-agents/hermes-agent.md) 通过 [Honcho](../libraries/honcho.md) 框架做**辩证用户建模**：不是记录离散偏好，而是通过多轮交互逐步构建和修正一个"用户心智模型"。本质区别在于：偏好列表是静态的 key-value，心智模型是动态的、可推理的——Agent 能从已有理解**推断**新场景下用户可能的偏好，而不需要每次都被显式告知。
+传统的用户记忆是**偏好列表**——"用户喜欢简洁回复"、"用户用 Python"。[Hermes Agent](../ai-personal-software/hermes-agent.md) 通过 [Honcho](../libraries/honcho.md) 框架做**辩证用户建模**：不是记录离散偏好，而是通过多轮交互逐步构建和修正一个"用户心智模型"。本质区别在于：偏好列表是静态的 key-value，心智模型是动态的、可推理的——Agent 能从已有理解**推断**新场景下用户可能的偏好，而不需要每次都被显式告知。
 
 ---
 

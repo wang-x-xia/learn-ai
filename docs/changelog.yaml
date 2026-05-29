@@ -4,12 +4,12 @@ entries:
     title: 添加推理过程主要阶段文档
     description: 新增推理过程主要阶段文档，涵盖 KV Cache 加载、Prefill、Decode 完整流程，以及 MTP、Chunked Prefilling 等优化技术
     link: infrastructure/inference-stages.md
-  - date: 2025-01-19
+  - date: 2026-05-19
     type: feature
     title: 添加 OneVL 开源库档案
     description: 新增 OneVL 双模态 Latent CoT 框架文档，涵盖 Emu3.5 与 Qwen3-VL 集成、双模态辅助解码器、三阶段训练策略等核心技术
     link: libraries/onevl.md
-  - date: 2025-01-19
+  - date: 2026-05-19
     type: feature
     title: 添加训练范式演进文档
     description: 新增训练范式演进文档，记录从 CPU 单卡到 GPU 单卡再到分布式训练的技术演进——以 MNIST 为例

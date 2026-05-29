@@ -267,7 +267,7 @@ Agent 循环的自主性带来安全风险——循环可能失控（无限执�
 | Agent 框架 | [框架档案](../agent-workflow/index.md) |
 | 生命周期钩子 | [Agent Hooks](agent-hooks.md) |
 | Subagent 架构 | [Subagent 实践](subagents.md) |
-| 编码 Agent 产品 | [产品档案](../coding-agents/index.md) |
+| AI 个人软件产品 | [产品档案](../ai-personal-software/index.md) |
 
 ---
 

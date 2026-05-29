@@ -72,8 +72,7 @@ learn-ai/
 │   ├── infrastructure/         # 基础设施 & 经济性（中频更新）
 │   ├── research/               # 前沿研究（高频更新）
 │   ├── model/                  # 模型档案（重要模型深度分析）
-│   ├── coding-agents/          # 编码 Agent 产品档案
-│   ├── personal-agents/        # 个人 AI Agent 产品档案
+│   ├── ai-personal-software/   # AI 个人软件产品档案
 │   ├── agent-workflow/         # Agent Workflow 框架产品档案
 │   └── libraries/              # 开源库产品档案
 ├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 Zensical）
