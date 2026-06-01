@@ -124,6 +124,7 @@ nav:
       - Lustre 并行文件系统: infrastructure/lustre.md
       - 3FS 分布式文件系统: infrastructure/3fs.md
       - 推理经济性: infrastructure/inference-economics.md
+      - 结构化数据格式与 GPU 亲和性: infrastructure/structured-data-format.md
       - 硬件产品:
         - hardware/index.md
         - NVLink 与 NVSwitch: hardware/nvlink.md

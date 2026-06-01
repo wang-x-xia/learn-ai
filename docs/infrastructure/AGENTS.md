@@ -16,6 +16,7 @@ AI 系统的物理层与运营层，中频更新。
 | `lustre.md` | Lustre 并行文件系统（HPC/AI 超算存储） |
 | `3fs.md` | 3FS 分布式文件系统（DeepSeek AI 训练存储） |
 | `inference-economics.md` | 推理经济性（GPU 成本、API 定价、盈亏模型） |
+| `structured-data-format.md` | 结构化数据格式与 GPU 亲和性（Parquet、Arrow/Feather、Lance） |
 
 ## 收录哪些内容
 

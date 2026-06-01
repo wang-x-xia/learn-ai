@@ -8,6 +8,7 @@ tags:
   - anthropic
   - anx
   - architecture
+  - arrow
   - attention
   - audio
   - automation
@@ -18,6 +19,7 @@ tags:
   - cli
   - craq
   - checkpoint
+  - data-format
   - data-loading
   - distributed-training
   - dpu
@@ -63,6 +65,7 @@ tags:
   - jamba
   - javascript
   - kv-cache
+  - lance
   - langchain
   - lifecycle
   - long-context
@@ -90,6 +93,7 @@ tags:
   - open-source
   - openclaw
   - parallel-execution
+  - parquet
   - parallel-filesystem
   - pcie
   - personal-agent

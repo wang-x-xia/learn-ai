@@ -1,6 +1,11 @@
 entries:
   - date: 2026-06-01
     type: feature
+    title: 添加结构化数据格式与 GPU 亲和性文档
+    description: 新增 Parquet、Apache Arrow / Feather、Lance 三种列式格式在 GPU 加速场景下的设计权衡文档
+    link: infrastructure/structured-data-format.md
+  - date: 2026-06-01
+    type: feature
     title: 添加 AI 服务器单节点拓扑文档
     description: 新增单节点拓扑文档，涵盖 NVLink Switch 全互连原则、Rail-aligned 网络设计、四种网络 Fabric 及 Hopper → Blackwell 演进
     link: infrastructure/single-node.md

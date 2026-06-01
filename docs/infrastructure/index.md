@@ -75,6 +75,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     单机 8 卡 AI 服务器的硬件结构——NVLink Switch 全互连、PCIe 桥接、Rail-aligned 网络模块
 
+- :material-database: **[结构化数据格式与 GPU 亲和性](structured-data-format.md)**
+
+    ---
+
+    Parquet、Arrow / Feather、Lance 三种列式格式在 GPU 加速场景下的设计权衡
+
 - :material-expansion-card: **[硬件产品](../hardware/index.md)**
 
     ---
