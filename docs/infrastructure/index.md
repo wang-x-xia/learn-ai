@@ -69,4 +69,16 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     GPU 成本、API 定价、盈亏测算
 
+- :material-server-network: **[单节点拓扑](single-node.md)**
+
+    ---
+
+    单机 8 卡 AI 服务器的硬件结构——NVLink Switch 全互连、PCIe 桥接、Rail-aligned 网络模块
+
+- :material-expansion-card: **[硬件产品](../hardware/index.md)**
+
+    ---
+
+    AI 基础设施中的关键硬件产品——NVIDIA ConnectX SmartNIC、BlueField DPU
+
 </div>

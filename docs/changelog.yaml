@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-06-01
+    type: feature
+    title: 添加 AI 服务器单节点拓扑文档
+    description: 新增单节点拓扑文档，涵盖 NVLink Switch 全互连原则、Rail-aligned 网络设计、四种网络 Fabric 及 Hopper → Blackwell 演进
+    link: infrastructure/single-node.md
   - date: 2026-05-19
     type: feature
     title: 添加推理过程主要阶段文档

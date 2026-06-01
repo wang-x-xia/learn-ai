@@ -35,7 +35,7 @@ review: 2026-05-15
 1. 节点内通信 (Intra-node)
    └── GPU 间互联技术
        ├── 互联协议：NVLink / HCCS / Infinity Fabric
-       ├── 交换芯片：NVSwitch (NVIDIA) / 无交换芯片 (华为)
+       ├── 交换芯片：NVLink Switch (NVIDIA) / 无交换芯片 (华为)
        ├── 带宽范围：300-900 GB/s
        ├── 拓扑：全互连 (Full-Mesh) 或 点对点
        └── 代表产品：NVLink 4.0、HCCS v2
@@ -72,6 +72,8 @@ review: 2026-05-15
        └── 连接：高性能存储系统、并行文件系统
 ```
 
+以 DGX H100 为例的单节点内部拓扑（NVLink Switch 全互连、PCIe 桥接、Rail-aligned 网络模块）→ [详见单节点拓扑](single-node.md)。
+
 **工程权衡**：计算网络和存储网络可以复用同一套 fabric 以降低成本，通过 QoS 隔离流量。分开部署能提供更好的性能隔离，但成本更高。
 
 ---
@@ -84,12 +86,12 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 | 技术 | 厂商 | 带宽 | 拓扑 | 交换芯片 | 代表产品 |
 |------|------|------|------|----------|----------|
-| **NVLink 4.0** | NVIDIA | 900 GB/s | 全互连 | NVSwitch 3.0 | H100/H200 |
+| **NVLink 4.0** | NVIDIA | 900 GB/s | 全互连 | NVLink Switch 3rd | H100/H200 |
 | **HCCS v2** | 华为 | 392 GB/s | Full-Mesh | 无 | 昇腾 910B |
 | **Infinity Fabric** | AMD | - | - | - | MI300X |
 
 **关键差异**：
-- **NVLink + NVSwitch**：非阻塞交换芯片，任意 GPU 间 900 GB/s 直连，适合大模型张量并行[^nvidia-nvlink]
+- **NVLink + NVLink Switch**：非阻塞交换芯片，任意 GPU 间 900 GB/s 直连，适合大模型张量并行（[代际演进详见](../hardware/nvlink.md)）[^nvidia-nvlink]
 - **HCCS**：点对点互联，无交换芯片，总带宽 392 GB/s，依赖软件优化弥补硬件差距[^huawei-hccs]
 
 ### 2.2 超节点互联技术
@@ -113,7 +115,7 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 
 **关键差异**：
 - **InfiniBand**：专为 HPC/AI 设计，最低延迟，支持 in-network computing（SHARP），但成本高，生态封闭
-- **RoCE v2**：基于以太网的 RDMA，平衡性能和成本，支持 NVMe-oF over RDMA 实现低延迟存储访问，华为昇腾内置网卡，NVIDIA 需外接 ConnectX
+- **RoCE v2**：基于以太网的 RDMA，平衡性能和成本，支持 NVMe-oF over RDMA 实现低延迟存储访问，华为昇腾内置网卡，NVIDIA 需外接 ConnectX（[ConnectX 系列详见](../hardware/nvidia-connectx.md)）
 - **Ethernet**：通用性强，成本最低，支持 NVMe-oF over TCP，适合现有以太网基础设施，但延迟较高
 
 ### 2.4 交换机对比
@@ -129,7 +131,7 @@ GPU/NPU 间互联技术决定了单节点内多卡协同训练的效率。
 **关键差异**：
 - **InfiniBand 交换机**：专为 AI/HPC 优化，支持自适应路由、SHARP in-network computing，但成本高
 - **以太网交换机**：通用性强，生态成熟，RoCE v2 可达到接近 InfiniBand 的性能，成本更低
-- **智能网卡**：卸载网络、存储、安全功能，释放 CPU 资源，适合超大规模集群
+- **智能网卡**：卸载网络、存储、安全功能，释放 CPU 资源，适合超大规模集群（[BlueField DPU 详见](../hardware/nvidia-bf.md)）
 
 ### 2.5 计算芯片对比
 
@@ -247,5 +249,5 @@ NVMe-oF (框架/总称)
 
 ## 参考资料
 
-[^nvidia-nvlink]: NVIDIA. NVLink and NVSwitch 技术文档
+[^nvidia-nvlink]: NVIDIA. NVLink and NVLink Switch 技术文档
 [^huawei-hccs]: 华为. HCCS 互联技术文档

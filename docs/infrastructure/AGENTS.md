@@ -7,6 +7,7 @@ AI 系统的物理层与运营层，中频更新。
 | 文件 | 主题 |
 |------|------|
 | `infrastructure.md` | 硬件 / 网络 / 部署基础设施 |
+| `single-node.md` | AI 服务器单节点拓扑（NVLink Switch、PCIe、Rail-aligned 网络） |
 | `training-evolution.md` | 训练范式演进（CPU → GPU → 分布式） |
 | `distributed-training.md` | 分布式训练的数据流、存储与并行架构 |
 | `dp.md` | 数据并行（DP）的技术设计 |
@@ -19,6 +20,8 @@ AI 系统的物理层与运营层，中频更新。
 ## 收录哪些内容
 
 - GPU 加速器、互联拓扑（NVLink / InfiniBand / RoCE）→ `infrastructure.md`
+- 单节点硬件拓扑（CPU-GPU-网络连接、Rail alignment）→ `single-node.md`
+- 硬件产品档案（ConnectX、BlueField 等）→ `../hardware/`
 - 训练范式演进（CPU → GPU → 分布式）→ `training-evolution.md`
 - 分布式训练架构（数据流、并行策略、检查点）→ `distributed-training.md`
 - 推理过程主要阶段（KV Cache、Prefill、Decode）→ `inference-stages.md`

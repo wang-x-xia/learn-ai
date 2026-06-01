@@ -137,7 +137,7 @@ for epoch in range(num_epochs):
 **NCCL（NVIDIA Collective Communication Library）** 是 NVIDIA 提供的 GPU 集合通信库，为分布式训练提供高性能的通信原语（All-Reduce、All-Gather 等）。
 
 **拓扑感知通信**：
-- NCCL 自动检测硬件拓扑（PCIe、NVLink、NVSwitch、InfiniBand、RoCE）
+- NCCL 自动检测硬件拓扑（PCIe、NVLink、NVLink Switch、InfiniBand、RoCE）
 - 根据拓扑结构选择最优通信路径和算法
 - 跨节点通信时考虑网络拓扑（如多数据中心场景）
 

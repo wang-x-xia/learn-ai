@@ -114,6 +114,7 @@ nav:
     - 基础设施:
       - infrastructure/index.md
       - AI 基础设施: infrastructure/infrastructure.md
+      - 单节点拓扑: infrastructure/single-node.md
       - 训练范式演进: infrastructure/training-evolution.md
       - LLM 训练流程: infrastructure/llm-training.md
       - 分布式训练: infrastructure/distributed-training.md
@@ -123,6 +124,11 @@ nav:
       - Lustre 并行文件系统: infrastructure/lustre.md
       - 3FS 分布式文件系统: infrastructure/3fs.md
       - 推理经济性: infrastructure/inference-economics.md
+      - 硬件产品:
+        - hardware/index.md
+        - NVLink 与 NVSwitch: hardware/nvlink.md
+        - NVIDIA ConnectX: hardware/nvidia-connectx.md
+        - NVIDIA BlueField DPU: hardware/nvidia-bf.md
   - 研究、模型与产品:
     - 前沿研究:
       - research/index.md
