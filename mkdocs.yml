@@ -79,6 +79,8 @@ markdown_extensions:
   - toc:
       permalink: true
   - zensical.extensions.macros:
+      module_name: scripts/macros
+      on_error_fail: true
       include_yaml:
         changelog: docs/changelog.yaml
 
@@ -95,8 +97,8 @@ nav:
     - 扩散模型: foundations/diffusion-models.md
     - 从规则到表示学习: foundations/representation-learning.md
     - 信息检索基础: foundations/information-retrieval.md
-  - 应用技术:
-    - Agent 技术栈:
+  - Agent 技术:
+    - 核心概念:
       - agent/index.md
       - AI Agent 智能体: agent/ai-agents.md
       - Agent 记忆系统: agent/memory-systems.md
@@ -105,12 +107,25 @@ nav:
       - Agent 间协议: agent/agent-protocols.md
       - Agent Hooks: agent/agent-hooks.md
       - Subagent 实践: agent/subagents.md
-    - 通用技术:
+    - 应用技术:
       - applied/index.md
       - Thinking Mode: applied/thinking-mode.md
       - 提示工程: applied/prompt-engineering.md
       - 检索增强生成 (RAG): applied/rag.md
       - AI 浏览器自动化: applied/browser-automation.md
+    - AI 软件:
+      - ai-personal-software/index.md
+      - Claude Code: ai-personal-software/claude-code.md
+      - Hermes Agent: ai-personal-software/hermes-agent.md
+      - OpenClaw: ai-personal-software/openclaw.md
+    - Workflow 框架:
+      - agent-workflow/index.md
+      - LangGraph: agent-workflow/langgraph.md
+      - Ruflo: agent-workflow/ruflo.md
+      - Microsoft Agent Framework: agent-workflow/maf.md
+      - Dify: agent-workflow/dify.md
+      - NeMo Agent Toolkit: agent-workflow/nemo-agent-toolkit.md
+  - 系统与基础设施:
     - 基础设施:
       - infrastructure/index.md
       - AI 基础设施: infrastructure/infrastructure.md
@@ -125,12 +140,12 @@ nav:
       - 3FS 分布式文件系统: infrastructure/3fs.md
       - 推理经济性: infrastructure/inference-economics.md
       - 结构化数据格式与 GPU 亲和性: infrastructure/structured-data-format.md
-      - 硬件产品:
-        - hardware/index.md
-        - NVLink 与 NVSwitch: hardware/nvlink.md
-        - NVIDIA ConnectX: hardware/nvidia-connectx.md
-        - NVIDIA BlueField DPU: hardware/nvidia-bf.md
-  - 研究、模型与产品:
+    - 硬件:
+      - hardware/index.md
+      - NVLink 与 NVSwitch: hardware/nvlink.md
+      - NVIDIA ConnectX: hardware/nvidia-connectx.md
+      - NVIDIA BlueField DPU: hardware/nvidia-bf.md
+  - 研究与模型:
     - 前沿研究:
       - research/index.md
       - 可解释性: research/interpretability.md
@@ -140,22 +155,10 @@ nav:
       - model/index.md
       - Claude Mythos Preview: model/claude-mythos.md
       - DeepSeek-V4: model/deepseek-v4.md
-    - AI 个人软件:
-      - ai-personal-software/index.md
-      - Claude Code: ai-personal-software/claude-code.md
-      - Hermes Agent: ai-personal-software/hermes-agent.md
-      - OpenClaw: ai-personal-software/openclaw.md
     - 开源库:
       - libraries/index.md
       - libraries/honcho.md
       - OneVL: libraries/onevl.md
-    - Agent Workflow:
-      - agent-workflow/index.md
-      - LangGraph: agent-workflow/langgraph.md
-      - Ruflo: agent-workflow/ruflo.md
-      - Microsoft Agent Framework: agent-workflow/maf.md
-      - Dify: agent-workflow/dify.md
-      - NeMo Agent Toolkit: agent-workflow/nemo-agent-toolkit.md
 
 
 extra_css:

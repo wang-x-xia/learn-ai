@@ -66,15 +66,16 @@
 ```
 learn-ai/
 ├── docs/                        # 知识文档（Zensical 源文件）
-│   ├── foundations/             # 基础理论（低频更新）
-│   ├── agent/                  # Agent 技术栈（中频更新）
-│   ├── applied/                # 通用 AI 应用技术（中频更新）
-│   ├── infrastructure/         # 基础设施 & 经济性（中频更新）
-│   ├── research/               # 前沿研究（高频更新）
-│   ├── model/                  # 模型档案（重要模型深度分析）
-│   ├── ai-personal-software/   # AI 个人软件产品档案
-│   ├── agent-workflow/         # Agent Workflow 框架产品档案
-│   └── libraries/              # 开源库产品档案
+│   ├── foundations/             # [基础理论] 基础理论（低频更新）
+│   ├── agent/                  # [Agent 技术] 核心概念（中频更新）
+│   ├── applied/                # [Agent 技术] 应用技术（中频更新）
+│   ├── ai-personal-software/   # [Agent 技术] AI 个人软件产品档案
+│   ├── agent-workflow/         # [Agent 技术] Agent Workflow 框架产品档案
+│   ├── infrastructure/         # [系统与基础设施] 基础设施 & 经济性（中频更新）
+│   ├── hardware/               # [系统与基础设施] 硬件产品档案
+│   ├── research/               # [研究与模型] 前沿研究（高频更新）
+│   ├── model/                  # [研究与模型] 模型档案（重要模型深度分析）
+│   └── libraries/              # [研究与模型] 开源库产品档案
 ├── reference/                   # 重要文档原文存档（Markdown + 图片，不纳入 Zensical）
 ├── scripts/                     # 自动化脚本
 ├── mkdocs.yml                   # 站点配置 & 导航（Zensical 可直接读取）
