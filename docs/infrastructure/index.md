@@ -81,10 +81,4 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     Parquet、Arrow / Feather、Lance 三种列式格式在 GPU 加速场景下的设计权衡
 
-- :material-expansion-card: **[硬件产品](../hardware/index.md)**
-
-    ---
-
-    AI 基础设施中的关键硬件产品——NVIDIA ConnectX SmartNIC、BlueField DPU
-
 </div>
