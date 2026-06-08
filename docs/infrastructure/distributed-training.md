@@ -134,32 +134,7 @@ for epoch in range(num_epochs):
 
 ### NCCL：NVIDIA 集合通信库
 
-**NCCL（NVIDIA Collective Communication Library）** 是 NVIDIA 提供的 GPU 集合通信库，为分布式训练提供高性能的通信原语（All-Reduce、All-Gather 等）。
-
-**拓扑感知通信**：
-- NCCL 自动检测硬件拓扑（PCIe、NVLink、NVLink Switch、InfiniBand、RoCE）
-- 根据拓扑结构选择最优通信路径和算法
-- 跨节点通信时考虑网络拓扑（如多数据中心场景）
-
-**通信协议**：
-NCCL 提供三种通信协议，针对不同消息大小优化带宽和延迟[^nccl-2025-demystifying]：
-
-| 协议 | 适用场景 | 特点 |
-|------|----------|------|
-| Simple | 大消息（>1MB） | 最大化带宽利用率，使用内存栅栏同步 |
-| LL（Low Latency） | 小消息（<1MB） | 优化延迟，使用轻量级 flag 同步（4字节数据+4字节flag） |
-| LL128 | 中等消息 | 平衡带宽和延迟，128字节传输单元（120字节数据+8字节flag） |
-
-**集合通信算法**：
-- **Ring AllReduce**：环形拓扑，每个 GPU 只与相邻 GPU 通信，带宽利用率高
-- **Tree AllReduce**：树形拓扑，层次化 reduce-scatter + allgather，适合大规模集群
-- NCCL 动态选择算法，根据消息大小、GPU 数量、网络拓扑等因素
-
-**单 kernel 实现**：
-- 每个集合通信操作由单个 CUDA kernel 实现
-- 避免多次 kernel 启动和内存拷贝的开销
-- 使用 GPUDirect Peer-to-Peer 直接访问 GPU 间内存
-- 当 P2P 不可用时，通过 pinned system memory 中转
+**NCCL（NVIDIA Collective Communication Library）** 是分布式训练的通信核心。它自动探测硬件拓扑，根据消息大小和互连类型动态选择最优的通信算法（Ring/Tree/NVLS）和协议（Simple/LL/LL128），以 GPU kernel 的形式直接在显存间流水线搬运数据，把集合通信跑到接近硬件带宽上限 → [详见 NCCL 集合通信库](./nccl.md)
 
 ---
 
@@ -308,5 +283,3 @@ checkpoint/
 ---
 
 ## 参考资料
-
-[^nccl-2025-demystifying]: Hu et al. *Demystifying NCCL: An In-depth Analysis of GPU Communication Protocols and Algorithms*. 2025. https://arxiv.org/html/2507.04786v2

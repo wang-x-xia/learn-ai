@@ -10,6 +10,7 @@ AI 系统的物理层与运营层，中频更新。
 | `single-node.md` | AI 服务器单节点拓扑（NVLink Switch、PCIe、Rail-aligned 网络） |
 | `training-evolution.md` | 训练范式演进（CPU → GPU → 分布式） |
 | `distributed-training.md` | 分布式训练的数据流、存储与并行架构 |
+| `nccl.md` | NCCL 集合通信库（拓扑感知算法、传输层架构、通信协议） |
 | `dp.md` | 数据并行（DP）的技术设计 |
 | `pp.md` | 流水线并行（PP）的调度策略 |
 | `inference-stages.md` | 推理过程主要阶段（KV Cache、Prefill、Decode）及优化技术（MTP、Chunked Prefilling） |

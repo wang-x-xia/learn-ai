@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-06-08
+    type: feature
+    title: 添加 NCCL 集合通信库文档
+    description: 新增 NCCL 文档，涵盖数据操作 API（集合/P2P/RMA）、传输层架构（P2P/SHM/NVLS/IB/Socket）、通信算法（Ring/Tree）与协议（Simple/LL/LL128）、代价模型算法选择机制
+    link: infrastructure/nccl.md
   - date: 2026-06-01
     type: feature
     title: 添加结构化数据格式与 GPU 亲和性文档

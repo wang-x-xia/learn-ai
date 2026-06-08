@@ -33,6 +33,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     数据流、存储、并行策略、检查点机制——从数据加载到梯度更新的完整链路
 
+- :material-lan: **[NCCL 集合通信库](nccl.md)**
+
+    ---
+
+    拓扑感知算法选择、Ring/Tree/NVLS 通信算法、LL/LL128/Simple 协议、传输层插件架构
+
 - :material-view-module: **[数据并行](dp.md)**
 
     ---
