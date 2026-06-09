@@ -24,28 +24,3 @@ entries:
     title: 添加推理过程主要阶段文档
     description: 新增推理过程主要阶段文档，涵盖 KV Cache 加载、Prefill、Decode 完整流程，以及 MTP、Chunked Prefilling 等优化技术
     link: infrastructure/inference-stages.md
-  - date: 2026-05-19
-    type: feature
-    title: 添加 OneVL 开源库档案
-    description: 新增 OneVL 双模态 Latent CoT 框架文档，涵盖 Emu3.5 与 Qwen3-VL 集成、双模态辅助解码器、三阶段训练策略等核心技术
-    link: libraries/onevl.md
-  - date: 2026-05-19
-    type: feature
-    title: 添加训练范式演进文档
-    description: 新增训练范式演进文档，记录从 CPU 单卡到 GPU 单卡再到分布式训练的技术演进——以 MNIST 为例
-    link: infrastructure/training-evolution.md
-  - date: 2026-05-15
-    type: feature
-    title: 添加分布式训练文档
-    description: 新增分布式训练基础设施文档，涵盖数据流、存储、并行策略、检查点机制等核心技术
-    link: infrastructure/distributed-training.md
-  - date: 2026-05-15
-    type: feature
-    title: 添加 3FS 分布式文件系统文档
-    description: 新增 DeepSeek 3FS 架构文档，涵盖四层设计、CRAQ 协议、FoundationDB 元数据、NVMe SSD 集群等核心技术
-    link: infrastructure/3fs.md
-  - date: 2026-05-13
-    type: feature
-    title: 添加数学公式渲染支持
-    description: 集成 KaTeX，支持 LaTeX 数学公式渲染（行内用 $ 包裹，块级用 $$ 包裹）
-    link: null

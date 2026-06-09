@@ -85,7 +85,7 @@ _FOOTNOTE_DEF = re.compile(r"^\[\^([\w-]+)\]:", re.MULTILINE)
 # Changelog validation
 # ---------------------------------------------------------------------------
 
-MAX_CHANGELOG_ENTRIES = 20
+MAX_CHANGELOG_ENTRIES = 5
 CHANGELOG_PATH = REPO_ROOT / "docs" / "changelog.yaml"
 
 
