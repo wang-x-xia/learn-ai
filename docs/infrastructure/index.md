@@ -87,4 +87,10 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     Parquet、Arrow / Feather、Lance 三种列式格式在 GPU 加速场景下的设计权衡
 
+- :material-function: **[PyTorch 算子分发机制](operator-dispatch.md)**
+
+    ---
+
+    从 Python 一行 nn.Linear 到 GPU 上一次 cuBLAS/cuSPARSE 调用的完整分发路径
+
 </div>

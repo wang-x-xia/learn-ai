@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-06-09
+    type: feature
+    title: 添加 PyTorch 算子分发机制文档
+    description: 新增 PyTorch 算子分发文档，以 nn.Linear 为例追踪从 Python 到 cublasLtMatmul 的 5 层分发路径——Python 模块、Python/C++ codegen 边界、ATen Dispatcher 剥洋葱式分发、Native CUDA 实现、cuBLASLt 库调用
+    link: infrastructure/operator-dispatch.md
   - date: 2026-06-08
     type: feature
     title: 添加 NCCL 集合通信库文档
