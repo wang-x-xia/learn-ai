@@ -89,6 +89,48 @@ MAX_CHANGELOG_ENTRIES = 5
 CHANGELOG_PATH = REPO_ROOT / "docs" / "changelog.yaml"
 
 
+def fix_changelog() -> list[str]:
+    """Auto-fix changelog by truncating to MAX_CHANGELOG_ENTRIES."""
+    import yaml
+
+    if not CHANGELOG_PATH.exists():
+        return []
+
+    raw = CHANGELOG_PATH.read_text(encoding="utf-8")
+    try:
+        data = yaml.safe_load(raw)
+    except yaml.YAMLError:
+        return []
+
+    if not isinstance(data, dict) or "entries" not in data:
+        return []
+
+    entries = data["entries"]
+    if not isinstance(entries, list) or len(entries) <= MAX_CHANGELOG_ENTRIES:
+        return []
+
+    original_count = len(entries)
+    removed = original_count - MAX_CHANGELOG_ENTRIES
+
+    # Truncate by cutting YAML text: find the start of the (N+1)-th entry
+    # and remove everything from there to end of file.
+    # Entries start with "  - date:" at column 2.
+    entry_starts: list[int] = []
+    for m in re.finditer(r"^  - date:", raw, re.MULTILINE):
+        entry_starts.append(m.start())
+
+    if len(entry_starts) > MAX_CHANGELOG_ENTRIES:
+        cut_pos = entry_starts[MAX_CHANGELOG_ENTRIES]
+        truncated = raw[:cut_pos].rstrip("\n") + "\n"
+        CHANGELOG_PATH.write_text(truncated, encoding="utf-8")
+
+    rel = CHANGELOG_PATH.relative_to(REPO_ROOT)
+    return [
+        f"{rel}: truncated from {original_count} to "
+        f"{MAX_CHANGELOG_ENTRIES} entries (removed {removed} oldest)"
+    ]
+
+
 def check_changelog() -> list[str]:
     """Check docs/changelog.yaml schema, link validity, and entry count."""
     import yaml
@@ -478,6 +520,11 @@ def validate_file(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate Markdown files.")
+    parser.add_argument(
+        "--auto-fix",
+        action="store_true",
+        help="Automatically fix issues (e.g. truncate changelog entries)",
+    )
     args = parser.parse_args()
 
     # Load tag vocabulary
@@ -493,6 +540,11 @@ def main() -> int:
     files = [f for f in files if f.name != "AGENTS.md"]
 
     total_errors = 0
+
+    # --- Auto-fix pass (before validation) ---
+    if args.auto_fix:
+        for msg in fix_changelog():
+            print(f"  FIXED {msg}")
 
     # --- Changelog check ---
     changelog_errors = check_changelog()
