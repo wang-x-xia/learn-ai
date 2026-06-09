@@ -93,4 +93,10 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     从 Python 一行 nn.Linear 到 GPU 上一次 cuBLAS/cuSPARSE 调用的完整分发路径
 
+- :material-puzzle: **[PyTorch 算子扩展机制](operator-extension.md)**
+
+    ---
+
+    在不修改 PyTorch 源码的前提下，接入新硬件、注册自定义算子、添加融合规则的三种扩展路径
+
 </div>
