@@ -97,7 +97,7 @@ flowchart TB
 
 | 字段 | 类型 | Shape | 说明 |
 |------|------|-------|------|
-| `obs` | float32 | `[3, 3, 192, 256]` | 3 视角（top_head / hand_left / hand_right）× RGB × H × W，范围 [-1, 1] |
+| `obs` | float32 | `[3, 3, 192, 256]` | 3 视角（top_head / hand_left / hand_right）× RGB × H × W，范围 \[-1, 1\] |
 | `prompt` | string | — | 语言指令 |
 | `state` | float32 | `[14]` | 双臂 EEF 绝对位姿：2 × (xyz + 四元数 xyzw) |
 | `gripper_states` | float32 | `[2]` | 左右夹爪，范围 0–120（0=开，120=闭） |
@@ -136,7 +136,7 @@ flowchart TB
 
 ### 归一化
 
-使用 z-score（mean-std）归一化，统计量存储在 `statistics.json` 中，state 和 action 各 20 维独立计算均值/标准差。与 [OpenPI 的归一化策略](openpi.md#归一化策略)相同类型，但维度和物理含义不同。详见[归一化方案对比](embodied-normalization.md)。
+使用 z-score（mean-std）归一化，统计量存储在 `statistics.json` 中，state 和 action 各 20 维独立计算均值/标准差。与 [OpenPI 的归一化策略](openpi.md)相同类型，但维度和物理含义不同。详见[归一化方案对比](embodied-normalization.md)。
 
 ---
 
