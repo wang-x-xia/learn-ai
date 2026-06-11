@@ -223,7 +223,7 @@ torch.compile 看到的图:
                     ↑ compile 无法穿透此边界
 ```
 
-对于本身就是重计算的融合 kernel（如 FlashAttention），不透明问题不大。但对于轻量逐元素操作，这个边界会阻止与周围算子的融合。如果需要 compile 穿透，应使用 `torch.library.triton_op`（Triton kernel 专用，不在本文范围）。
+对于本身就是重计算的融合 kernel（如 FlashAttention），不透明问题不大。但对于轻量逐元素操作，这个边界会阻止与周围算子的融合。如果需要 compile 穿透，应使用 `torch.library.triton_op`（Triton kernel 专用 → [详见 Triton 编译器架构](./triton-compiler.md)）。
 
 ### 实际案例：flash-attn 包
 

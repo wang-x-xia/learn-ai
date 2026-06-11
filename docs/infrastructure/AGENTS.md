@@ -20,6 +20,7 @@ AI 系统的物理层与运营层，中频更新。
 | `structured-data-format.md` | 结构化数据格式与 GPU 亲和性（Parquet、Arrow/Feather、Lance） |
 | `operator-dispatch.md` | PyTorch 算子分发机制（Linear → addmm → cuBLAS/cuSPARSE 的完整路径） |
 | `operator-extension.md` | PyTorch 算子扩展机制（新硬件接入、融合规则、自定义算子注册） |
+| `triton-compiler.md` | Triton 编译器架构（Python DSL → GPU 二进制的编译链路与扩展机制） |
 
 ## 收录哪些内容
 

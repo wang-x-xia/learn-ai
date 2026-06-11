@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-06-11
+    type: feature
+    title: 添加 Triton 编译器架构文档
+    description: 新增 Triton 编译器文档，涵盖 Python DSL → TTIR → TTGIR → LLVM IR → GPU 二进制的完整编译链路，Layout Encoding 系统，以及 Backend Plugin / Pass Plugin / Inspection Hook / Dialect Plugin 四层扩展机制
+    link: infrastructure/triton-compiler.md
   - date: 2026-06-09
     type: feature
     title: 添加 PyTorch 算子分发机制文档
@@ -19,8 +24,3 @@ entries:
     title: 添加 AI 服务器单节点拓扑文档
     description: 新增单节点拓扑文档，涵盖 NVLink Switch 全互连原则、Rail-aligned 网络设计、四种网络 Fabric 及 Hopper → Blackwell 演进
     link: infrastructure/single-node.md
-  - date: 2026-05-19
-    type: feature
-    title: 添加推理过程主要阶段文档
-    description: 新增推理过程主要阶段文档，涵盖 KV Cache 加载、Prefill、Decode 完整流程，以及 MTP、Chunked Prefilling 等优化技术
-    link: infrastructure/inference-stages.md

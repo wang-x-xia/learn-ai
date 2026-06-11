@@ -143,6 +143,7 @@ nav:
       - 结构化数据格式与 GPU 亲和性: infrastructure/structured-data-format.md
       - PyTorch 算子分发机制: infrastructure/operator-dispatch.md
       - PyTorch 算子扩展机制: infrastructure/operator-extension.md
+      - Triton 编译器架构: infrastructure/triton-compiler.md
     - 硬件:
       - hardware/index.md
       - NVLink 与 NVSwitch: hardware/nvlink.md
