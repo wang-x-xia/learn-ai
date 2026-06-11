@@ -33,4 +33,10 @@ AI 与物理世界交互的技术前沿，涵盖机器人基础模型、仿真�
 
     存储-API 解耦、多 episode 文件聚合、关系型元数据索引，解决百万级 episode 可扩展性
 
+- :material-earth: **[τ₀-World Model](tau-0-wm.md)**
+
+    ---
+
+    5B 视频-动作统一世界模型——视频扩散骨干联合生成未来帧与动作序列，异构数据模态级监督掩码，推理时 Propose-Evaluate-Revise
+
 </div>

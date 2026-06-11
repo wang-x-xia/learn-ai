@@ -10,6 +10,7 @@ AI 与物理世界交互的技术前沿。
 | `embodied-normalization.md` | 具身智能数据归一化（z-score / min-max / 分位数方案、delta actions 陷阱、per-timestep 归一化） |
 | `openpi.md` | OpenPI 具身基础模型微调框架（双专家架构、三层 Transform 管线、位置语义化观测结构） |
 | `lerobot-dataset-v3.md` | LeRobot Dataset v3 可扩展存储架构（存储-API 解耦、多 episode 聚合、关系型元数据） |
+| `tau-0-wm.md` | τ₀-World Model 统一视频-动作世界模型（异构数据监督掩码、6D rotation、Propose-Evaluate-Revise） |
 
 ## 收录哪些内容
 

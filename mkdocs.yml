@@ -169,6 +169,7 @@ nav:
     - 具身智能数据归一化: embodied/embodied-normalization.md
     - OpenPI 微调框架: embodied/openpi.md
     - LeRobot Dataset v3: embodied/lerobot-dataset-v3.md
+    - τ₀-World Model: embodied/tau-0-wm.md
 
 
 extra_css:

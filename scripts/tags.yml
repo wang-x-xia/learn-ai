@@ -25,6 +25,7 @@ tags:
   - data-loading
   - distributed-training
   - dpu
+  - dual-arm
   - parallelism
   - coding
   - conditional-memory
@@ -145,3 +146,4 @@ tags:
   - vision-language
   - vla
   - workflow
+  - world-model
