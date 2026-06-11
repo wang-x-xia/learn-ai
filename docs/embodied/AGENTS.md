@@ -6,6 +6,9 @@ AI 与物理世界交互的技术前沿。
 
 | 文件 | 主题 |
 |------|------|
+| `embodied-data-types.md` | 具身智能数据类型（通用四元组：图像、本体感知、动作、语言指令） |
+| `embodied-normalization.md` | 具身智能数据归一化（z-score / min-max / 分位数方案、delta actions 陷阱、per-timestep 归一化） |
+| `openpi.md` | OpenPI 具身基础模型微调框架（双专家架构、三层 Transform 管线、位置语义化观测结构） |
 | `lerobot-dataset-v3.md` | LeRobot Dataset v3 可扩展存储架构（存储-API 解耦、多 episode 聚合、关系型元数据） |
 
 ## 收录哪些内容

@@ -47,6 +47,7 @@ tags:
   - feature-engineering
   - feeds
   - few-shot
+  - fine-tuning
   - flow-matching
   - fp4
   - framework
@@ -142,4 +143,5 @@ tags:
   - vector-db
   - vector-search
   - vision-language
+  - vla
   - workflow

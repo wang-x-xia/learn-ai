@@ -165,6 +165,9 @@ nav:
       - OneVL: libraries/onevl.md
   - 具身智能:
     - embodied/index.md
+    - 具身智能数据类型: embodied/embodied-data-types.md
+    - 具身智能数据归一化: embodied/embodied-normalization.md
+    - OpenPI 微调框架: embodied/openpi.md
     - LeRobot Dataset v3: embodied/lerobot-dataset-v3.md
 
 
