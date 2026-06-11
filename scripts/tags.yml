@@ -20,6 +20,8 @@ tags:
   - craq
   - checkpoint
   - data-format
+  - data-infrastructure
+  - dataset
   - data-loading
   - distributed-training
   - dpu
@@ -39,6 +41,7 @@ tags:
   - distributed-filesystem
   - dspy
   - economics
+  - embodied
   - emergence
   - enterprise
   - feature-engineering
@@ -113,6 +116,7 @@ tags:
   - reflexion
   - regulation
   - representation-engineering
+  - robotics
   - representation-learning
   - resources
   - retrieval
