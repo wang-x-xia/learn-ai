@@ -164,6 +164,7 @@ nav:
       - libraries/index.md
       - libraries/honcho.md
       - OneVL: libraries/onevl.md
+      - Mooncake: libraries/mooncake.md
   - 具身智能:
     - embodied/index.md
     - 具身智能数据类型: embodied/embodied-data-types.md

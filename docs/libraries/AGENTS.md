@@ -15,6 +15,7 @@
 | `index.md` | 索引页 |
 | `honcho.md` | 辩证用户建模记忆库 |
 | `onevl.md` | OneVL 双模态 Latent CoT 框架 |
+| `mooncake.md` | Mooncake LLM 推理基础设施 |
 
 ## 写法指南
 

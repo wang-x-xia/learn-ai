@@ -2,7 +2,7 @@
 title: "Transformer 架构"
 description: "Transformer 架构深度解析——自注意力机制、前馈网络与 MoE。"
 created: 2026-04-08
-updated: 2026-04-09
+updated: 2026-06-12
 tags:
   - transformer
   - attention
@@ -192,6 +192,26 @@ $Q_2 \cdot K^T = [0.1, 0.1, 0.1, 0.7]$  → 主要关注第 4 个 token
 
 GQA/MQA 的主要动机是**减少推理时 KV Cache 的显存占用**——KV 头越少，需要缓存的向量越少。具体的缓存大小对比见 [KV Cache 与推理优化](./kv-cache.md)。
 
+### 位置编码：从固定到 RoPE
+
+Attention 本身对位置不敏感——打乱输入顺序，输出不变。位置编码注入序列顺序信息。
+
+原始 Transformer 用**固定的正弦/余弦函数**[^vaswani-2017]编码绝对位置。现代 LLM 普遍采用 **RoPE（旋转位置编码）**[^rope-2024]——将位置信息编码为 Q/K 向量的旋转角度：
+
+$$
+\text{RoPE}(x_m, m) = x_m \cdot e^{im\theta}
+$$
+
+直觉：把每对相邻维度视为二维平面上的一个点，位置 $m$ 对应旋转角度 $m\theta$。两个 token 做点积时，结果只取决于它们的**相对位置差**（旋转角度之差），而非绝对位置。
+
+| 特性 | 效果 |
+|------|------|
+| 天然编码相对位置 | 点积自动包含相对信息，不需要显式计算位置差 |
+| 外推性好 | 配合 NTK-aware 缩放，可处理比训练时更长的序列 |
+| 无额外参数 | 旋转角度由公式确定，不增加可学习参数 |
+
+RoPE 已被 LLaMA、Mistral、Qwen 等主流模型采用，成为事实标准。
+
 ---
 
 ## 3. 前馈网络与 MoE
@@ -236,3 +256,4 @@ $$
 ## 参考资料
 
 [^vaswani-2017]: Vaswani et al. *Attention Is All You Need*. 2017. https://arxiv.org/abs/1706.03762
+[^rope-2024]: Su et al. *RoFormer: Enhanced Transformer with Rotary Position Embedding*. Neurocomputing 2024. https://arxiv.org/abs/2104.09864

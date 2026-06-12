@@ -1,8 +1,8 @@
 ---
 title: "KV Cache 与推理优化"
-description: "KV Cache 的存储特征、注意力变体（GQA）、推理阶段差异与压缩手段的设计权衡。"
+description: "KV Cache 的存储特征、注意力变体（GQA）、FlashAttention / PagedAttention、分层存储与压缩手段的设计权衡。"
 created: 2026-04-09
-updated: 2026-04-28
+updated: 2026-06-12
 tags:
   - kv-cache
   - gqa
@@ -174,7 +174,58 @@ MQA:        1 组 KV → 需缓存   ~4 GB  ← 但质量损失大
 
 ---
 
-## 5. 长上下文时代的挑战
+## 5. Attention 计算优化：FlashAttention
+
+标准 Attention 的实际瓶颈不在算力，而在**显存读写**。计算 $QK^T$ 产生 $n \times n$ 的注意力矩阵，写入 HBM 再读回做 softmax——这些 IO 操作才是时间杀手[^dao-2022]。
+
+FlashAttention 的核心洞察：**不把完整注意力矩阵写入 HBM**。两个关键技巧：
+
+1. **分块计算（Tiling）**：把 Q/K/V 切成小块塞进 GPU 片上 SRAM（比 HBM 快 10-20 倍），在 SRAM 内完成一个块的 $QK^T → \text{softmax} → \times V$ 后直接输出，不存中间矩阵
+2. **在线 Softmax**：逐块累积归一化因子（运行最大值和指数和），数学上等价于全局 softmax——计算精确，不是近似
+
+| 版本 | 核心改进 | 典型加速 | 权衡 |
+|------|---------|---------|------|
+| v1[^dao-2022] | Tiling + 在线 Softmax，HBM 访问 O(n²) → O(n²d²/M) | 2-4x | 需重写 kernel |
+| v2[^dao-2023] | 优化 warp 调度，减少非矩阵运算占比 | 3-6x | 同上 |
+| v3[^shah-2024] | Hopper 专属：WGMMA 异步矩阵指令 + FP8 动态缩放 | 6-10x | 仅 H100+ |
+
+FlashAttention 主要加速 Prefill（多 Query 并行）。Decode 阶段每步只有 1 个 Query，并行度不足——**FlashDecoding**[^flashdecoding-2023] 沿序列长度维度切分 KV Cache，每块独立计算局部 Attention 后合并，长序列（>8K tokens）加速 3-8x。
+
+---
+
+## 6. 内存管理：PagedAttention
+
+传统推理引擎为每个请求预分配**连续**显存。序列长度不可预知——预分配大了浪费，小了要扩容搬移。多请求交替完成后碎片严重，KV Cache 显存利用率仅 20-40%。
+
+PagedAttention[^vllm-2023] 借鉴操作系统虚拟内存：固定大小的逻辑块（典型 16 tokens）通过 Block Table 映射到物理块，无需连续分配。
+
+| OS 概念 | PagedAttention 对应 | 作用 |
+|---------|-------------------|------|
+| 虚拟页 | 逻辑 KV Block | 固定大小，按需分配 |
+| 页表 | Block Table | 逻辑→物理映射 |
+| 按需分页 | 动态块分配 | 用一块分一块，消除外部碎片 |
+| Copy-on-Write | 共享前缀物理块 | Beam Search / 并行采样共享前缀 |
+
+**效果**：KV Cache 利用率 ~30% → ~85%，同等显存下吞吐 2.5-3x[^vllm-2023]。已成为 vLLM、SGLang 等主流推理引擎的标准内存管理方案。
+
+---
+
+## 7. 分层存储：用廉价介质扩展容量
+
+当 KV Cache 超出单卡 HBM 时，可利用低层存储介质，以延迟换容量：
+
+| 层级 | 介质 | 带宽 | 延迟 | 典型容量 |
+|------|------|------|------|---------|
+| L0 | GPU HBM | 1.5-2.0 TB/s | ~100ns | 80-192 GB |
+| L1 | CPU DRAM | 50-100 GB/s | ~100ns | 1-4 TB |
+| L2 | NVMe SSD | 7-14 GB/s | ~10μs | 1-32 TB |
+| L3 | 远端内存（经 RDMA 访问） | 12.5-100 GB/s | 1-5μs | 不限 |
+
+Mooncake[^mooncake-2025] 的核心设计哲学是**以 KV Cache 为中心**：热数据（当前 batch）留在 HBM，温数据（Prefix Cache）放 CPU DRAM，冷数据下沉到 SSD / 远端——用廉价存储换昂贵 GPU 算力。配合 GPUDirect RDMA 零拷贝传输（拓扑感知路径选择 + 多 NIC 带宽聚合），128K tokens 的 KV Cache（~2GB）在 400Gbps InfiniBand 上仅需 ~40ms，远快于重新 Prefill。架构详见 [Mooncake 开源库](../libraries/mooncake.md)。
+
+---
+
+## 8. 长上下文时代的挑战
 
 随着上下文窗口从 4K → 128K → 1M+ 扩展，KV Cache 问题被急剧放大：
 
@@ -186,9 +237,9 @@ MQA:        1 组 KV → 需缓存   ~4 GB  ← 但质量损失大
 
 应对方向：
 
-- **架构层**：GQA 减少 KV 头数；Mamba/RWKV 等 SSM 架构完全绕过 KV Cache（见 [Mamba 与状态空间模型](./mamba-and-ssm.md)）
-- **算法层**：稀疏注意力、Token 驱逐、量化
-- **系统层**：Prefix Caching、KV Cache offloading
+- **架构层**：GQA 减少 KV 头数（§3）；Mamba/RWKV 等 SSM 架构完全绕过 KV Cache → [Mamba 与状态空间模型](./mamba-and-ssm.md)
+- **算法层**：FlashAttention 降低 IO 开销（§5）；稀疏注意力、Token 驱逐、量化（§4）
+- **系统层**：PagedAttention 消除碎片（§6）；分层存储扩展容量（§7）；Prefix Caching
 - **硬件层**：更大显存（H200: 141GB, B200: 192GB）、更高带宽
 
 ---
@@ -204,3 +255,9 @@ MQA:        1 组 KV → 需缓存   ~4 GB  ← 但质量损失大
 [^turboquant-2025]: Zandieh et al. *TurboQuant: Online Vector Quantization with Near-optimal Distortion Rate*. 2025. https://arxiv.org/abs/2504.19874
 [^polarquant-2025]: Han et al. *PolarQuant: Quantizing KV Caches with Polar Transformation*. 2025. https://arxiv.org/abs/2502.02617
 [^qjl-2024]: Zandieh et al. *QJL: 1-Bit Quantized JL Transform for KV Cache Quantization with Zero Overhead*. 2024. https://arxiv.org/abs/2406.03482
+[^dao-2022]: Dao et al. *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness*. 2022. https://arxiv.org/abs/2205.14135
+[^dao-2023]: Dao. *FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning*. 2023. https://arxiv.org/abs/2307.08691
+[^shah-2024]: Shah et al. *FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision*. 2024. https://arxiv.org/abs/2407.08608
+[^flashdecoding-2023]: Dao et al. *FlashDecoding: Faster Long-Context LLM Inference*. 2023. https://crfm.stanford.edu/2023/10/12/flashdecoding.html
+[^vllm-2023]: Kwon et al. *Efficient Memory Management for Large Language Model Serving with PagedAttention*. 2023. https://arxiv.org/abs/2309.06180
+[^mooncake-2025]: Qin et al. *Mooncake: Trading More Storage for Less Computation — A KVCache-centric Architecture for Serving LLM Chatbot*. FAST 2025 Best Paper. https://arxiv.org/abs/2407.00079

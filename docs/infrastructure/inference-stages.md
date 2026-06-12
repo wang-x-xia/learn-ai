@@ -1,8 +1,8 @@
 ---
 title: 推理过程主要阶段
-description: 从 KV Cache 加载到 Prefill 和 Decode 的完整推理流程，以及 MTP、Chunked Prefilling 等优化技术
+description: 从 KV Cache 加载到 Prefill 和 Decode 的完整推理流程，以及 Continuous Batching、Chunked Prefilling、Speculative Decoding、PD 分离等优化技术
 created: 2026-05-19
-updated: 2026-05-19
+updated: 2026-06-12
 tags:
   - gpu
   - inference
@@ -198,14 +198,94 @@ Chunked Prefilling:
 
 ---
 
+### Continuous Batching（动态批处理）
+
+传统静态批处理等一批请求全部完成才接新请求——先完成的请求白等，GPU 空转。Continuous Batching[^orca-2022] 在**每次迭代**时动态加入/移除请求：
+
+```
+静态批处理：
+请求 A: [===Prefill===][=D1=][=D2=][=D3=][=D4=]  ← A 完成
+请求 B: [===Prefill===][=D1=][=D2=][ 空等 ][ 空等 ]  ← B 早完成，GPU 空转
+请求 C: [           等 A+B 全部完成后才开始          ]  ← C 被阻塞
+
+Continuous Batching：
+请求 A: [===Prefill===][=D1=][=D2=][=D3=][=D4=]
+请求 B: [===Prefill===][=D1=][=D2=]               ← B 完成立即释放
+请求 C:                             [=Prefill=][=D1=]...  ← C 立即填入空位
+```
+
+| 指标 | 静态批处理 | Continuous Batching | 权衡 |
+|------|-----------|-------------------|------|
+| GPU 利用率 | 40-60% | 70-90% | 调度开销略增 |
+| 吞吐 | 1x | 2-3x | — |
+| P99 延迟 | 高（等待整批） | 低（动态调度） | — |
+
+Continuous Batching 是 Chunked Prefilling 的基础——后者在此之上进一步解决长 Prefill 阻塞 Decode 的干扰问题。
+
+---
+
+### Speculative Decoding（推测解码）
+
+自回归生成每步只产出一个 token，每个 token 都需要完整的模型前向传播——即使模型很确定下一个词是什么。Speculative Decoding[^leviathan-2023] 的核心范式：**小模型快速草拟，大模型并行验证**。
+
+```
+传统 Decode（串行）：
+大模型: [fwd]→"The" [fwd]→"cat" [fwd]→"sat" [fwd]→"on"     4 步
+
+Speculative Decoding（草拟+验证）：
+小模型: [fwd fwd fwd fwd]→"The cat sat on"                   快速草拟 4 个候选
+大模型: [单次 fwd 并行验证 4 个]→ 接受 "The cat sat"，拒绝 "on"   1 步验证
+```
+
+验证使用**拒绝采样**：接受概率 $\min(1,\, p_{\text{大}}(x) / q_{\text{小}}(x))$，被拒绝的 token 从修正分布重采样——数学上保证输出分布与大模型完全一致。
+
+| 方法 | 辅助结构 | 需额外训练 | 加速 | 权衡 |
+|------|---------|-----------|------|------|
+| Speculative Decoding[^leviathan-2023] | 独立小模型 | 否 | 1.5-2.5x | 需维护两套模型，显存开销大 |
+| Medusa[^medusa-2024] | 原模型加多预测头 | 是（冻结主干） | 1.8-2.8x | 显存仅增 ~5%，但需微调 |
+| EAGLE[^eagle-2024] | 特征空间自回归头 | 是 | 2.0-3.0x | 连续空间推测，接受率更高 |
+| Lookahead Decoding | n-gram 匹配 | 否 | 1.2-2.0x | 无需辅助模型，依赖内容重复度 |
+
+推测解码与 PD 分离正交——两者可叠加：Prefill 走标准路径，Decode 走推测路径。
+
+---
+
+### PD 分离（Prefill-Decode Disaggregation）
+
+Prefill 和 Decode 的硬件需求截然对立（见§阶段一 vs §阶段二），放在同一 GPU 上相互干扰：长 Prefill 阻塞 Decode 的逐 token 生成（延迟抖动），Decode 的低算力利用率拖累 Prefill 吞吐。
+
+PD 分离将两个阶段拆到**独立的 GPU 集群**，各自按最优配置运行[^distserve-2024]：
+
+``` mermaid
+graph LR
+    Req["用户请求"] --> Sched["全局调度器"]
+    Sched --> P["Prefill 集群\n(计算密集，追求高 MFU)"]
+    P -->|"KV Cache\n(RDMA 传输)"| D["Decode 集群\n(带宽密集，追求低 TPOT)"]
+    D --> Resp["流式响应"]
+```
+
+**核心设计决策**：KV Cache 从计算副产物变为一等资源——Prefill 产出的 KV Cache 通过高速网络（RDMA / NVLink）传输到 Decode 节点，配合[分层存储](../foundations/kv-cache.md#7)实现跨请求复用[^mooncake-2025]。
+
+| 指标 | 同机混跑 | PD 分离 | 提升来源 |
+|------|---------|---------|---------|
+| TTFT P99 | 高 | 低 | Prefill 专属集群，无 Decode 干扰 |
+| TPOT | 抖动大 | 稳定 | Decode 专属集群，无 Prefill 抢占 |
+| GPU 利用率 | 中（折中） | 高（各自最优） | 硬件-负载匹配 |
+| 长上下文吞吐 | 1x | 2-5x | KV Cache 复用 + 存储扩展 |
+
+DistServe[^distserve-2024] 首次系统化验证了 PD 分离的可行性，提出 **Goodput**（满足 SLO 的有效吞吐）作为优化目标。Mooncake[^mooncake-2025]（FAST 2025 Best Paper）将其发展为生产级系统，在 Kimi 平台上实现日处理 100B+ tokens，A800 集群请求处理能力提升 115%。其 Transfer Engine 和 Mooncake Store 已开源并集成进 SGLang/vLLM/TRT-LLM → [详见](../libraries/mooncake.md)。
+
+---
+
 ### 优化技术对比
 
-| 技术 | 目标 | 适用场景 |
-|------|------|----------|
-| MTP | 加速 decode | 需要快速生成多个 token |
-| Chunked Prefilling | 降低 TTFT，支持流式输入 | 长 prompt、流式场景 |
-| Speculative Decoding | 加速 decode | 有小模型可用 |
-| KV Cache | 减少 decode 计算量 | 所有生成场景 |
+| 技术 | 优化目标 | 核心思路 | 适用场景 |
+|------|---------|---------|----------|
+| MTP | 加速 Decode | 一次前向预测多个 token | 需要快速生成 |
+| Continuous Batching | 提升吞吐 | 迭代级动态请求调度 | 所有在线服务 |
+| Chunked Prefilling | 降低 TTFT | 长 Prefill 分块，与 Decode 交错 | 长 prompt、流式输入 |
+| Speculative Decoding | 加速 Decode | 小模型草拟 + 大模型并行验证 | 有匹配的小模型 |
+| PD 分离 | 全局资源效率 | Prefill / Decode 拆分到独立集群 | 大规模部署 |
 
 ---
 
@@ -227,3 +307,9 @@ Chunked Prefilling:
 [^training-evolution]: 训练范式演进 → [详见](./training-evolution.md)
 [^mtp]: Multi-Token Prediction. 一种让模型一次预测多个 token 的推理加速技术。相关研究包括 Medusa、Lookahead Decoding 等。
 [^chunked-prefill]: Chunked Prefilling. 将长 prompt 分块处理的推理优化技术，用于降低 TTFT 和支持流式输入。常见于 vLLM、TensorRT-LLM 等推理引擎的实现中。
+[^orca-2022]: Yu et al. *Orca: A Distributed Serving System for Transformer-Based Generative Models*. OSDI 2022. https://www.usenix.org/conference/osdi22/presentation/yu
+[^leviathan-2023]: Leviathan et al. *Fast Inference from Transformers via Speculative Decoding*. ICML 2023. https://arxiv.org/abs/2211.17192
+[^medusa-2024]: Cai et al. *Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads*. 2024. https://arxiv.org/abs/2401.10774
+[^eagle-2024]: Li et al. *EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty*. ICML 2024. https://arxiv.org/abs/2401.15077
+[^distserve-2024]: Zhong et al. *DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving*. OSDI 2024. https://arxiv.org/abs/2401.09670
+[^mooncake-2025]: Qin et al. *Mooncake: Trading More Storage for Less Computation — A KVCache-centric Architecture for Serving LLM Chatbot*. FAST 2025 Best Paper. https://arxiv.org/abs/2407.00079
