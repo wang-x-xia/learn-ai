@@ -81,6 +81,12 @@ AI 系统的物理层与运营层，聚焦硬件、网络、存储和成本。
 
     单机 8 卡 AI 服务器的硬件结构——NVLink Switch 全互连、PCIe 桥接、Rail-aligned 网络模块
 
+- :material-swap-horizontal: **[AI 数据管线](data-pipeline.md)**
+
+    ---
+
+    数据管线全景——语料工程（去重/过滤/混合）、预处理变换、训练供给（流式/物化/格式选型）、数据反馈环（RLHF/合成数据/飞轮）、开环 vs 闭环差异、场景对比
+
 - :material-database: **[结构化数据格式与 GPU 亲和性](structured-data-format.md)**
 
     ---

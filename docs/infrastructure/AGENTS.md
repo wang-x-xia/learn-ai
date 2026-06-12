@@ -17,6 +17,7 @@ AI 系统的物理层与运营层，中频更新。
 | `lustre.md` | Lustre 并行文件系统（HPC/AI 超算存储） |
 | `3fs.md` | 3FS 分布式文件系统（DeepSeek AI 训练存储） |
 | `inference-economics.md` | 推理经济性（GPU 成本、API 定价、盈亏模型） |
+| `data-pipeline.md` | AI 数据管线（语料工程、预处理变换、训练供给、数据反馈环、开环 vs 闭环、场景对比） |
 | `structured-data-format.md` | 结构化数据格式与 GPU 亲和性（Parquet、Arrow/Feather、Lance） |
 | `operator-dispatch.md` | PyTorch 算子分发机制（Linear → addmm → cuBLAS/cuSPARSE 的完整路径） |
 | `operator-extension.md` | PyTorch 算子扩展机制（新硬件接入、融合规则、自定义算子注册） |

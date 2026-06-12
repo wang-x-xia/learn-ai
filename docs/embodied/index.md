@@ -21,6 +21,12 @@ AI 与物理世界交互的技术前沿，涵盖机器人基础模型、仿真�
 
     z-score、min-max、分位数三种归一化方案的公式与权衡，delta actions 陷阱，per-timestep 归一化，动作离散化
 
+- :material-pipe: **[具身智能数据管线](embodied-data-pipeline.md)**
+
+    ---
+
+    从采集到模型消费的 8 个阶段——Schema 映射、坐标变换、模态预处理、归一化、时序窗口、表示转换、Batch 化、噪声注入，以及 LeRobot / OpenPI / Octo / RT-2 等框架的解法对比
+
 - :material-robot: **[OpenPI 微调框架](openpi.md)**
 
     ---
@@ -38,5 +44,11 @@ AI 与物理世界交互的技术前沿，涵盖机器人基础模型、仿真�
     ---
 
     5B 视频-动作统一世界模型——视频扩散骨干联合生成未来帧与动作序列，异构数据模态级监督掩码，推理时 Propose-Evaluate-Revise
+
+- :material-cube-outline: **[具身仿真](simulation.md)**
+
+    ---
+
+    GPU 并行仿真 vs CPU 高保真的技术权衡——接触力学建模、Sim-to-Real Gap 四种来源、域随机化 / 系统辨识 / Teacher-Student 蒸馏三种跨越策略
 
 </div>
