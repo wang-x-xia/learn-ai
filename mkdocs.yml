@@ -168,6 +168,7 @@ nav:
   - 具身智能:
     - 具身算法:
       - embodied-algorithm/index.md
+      - OpenVLA-OFT: embodied-algorithm/openvla-oft.md
       - OpenPI 微调框架: embodied-algorithm/openpi.md
       - τ₀-World Model: embodied-algorithm/tau-0-wm.md
       - StarVLA: embodied-algorithm/starvla.md

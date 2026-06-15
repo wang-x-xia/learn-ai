@@ -9,6 +9,12 @@ description: 具身智能算法——机器人基础模型、视觉-语言-动�
 
 <div class="grid cards" markdown>
 
+- :material-swap-horizontal: **[OpenVLA-OFT](openvla-oft.md)**
+
+    ---
+
+    VLA 优化微调方法论——并行解码替代自回归、MLP action head 直接回归连续动作、L1 loss 简胜 diffusion，微调策略比预训练数据覆盖更重要
+
 - :material-robot: **[OpenPI 微调框架](openpi.md)**
 
     ---

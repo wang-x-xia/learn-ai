@@ -6,6 +6,7 @@
 
 | 文件 | 主题 |
 |------|------|
+| `openvla-oft.md` | OpenVLA-OFT VLA 微调方法论（并行解码、MLP action head 连续回归、L1 loss、FiLM 语言调制） |
 | `openpi.md` | OpenPI 具身基础模型微调框架（双专家架构、三层 Transform 管线、位置语义化观测结构） |
 | `tau-0-wm.md` | τ₀-World Model 统一视频-动作世界模型（异构数据监督掩码、6D rotation、Propose-Evaluate-Revise） |
 | `starvla.md` | StarVLA 模块化 VLA 研究平台（Backbone–Action Head 解耦、四种动作解码范式、StarVLA-α 极简基线消融） |
