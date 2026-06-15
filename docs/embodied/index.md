@@ -51,4 +51,16 @@ AI 与物理世界交互的技术前沿，涵盖机器人基础模型、仿真�
 
     GPU 并行仿真 vs CPU 高保真的技术权衡——接触力学建模、Sim-to-Real Gap 四种来源、域随机化 / 系统辨识 / Teacher-Student 蒸馏三种跨越策略
 
+- :material-robot-industrial: **[ROS 2](ros2.md)**
+
+    ---
+
+    机器人分布式软件框架——DDS 通信层、去中心化发现、节点/话题/服务/动作四种通信原语、QoS 策略、Executor 调度模型
+
+- :material-lan: **[DDS 数据分发服务](dds.md)**
+
+    ---
+
+    以数据为中心的发布/订阅标准——DCPS 实体模型、去中心化发现协议、22+ 种 QoS 策略，及在机器人系统中的三种集成形态
+
 </div>

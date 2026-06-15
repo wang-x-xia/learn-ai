@@ -13,6 +13,8 @@ AI 与物理世界交互的技术前沿。
 | `lerobot-dataset-v3.md` | LeRobot Dataset v3 可扩展存储架构（存储-API 解耦、多 episode 聚合、关系型元数据） |
 | `tau-0-wm.md` | τ₀-World Model 统一视频-动作世界模型（异构数据监督掩码、6D rotation、Propose-Evaluate-Revise） |
 | `simulation.md` | 具身仿真（GPU 并行 vs CPU 高保真、接触力学建模、Sim-to-Real Gap 跨越策略） |
+| `ros2.md` | ROS 2 机器人分布式软件框架（DDS 通信层、去中心化发现、通信原语、QoS、Executor 调度） |
+| `dds.md` | DDS 数据分发服务（Data-Centric 模型、DCPS 实体、自动发现、QoS 策略、机器人集成形态） |
 
 ## 收录哪些内容
 
