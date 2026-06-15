@@ -170,6 +170,7 @@ nav:
       - embodied-algorithm/index.md
       - OpenPI 微调框架: embodied-algorithm/openpi.md
       - τ₀-World Model: embodied-algorithm/tau-0-wm.md
+      - StarVLA: embodied-algorithm/starvla.md
     - 具身基础设施:
       - embodied-infrastructure/index.md
       - 具身智能数据类型: embodied-infrastructure/embodied-data-types.md
