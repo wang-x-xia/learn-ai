@@ -15,10 +15,10 @@ review:
 # OpenPI：具身基础模型的开源微调框架
 
 ??? note "背景知识"
-    - **具身智能数据类型**：机器人学习的通用四元组（图像、本体感知、动作、语言指令） → [详见](embodied-data-types.md)
+    - **具身智能数据类型**：机器人学习的通用四元组（图像、本体感知、动作、语言指令） → [详见](../embodied-infrastructure/embodied-data-types.md)
     - **Flow Matching**：条件流匹配，通过学习从噪声到目标分布的连续向量场来生成样本 → [详见](../foundations/diffusion-models.md)
     - **PaliGemma**：Google 的视觉-语言模型，OpenPI 用作视觉和语言编码的骨干网络
-    - **LeRobot Dataset v3**：Hugging Face 的机器人数据格式，OpenPI 用作训练数据输入 → [详见](lerobot-dataset-v3.md)
+    - **LeRobot Dataset v3**：Hugging Face 的机器人数据格式，OpenPI 用作训练数据输入 → [详见](../embodied-infrastructure/lerobot-dataset-v3.md)
     - **FSDP**：Fully Sharded Data Parallelism，将模型参数分片到多卡以降低单卡显存 → [详见](../infrastructure/distributed-training.md)
 
 ---
@@ -109,7 +109,7 @@ flowchart LR
 
 ## 固定观测结构：位置即语义
 
-OpenPI 将[通用的四元组数据类型](embodied-data-types.md)（图像、本体感知、动作、语言指令）映射到一组硬编码的固定槽位：
+OpenPI 将[通用的四元组数据类型](../embodied-infrastructure/embodied-data-types.md)（图像、本体感知、动作、语言指令）映射到一组硬编码的固定槽位：
 
 ### OpenPI 固定槽位
 
@@ -140,13 +140,13 @@ OpenPI 将[通用的四元组数据类型](embodied-data-types.md)（图像、�
 | dim 13 | 右臂夹爪（双臂） |
 | dim 14–15 | 底盘 x-y 速度（移动机器人） |
 
-维度顺序和物理量类型（弧度 vs 米、关节空间 vs 笛卡尔空间、绝对 vs delta → [数据类型详解](embodied-data-types.md)）需要与预训练保持一致。偏离越远，预训练 prior 帮助越有限。
+维度顺序和物理量类型（弧度 vs 米、关节空间 vs 笛卡尔空间、绝对 vs delta → [数据类型详解](../embodied-infrastructure/embodied-data-types.md)）需要与预训练保持一致。偏离越远，预训练 prior 帮助越有限。
 
 ---
 
 ## 归一化策略
 
-训练前必须对 state/actions 做[归一化](embodied-normalization.md)。OpenPI 特有的设计：
+训练前必须对 state/actions 做[归一化](../embodied-infrastructure/embodied-normalization.md)。OpenPI 特有的设计：
 
 - **模型间差异**：π₀ 用 z-score，π₀.₅ / π₀-FAST 用分位数归一化（硬编码，由 `model_type` 决定）
 - **复用预训练统计量**：预训练提供了 9 种平台（ALOHA、DROID-Franka、UR5e 等）的 `norm_stats.json`，匹配的平台直接从 checkpoint assets 加载；新平台用 `compute_norm_stats.py` 重新计算

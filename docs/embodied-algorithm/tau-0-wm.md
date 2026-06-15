@@ -15,11 +15,11 @@ review:
 # τ₀-World Model：统一视频-动作世界模型
 
 ??? note "背景知识"
-    - **具身智能数据类型**：机器人学习的通用四元组（图像、本体感知、动作、语言指令） → [详见](embodied-data-types.md)
+    - **具身智能数据类型**：机器人学习的通用四元组（图像、本体感知、动作、语言指令） → [详见](../embodied-infrastructure/embodied-data-types.md)
     - **扩散模型**：通过迭代去噪从噪声分布生成目标样本的生成模型范式 → [详见](../foundations/diffusion-models.md)
     - **Flow Matching**：条件流匹配，学习从噪声到目标分布的连续向量场 → [详见](../foundations/diffusion-models.md)
     - **OpenPI**：Physical Intelligence 开源的 VLA 微调框架，τ₀-WM 的推理服务器基于其 WebSocket 架构 → [详见](openpi.md)
-    - **具身智能数据归一化**：state/action 的 z-score / min-max / 分位数方案 → [详见](embodied-normalization.md)
+    - **具身智能数据归一化**：state/action 的 z-score / min-max / 分位数方案 → [详见](../embodied-infrastructure/embodied-normalization.md)
 
 ---
 
@@ -132,11 +132,11 @@ flowchart TB
 | `chunk` | 9 | 对应 9 帧视频（video branch 的时间维度） |
 | `execution_step` | 1–100 | 实际执行前 N 步，由客户端指定 |
 
-与[现有框架的 action chunking 对比](embodied-data-types.md#action-chunking)：介于 Diffusion Policy（4–16）和 ALOHA（50）之间。
+与[现有框架的 action chunking 对比](../embodied-infrastructure/embodied-data-types.md#action-chunking)：介于 Diffusion Policy（4–16）和 ALOHA（50）之间。
 
 ### 归一化
 
-使用 z-score（mean-std）归一化，统计量存储在 `statistics.json` 中，state 和 action 各 20 维独立计算均值/标准差。与 [OpenPI 的归一化策略](openpi.md)相同类型，但维度和物理含义不同。详见[归一化方案对比](embodied-normalization.md)。
+使用 z-score（mean-std）归一化，统计量存储在 `statistics.json` 中，state 和 action 各 20 维独立计算均值/标准差。与 [OpenPI 的归一化策略](openpi.md)相同类型，但维度和物理含义不同。详见[归一化方案对比](../embodied-infrastructure/embodied-normalization.md)。
 
 ---
 

@@ -166,16 +166,19 @@ nav:
       - OneVL: libraries/onevl.md
       - Mooncake: libraries/mooncake.md
   - 具身智能:
-    - embodied/index.md
-    - 具身智能数据类型: embodied/embodied-data-types.md
-    - 具身智能数据归一化: embodied/embodied-normalization.md
-    - 具身智能数据管线: embodied/embodied-data-pipeline.md
-    - OpenPI 微调框架: embodied/openpi.md
-    - LeRobot Dataset v3: embodied/lerobot-dataset-v3.md
-    - τ₀-World Model: embodied/tau-0-wm.md
-    - 具身仿真: embodied/simulation.md
-    - ROS 2: embodied/ros2.md
-    - DDS 数据分发服务: embodied/dds.md
+    - 具身算法:
+      - embodied-algorithm/index.md
+      - OpenPI 微调框架: embodied-algorithm/openpi.md
+      - τ₀-World Model: embodied-algorithm/tau-0-wm.md
+    - 具身基础设施:
+      - embodied-infrastructure/index.md
+      - 具身智能数据类型: embodied-infrastructure/embodied-data-types.md
+      - 具身智能数据归一化: embodied-infrastructure/embodied-normalization.md
+      - 具身智能数据管线: embodied-infrastructure/embodied-data-pipeline.md
+      - LeRobot Dataset v3: embodied-infrastructure/lerobot-dataset-v3.md
+      - 具身仿真: embodied-infrastructure/simulation.md
+      - ROS 2: embodied-infrastructure/ros2.md
+      - DDS 数据分发服务: embodied-infrastructure/dds.md
 
 
 extra_css:

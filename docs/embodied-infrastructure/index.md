@@ -1,11 +1,11 @@
 ---
-title: 具身智能
-description: 具身智能——机器人学习、仿真环境、视觉-语言-动作模型与物理世界交互。
+title: 具身基础设施
+description: 具身智能基础设施——数据类型与归一化、数据管线、数据集存储、仿真环境、机器人中间件。
 ---
 
-# 具身智能
+# 具身基础设施
 
-AI 与物理世界交互的技术前沿，涵盖机器人基础模型、仿真到现实迁移、感知-决策-控制全栈。
+具身智能的数据、仿真与系统基础设施，从数据采集到机器人通信全栈。
 
 <div class="grid cards" markdown>
 
@@ -27,23 +27,11 @@ AI 与物理世界交互的技术前沿，涵盖机器人基础模型、仿真�
 
     从采集到模型消费的 8 个阶段——Schema 映射、坐标变换、模态预处理、归一化、时序窗口、表示转换、Batch 化、噪声注入，以及 LeRobot / OpenPI / Octo / RT-2 等框架的解法对比
 
-- :material-robot: **[OpenPI 微调框架](openpi.md)**
-
-    ---
-
-    Physical Intelligence 开源 VLA 模型框架——双专家架构、三层 Transform 数据管线、位置语义化的固定观测结构
-
 - :material-database: **[LeRobot Dataset v3](lerobot-dataset-v3.md)**
 
     ---
 
     存储-API 解耦、多 episode 文件聚合、关系型元数据索引，解决百万级 episode 可扩展性
-
-- :material-earth: **[τ₀-World Model](tau-0-wm.md)**
-
-    ---
-
-    5B 视频-动作统一世界模型——视频扩散骨干联合生成未来帧与动作序列，异构数据模态级监督掩码，推理时 Propose-Evaluate-Revise
 
 - :material-cube-outline: **[具身仿真](simulation.md)**
 

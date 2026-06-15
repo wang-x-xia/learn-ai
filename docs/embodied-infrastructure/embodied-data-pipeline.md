@@ -17,7 +17,7 @@ review: "2026-06-12"
     - **ML 数据管线**：通用阶段模型、开环 vs 闭环的根本差异、双向变换一致性 → [详见](../infrastructure/data-pipeline.md)
     - **具身智能数据类型**：机器人学习的事实标准四元组——图像、本体感知、动作、语言指令 → [详见](embodied-data-types.md)
     - **数据归一化**：z-score / min-max / 分位数方案及 delta actions 陷阱 → [详见](embodied-normalization.md)
-    - **OpenPI 三层 Transform**：RepackTransform → data_transforms → model_transforms 的分层数据管线 → [详见](openpi.md)
+    - **OpenPI 三层 Transform**：RepackTransform → data_transforms → model_transforms 的分层数据管线 → [详见](../embodied-algorithm/openpi.md)
     - **LeRobot Dataset v3**：多 episode 聚合存储、关系型元数据索引 → [详见](lerobot-dataset-v3.md)
 
 ---
@@ -42,7 +42,7 @@ review: "2026-06-12"
 |------|------|----------|----------|
 | **真机遥操作** | 低（每小时几十 episode） | 最高（真实物理） | 人力成本——采集过程本身就是标注（动作由编码器录制） |
 | **仿真生成** | 极高（GPU 并行，百万级 episode/天） | 受 sim-to-real gap 限制 | 物理保真度——接触力学、视觉、传感器噪声的差距 |
-| **互联网视频** | 海量 | 无动作标签 | 需额外推断动作——τ₀-World Model 用视频+机器人数据联合训练解决此问题 → [详见](tau-0-wm.md) |
+| **互联网视频** | 海量 | 无动作标签 | 需额外推断动作——τ₀-World Model 用视频+机器人数据联合训练解决此问题 → [详见](../embodied-algorithm/tau-0-wm.md) |
 
 ### 真机遥操作：采集即标注
 
@@ -72,7 +72,7 @@ review: "2026-06-12"
 | **标准格式入库前转** | RT-2/OXE | 入库前转成 RLDS 统一 Schema | 一次性成本——入库麻烦但训练零开销 |
 | **不做统一** | ROS 2 / robomimic | 用户自行编写映射代码 | 灵活但不可复用 |
 
-**OpenPI 的位置语义绑定**是最值得注意的设计：模型在预训练时将每个输入位置与固定语义绑定（第 0 槽 = 全局相机、第 1 槽 = 左腕相机……），权重烧入了这种映射。微调时放反相机位置 = 预训练先验完全失效 → [详见 OpenPI](openpi.md)。
+**OpenPI 的位置语义绑定**是最值得注意的设计：模型在预训练时将每个输入位置与固定语义绑定（第 0 槽 = 全局相机、第 1 槽 = 左腕相机……），权重烧入了这种映射。微调时放反相机位置 = 预训练先验完全失效 → [详见 OpenPI](../embodied-algorithm/openpi.md)。
 
 ---
 
