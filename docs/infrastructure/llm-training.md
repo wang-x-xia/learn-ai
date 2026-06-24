@@ -59,6 +59,8 @@ graph LR
 - 具备语言理解和生成能力
 - 但不知道"说什么是对的"
 
+预训练对 Transformer 架构尤为关键——由于缺少 CNN/RNN 那样的归纳偏置，Transformer 必须通过大规模预训练才能超越传统架构。详见 [预训练：为什么 Transformer 离不开它](../foundations/pre-training.md)。
+
 ## 指令微调（SFT）
 
 **目标**：让模型学会遵循指令，变成有用的助手

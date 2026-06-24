@@ -1,4 +1,9 @@
 entries:
+  - date: 2026-06-24
+    type: feature
+    title: 添加预训练与 Transformer 文档
+    description: 新增预训练文档，解析 Transformer 为何比 CNN/RNN 更依赖预训练——归纳偏置权衡、ViT 的 90M 数据阈值实验、TrOCR 消融证据，以及三个理论视角（损失盆地正则化、类别多样性、交叉熵特征迁移）
+    link: foundations/pre-training.md
   - date: 2026-06-11
     type: feature
     title: 添加 Triton 编译器架构文档
@@ -19,8 +24,3 @@ entries:
     title: 添加结构化数据格式与 GPU 亲和性文档
     description: 新增 Parquet、Apache Arrow / Feather、Lance 三种列式格式在 GPU 加速场景下的设计权衡文档
     link: infrastructure/structured-data-format.md
-  - date: 2026-06-01
-    type: feature
-    title: 添加 AI 服务器单节点拓扑文档
-    description: 新增单节点拓扑文档，涵盖 NVLink Switch 全互连原则、Rail-aligned 网络设计、四种网络 Fabric 及 Hopper → Blackwell 演进
-    link: infrastructure/single-node.md

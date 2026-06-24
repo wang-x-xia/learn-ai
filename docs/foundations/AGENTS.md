@@ -7,6 +7,7 @@
 | 文件 | 主题 |
 |------|------|
 | `transformer.md` | Transformer 架构 |
+| `pre-training.md` | 预训练与 Transformer（归纳偏置权衡、数据阈值效应） |
 | `kv-cache.md` | KV Cache 与推理优化 |
 | `mamba-and-ssm.md` | SSM / Mamba / 替代架构 |
 | `multimodal-ai.md` | 多模态 AI |
@@ -16,6 +17,7 @@
 ## 收录哪些内容
 
 - Transformer 架构演进 → `transformer.md`
+- 预训练对 Transformer 的意义（归纳偏置、数据阈值、理论解释）→ `pre-training.md`
 - KV Cache、推理优化（GQA、Prefill/Decode、压缩权衡）→ `kv-cache.md`
 - SSM / Mamba / 替代架构 → `mamba-and-ssm.md`
 - 多模态数据特征与技术路线 → `multimodal-ai.md`

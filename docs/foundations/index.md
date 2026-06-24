@@ -15,6 +15,12 @@ description: AI 基础理论知识——Transformer、大语言模型、状态�
 
     自注意力、MoE
 
+- :material-school: **[预训练与 Transformer](pre-training.md)**
+
+    ---
+
+    归纳偏置权衡、90M 数据阈值、预训练为何对 Transformer 不可或缺
+
 - :material-memory: **[KV Cache 与推理优化](kv-cache.md)**
 
     ---

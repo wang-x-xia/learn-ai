@@ -145,6 +145,7 @@ nav:
     - 基础理论:
       - foundations/index.md
       - Transformer 架构: foundations/transformer.md
+      - 预训练与 Transformer: foundations/pre-training.md
       - KV Cache 与推理优化: foundations/kv-cache.md
       - Mamba 与 SSM: foundations/mamba-and-ssm.md
       - 多模态 AI: foundations/multimodal-ai.md

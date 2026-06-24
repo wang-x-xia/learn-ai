@@ -20,7 +20,7 @@ review: 2026-04-28
 
 > Transformer 是当前几乎所有前沿语言模型的底层架构。本文档聚焦其核心机制的技术原理和设计权衡，不涉及具体模型。
 >
-> 相关文档：[KV Cache 与推理优化](./kv-cache.md) | [Mamba 与状态空间模型](./mamba-and-ssm.md)
+> 相关文档：[预训练：为什么 Transformer 离不开它](./pre-training.md) | [KV Cache 与推理优化](./kv-cache.md) | [Mamba 与状态空间模型](./mamba-and-ssm.md)
 
 ???+ tip "推荐视频：3Blue1Brown 直观讲解 Transformer"
 
@@ -253,7 +253,25 @@ $$
 
 ---
 
+## 4. 预训练：Transformer 的必要前提
+
+CNN 内置了平移等变性和局部感受野，RNN 内置了时序依赖——这些归纳偏置让它们从随机初始化就能在中小规模数据上训练出不错的模型。Transformer 几乎没有这类先验，因此**极度依赖预训练**。
+
+ViT 论文[^vit-2021]的控制实验给出了量化证据：在 JFT 数据集的子集上，ViT 在 9M 图片时远不如 ResNet，直到 **90M+ 图片**才开始反超。类似地，TrOCR[^trocr-2021] 表明纯 Transformer 的 OCR 方案只有在接入预训练模型初始化后，才能超越 CNN+RNN 方案。
+
+| 数据规模 | CNN（有归纳偏置） | Transformer（无归纳偏置） |
+|----------|-------------------|--------------------------|
+| < 10M | 表现好——先验弥补了数据不足 | 严重过拟合 |
+| ~90M | 接近上限 | 开始反超 CNN |
+| 300M+ | 受先验约束 | 大幅领先——从数据中学出比先验更好的模式 |
+
+本质上，预训练用大规模数据替代了 CNN/RNN 的内置先验，为 Transformer 提供了等价甚至更好的"起点"。详细的理论分析和实验证据见 [预训练：为什么 Transformer 离不开它](./pre-training.md)。
+
+---
+
 ## 参考资料
 
 [^vaswani-2017]: Vaswani et al. *Attention Is All You Need*. 2017. https://arxiv.org/abs/1706.03762
 [^rope-2024]: Su et al. *RoFormer: Enhanced Transformer with Rotary Position Embedding*. Neurocomputing 2024. https://arxiv.org/abs/2104.09864
+[^vit-2021]: Dosovitskiy et al. *An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*. ICLR 2021. https://arxiv.org/abs/2010.11929
+[^trocr-2021]: Li et al. *TrOCR: Transformer-based Optical Character Recognition with Pre-trained Models*. AAAI 2023. https://arxiv.org/abs/2109.10282
