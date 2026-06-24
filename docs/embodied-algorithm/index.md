@@ -33,4 +33,10 @@ description: 具身智能算法——机器人基础模型、视觉-语言-动�
 
     模块化 VLA 统一实验平台——Backbone–Action Head 解耦统一四种动作解码范式，StarVLA-α 极简基线证明强 VLM 下复杂设计收益有限
 
+- :material-link-variant: **[Qwen-RobotManip](qwen-robotmanip.md)**
+
+    ---
+
+    三维度跨形态对齐框架——80 维 canonical space + 相机系 delta pose + 行为级上下文适应，实验证明对齐是数据 scaling 的前提条件
+
 </div>

@@ -13,6 +13,7 @@
 | `simulation.md` | 具身仿真（GPU 并行 vs CPU 高保真、接触力学建模、Sim-to-Real Gap 跨越策略） |
 | `ros2.md` | ROS 2 机器人分布式软件框架（DDS 通信层、去中心化发现、通信原语、QoS、Executor 调度） |
 | `dds.md` | DDS 数据分发服务（Data-Centric 模型、DCPS 实体、自动发现、QoS 策略、机器人集成形态） |
+| `embodied-synthetic-data.md` | 具身智能合成数据（仿真扩增 / H2R 视频合成 / LLM 驱动生成三条路线、各方案核心权衡） |
 
 ## 收录哪些内容
 

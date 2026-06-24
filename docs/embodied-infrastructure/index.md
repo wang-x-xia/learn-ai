@@ -51,4 +51,10 @@ description: 具身智能基础设施——数据类型与归一化、数据管�
 
     以数据为中心的发布/订阅标准——DCPS 实体模型、去中心化发现协议、22+ 种 QoS 策略，及在机器人系统中的三种集成形态
 
+- :material-movie-filter: **[具身智能合成数据](embodied-synthetic-data.md)**
+
+    ---
+
+    机器人操作数据的三类合成方法——仿真扩增（MimicGen/RoboCasa）、H2R 视频合成、LLM 驱动生成式仿真，以及各方案的核心权衡
+
 </div>

@@ -172,6 +172,7 @@ nav:
       - OpenPI 微调框架: embodied-algorithm/openpi.md
       - τ₀-World Model: embodied-algorithm/tau-0-wm.md
       - StarVLA: embodied-algorithm/starvla.md
+      - Qwen-RobotManip: embodied-algorithm/qwen-robotmanip.md
     - 具身基础设施:
       - embodied-infrastructure/index.md
       - 具身智能数据类型: embodied-infrastructure/embodied-data-types.md
@@ -181,6 +182,7 @@ nav:
       - 具身仿真: embodied-infrastructure/simulation.md
       - ROS 2: embodied-infrastructure/ros2.md
       - DDS 数据分发服务: embodied-infrastructure/dds.md
+      - 具身智能合成数据: embodied-infrastructure/embodied-synthetic-data.md
 
 
 extra_css:
