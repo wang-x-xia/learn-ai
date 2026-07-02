@@ -104,6 +104,7 @@ nav:
       - 提示工程: applied/prompt-engineering.md
       - 检索增强生成 (RAG): applied/rag.md
       - AI 浏览器自动化: applied/browser-automation.md
+      - AGENTS.md 标准: applied/agents-md.md
     - AI 软件:
       - ai-personal-software/index.md
       - Claude Code: ai-personal-software/claude-code.md

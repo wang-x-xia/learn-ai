@@ -107,7 +107,7 @@ for epoch in range(num_epochs):
 **显存优化**：
 - **梯度检查点（Gradient Checkpointing）**：不保存所有激活值，反向时重新计算部分激活值，用计算换显存
 - **混合精度训练**：FP16 计算降低显存和计算量，FP32 master weights 保证数值稳定性
-- **ZeRO（零冗余优化器）**：将优化器状态、梯度、参数分片到不同 GPU，打破单卡显存限制
+- **ZeRO（零冗余优化器）**[^rajbhandari-2020]：将优化器状态、梯度、参数分片到不同 GPU，打破单卡显存限制
 
 ### 4. 通信层
 
@@ -175,7 +175,7 @@ GPU 3: 部分 D  ←─→      GPU 3: 部分 D
 
 ### 混合并行（3D Parallel）
 
-结合 DP + TP + PP，适用于超大规模模型训练（如 GPT-3、DeepSeek-V3）。通信层次包括 TP 组内的 All-Reduce、PP 组间的 P2P 通信、DP 组间的梯度同步。详见[数据并行](./dp.md)和[流水线并行](./pp.md)。
+结合 DP + TP + PP，适用于超大规模模型训练（如 GPT-3、DeepSeek-V3）[^narayanan-2021]。通信层次包括 TP 组内的 All-Reduce、PP 组间的 P2P 通信、DP 组间的梯度同步。详见[数据并行](./dp.md)和[流水线并行](./pp.md)。
 
 ---
 
@@ -283,3 +283,6 @@ checkpoint/
 ---
 
 ## 参考资料
+
+[^rajbhandari-2020]: Rajbhandari et al. *ZeRO: Memory Optimizations Toward Training Trillion Parameter Models*. 2020. https://arxiv.org/abs/1910.02054
+[^narayanan-2021]: Narayanan et al. *Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM*. 2021. https://arxiv.org/abs/2104.04473

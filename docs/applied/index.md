@@ -33,4 +33,10 @@ description: AI 通用应用技术——提示工程、RAG、Thinking Mode、浏
 
     Playwright CLI snapshot、元素标识策略、token 优化
 
+- :material-file-document-edit: **[AGENTS.md](agents-md.md)**
+
+    ---
+
+    项目级 Agent 指令标准——发现算法、合并策略、有效写法
+
 </div>
