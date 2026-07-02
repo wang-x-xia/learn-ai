@@ -6,13 +6,13 @@
 
 ## 构建 & 验证
 
+任何commit之前，必须确保以下两个命令没有任何warning和error：
+
 ```bash
 # 构建站点，同时校验文档是否符合zensical的规范
 uv run zensical build --strict   
 # 检查本项目特别定义的规范，自动修复可修复项
 uv run scripts/validate_docs.py --auto-fix
-# 查看项目review状态
-uv run scripts/review_status.py
 ```
 
 推送 `main` 后 GitHub Actions 自动构建部署（`.github/workflows/deploy-pages.yml`）。
@@ -50,6 +50,7 @@ description: "文档描述"
 created: "2025-10-15"
 updated: "2025-10-15"
 # 最后一次review的时间，Review 过程中不要更新 `review` 日期，等维护者确认 review 完成后再更新。
+# 使用 uv run scripts/review_status.py 查看项目内所有文档的review状态。
 review: "2025-10-15"
 # 可选，review未完全完成时的备注。review全部完成后删除此字段。
 review_note: ""
