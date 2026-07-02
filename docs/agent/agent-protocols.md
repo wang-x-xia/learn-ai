@@ -1,15 +1,15 @@
 ---
 title: Agent 间通信协议
-description: Agent 与 Agent 之间如何发现、通信和协作——A2A 和 ANX 协议的交互流程与设计权衡。
+description: Agent 与 Agent 之间如何发现、通信和协作——A2A、ACP 协议的交互流程与设计权衡。
 created: 2026-04-10
-updated: 2026-04-10
+updated: 2026-07-02
 tags:
   - agent
   - a2a
-  - anx
+  - acp
   - protocols
   - multi-agent
-review: 2026-04-10
+review: 2026-07-02
 ---
 
 # Agent 间通信协议
@@ -67,28 +67,44 @@ sequenceDiagram
 - **不透明执行**：调用方不需要知道 Agent B 内部用了什么模型、什么工具——只关心输入和输出
 - **Push Notification**：长时间任务可通过 webhook 回调通知调用方，避免轮询
 
-### 与工具协议的边界
+---
 
-| 维度 | MCP（[工具协议](agent-tools.md)） | A2A |
-|------|-----|-----|
-| 交互对象 | Agent → 工具（被动执行） | Agent → Agent（自主决策） |
-| 执行方 | MCP Server 按指令执行 | Agent 自行规划执行步骤 |
-| 状态管理 | 无状态（调用-返回） | 有状态（Task 生命周期） |
-| 发现机制 | 配置文件静态指定 | Agent Card 动态发现 |
+## 2. ACP（Agent **Client** Protocol）
+
+Zed Industries 提出的 Client → Agent 通信协议（2025.8），JetBrains 于 2026.2 加入共同维护[^acp-spec]。注意此 ACP 的 C 是 **Client**——另一个同名的 Agent **Communication** Protocol（BeeAI / IBM / Linux Foundation）已废弃并合并进 A2A。
+
+与上面 A2A 的根本区别：A2A 是 Agent ↔ Agent **对等协作**，ACP 是 Client → Agent **单向控制**——编辑器/编排器信任并驱动一个 coding agent，类似 LSP 解决编辑器与语言工具的 M×N 集成问题。
+
+### 核心设计
+
+- **JSON-RPC 2 over stdio**（HTTP 传输开发中），复用 MCP 的类型定义
+- **Session 模型**：多轮对话以 Session 为单位，支持 `initialize → session/message → session/cancel / session/close`
+- **结构化事件流**：Agent 返回的不是终端文本，而是 tool call、文件 diff、推理链等结构化事件——解决 PTY scraping 丢失元数据的问题
+- **与 MCP 正交**：MCP 连接 Agent → 工具，ACP 连接 Client → Agent，ACP agent 内部可使用 MCP server
+
+### 协议栈分层
+
+| 层 | 说明 |
+|---|---|
+| **ACP 协议** | JSON-RPC 规范，定义 session 生命周期和事件类型 |
+| **ACP SDK** | 官方多语言库（TypeScript / Python / Kotlin / Java / Rust） |
+| **`acpx`** | OpenClaw 开发的无头 CLI 客户端，封装 session 管理、prompt 队列、崩溃恢复 |
 
 ---
 
-## 2. ANX Protocol
+## 3. 协议对比
 
-开源 Agent 交互协议（2026.4），试图在四个维度统一现有方案：
-
-- **工具使用（Tooling）**：统一 Function Calling 和 MCP 的工具描述格式
-- **发现机制（Discovery）**：融合 A2A 的 Agent Card 概念
-- **安全性（Security）**：内置认证和授权
-- **多 Agent SOP 协作**：支持标准操作流程的 Agent 间编排
+| 维度 | MCP（[工具协议](agent-tools.md)） | A2A | ACP |
+|------|-----|-----|-----|
+| 交互对象 | Agent → 工具（被动执行） | Agent ↔ Agent（对等协作） | Client → Agent（单向委派） |
+| 执行方 | MCP Server 按指令执行 | Agent 自行规划执行步骤 | Agent 自主执行，Client 信任 |
+| 核心抽象 | 工具调用（无状态） | **Task**（任务生命周期） | **Session**（多轮对话） |
+| 发现机制 | 配置文件静态指定 | Agent Card 动态发现 | ACP Registry + 本地注册表 |
+| 传输层 | stdio / Streamable HTTP | REST + SSE | JSON-RPC over stdio / HTTP |
 
 ---
 
 ## 参考资料
 
 [^a2a-spec]: Google. *Agent-to-Agent Protocol*. https://google.github.io/A2A/
+[^acp-spec]: Zed Industries & JetBrains. *Agent Client Protocol*. https://agentclientprotocol.com/

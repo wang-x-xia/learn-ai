@@ -2,12 +2,12 @@
 # 新增 tag 前先在此注册，避免同义重复
 tags:
   - a2a
+  - acp
   - accessibility-tree
   - action-head
   - agent
   - alignment
   - anthropic
-  - anx
   - architecture
   - arrow
   - attention
