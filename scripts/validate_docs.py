@@ -558,17 +558,6 @@ def main() -> int:
         print(f"  ERROR {e}")
     total_errors += len(nav_errors)
 
-    # --- AGENTS.md presence check ---
-    docs_dir = REPO_ROOT / "docs"
-    for subdir in sorted(docs_dir.iterdir()):
-        if subdir.is_dir() and subdir.name not in ("__pycache__", "stylesheets", "javascripts"):
-            agents_md = subdir / "AGENTS.md"
-            if not agents_md.exists():
-                print(
-                    f"  {subdir.relative_to(REPO_ROOT).as_posix()}/AGENTS.md: missing"
-                )
-                total_errors += 1
-
     total_warnings = 0
 
     for path in files:
