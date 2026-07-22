@@ -33,6 +33,12 @@ description: 具身智能基础设施——数据类型与归一化、数据管�
 
     存储-API 解耦、多 episode 文件聚合、关系型元数据索引，解决百万级 episode 可扩展性
 
+- :material-rocket-launch: **[lerobot-lancedb](lerobot-lancedb.md)**
+
+    ---
+
+    LeRobotDataset 的 Lance 后端——JPEG bytes / mp4 Blob V2 两种 layout，2-5x 训练吞吐提升且 bit-exact 对齐上游
+
 - :material-cube-outline: **[具身仿真](simulation.md)**
 
     ---

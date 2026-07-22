@@ -167,6 +167,7 @@ nav:
       - libraries/honcho.md
       - OneVL: libraries/onevl.md
       - Mooncake: libraries/mooncake.md
+      - LanceDB: libraries/lancedb.md
   - 具身智能:
     - 具身算法:
       - embodied-algorithm/index.md
@@ -181,6 +182,7 @@ nav:
       - 具身智能数据归一化: embodied-infrastructure/embodied-normalization.md
       - 具身智能数据管线: embodied-infrastructure/embodied-data-pipeline.md
       - LeRobot Dataset v3: embodied-infrastructure/lerobot-dataset-v3.md
+      - lerobot-lancedb: embodied-infrastructure/lerobot-lancedb.md
       - 具身仿真: embodied-infrastructure/simulation.md
       - ROS 2: embodied-infrastructure/ros2.md
       - DDS 数据分发服务: embodied-infrastructure/dds.md

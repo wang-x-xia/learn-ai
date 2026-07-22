@@ -1,4 +1,14 @@
 entries:
+  - date: 2026-07-22
+    type: feature
+    title: 添加 lerobot-lancedb 调研文档
+    description: 新增 lerobot-lancedb 文档——LeRobotDataset 的 Lance 后端，JPEG bytes / mp4 Blob V2 两种 layout、2-5x 训练吞吐提升、bit-exact 与上游数据对齐、Cloud/Hub 直读集成
+    link: embodied-infrastructure/lerobot-lancedb.md
+  - date: 2026-07-22
+    type: feature
+    title: 添加 LanceDB 调研文档
+    description: 新增 LanceDB 文档，聚焦其数据文件管理——Lance 列式格式、Manifest + Fragment 的 MVCC 版本化、索引与数据同目录的存储哲学、Blob V2 多模态存储、零拷贝 Schema 演进
+    link: libraries/lancedb.md
   - date: 2026-06-24
     type: feature
     title: 添加预训练与 Transformer 文档
@@ -14,13 +24,3 @@ entries:
     title: 添加 PyTorch 算子分发机制文档
     description: 新增 PyTorch 算子分发文档，以 nn.Linear 为例追踪从 Python 到 cublasLtMatmul 的 5 层分发路径——Python 模块、Python/C++ codegen 边界、ATen Dispatcher 剥洋葱式分发、Native CUDA 实现、cuBLASLt 库调用
     link: infrastructure/operator-dispatch.md
-  - date: 2026-06-08
-    type: feature
-    title: 添加 NCCL 集合通信库文档
-    description: 新增 NCCL 文档，涵盖数据操作 API（集合/P2P/RMA）、传输层架构（P2P/SHM/NVLS/IB/Socket）、通信算法（Ring/Tree）与协议（Simple/LL/LL128）、代价模型算法选择机制
-    link: infrastructure/nccl.md
-  - date: 2026-06-01
-    type: feature
-    title: 添加结构化数据格式与 GPU 亲和性文档
-    description: 新增 Parquet、Apache Arrow / Feather、Lance 三种列式格式在 GPU 加速场景下的设计权衡文档
-    link: infrastructure/structured-data-format.md
